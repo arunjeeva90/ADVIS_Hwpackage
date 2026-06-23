@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This folder contains the firmware abstraction layer that enables the IND-VIAS platform to support multiple SoC variants with minimal software changes. The HAL is a key IP differentiator.
+This folder contains the firmware abstraction layer that enables the ADVIS platform to support multiple SoC variants with minimal software changes. The HAL is a key IP differentiator.
 
 ## Sub-folders
 

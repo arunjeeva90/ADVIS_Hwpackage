@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Schematic capture files for the IND-VIAS ECU. Organized by sheet hierarchy matching the architectural decomposition.
+Schematic capture files for the ADVIS ECU. Organized by sheet hierarchy matching the architectural decomposition.
 
 ## Sub-folders
 
