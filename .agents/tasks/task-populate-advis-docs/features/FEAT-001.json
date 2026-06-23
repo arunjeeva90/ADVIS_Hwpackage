@@ -1,0 +1,38 @@
+{
+  "id": "FEAT-001",
+  "type": "docs",
+  "description": "Populate 01_Architecture folder with comprehensive system architecture documents, update root README to ADVIS branding, and create 05_Interface_Control_Documents content. This covers system block diagrams, power tree, ground domains, signal flow, thermal strategy, mechanical envelope, SoC variants, and all ICDs.",
+  "status": "in_progress",
+  "steps": [
+    "Update /projects/sandbox/ADVIS_Hwpackage/README.md: Replace all IND-VIAS references with ADVIS (Adaptive Driver & Vehicle Intelligence System). Add product family table (Assist, Control, Fusion, Fleet). Update project description to match ADVIS branding.",
+    "Update /projects/sandbox/ADVIS_Hwpackage/01_Architecture/README.md: Replace IND-VIAS with ADVIS throughout.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/01_Architecture/System_Block_Diagrams/ADVIS_System_Block_Diagram.md: Complete system block diagram in ASCII art showing all subsystems (Power Entry -> Protection -> Buck stages -> SOM, DS90UB954 -> CSI-2 -> SOM, CAN PHY, GNSS, IMU, USB, IR, Watchdog). Include signal names, bus widths, connector references.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/01_Architecture/Power_Tree/Power_Tree_Architecture.md: Full power tree from 12V input through all stages: 12V -> Fuse(5A) -> TVS -> PMOS(80V) -> LM61460-Q1(5V_SYS,6A) -> TPS62130A-Q1(3.3V) -> TLV75518-Q1(1.8V). Include ASCII diagram, current budgets per rail, sequencing requirements, power good signals.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/01_Architecture/Ground_Domains/Ground_Domain_Architecture.md: Define PGND_IN (power input ground), BOARD_GND (signal ground), CHASSIS_GND (enclosure/shield). Document star-point topology, ground domain interconnection rules, ESD return paths.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/01_Architecture/Signal_Flow/Signal_Flow_Architecture.md: Document all signal paths between subsystems: FPD-Link III (camera to deser), CSI-2 (deser to SOM 4-lane MIPI), SPI (SOM to BMI088 dual-CS), I2C (SOM to DS90UB954 config), UART (SOM to NEO-M9N), CAN-FD (SOM to TCAN1044AV-Q1), USB (SOM to USB-C). Include data rates, impedance targets, protocol details.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/01_Architecture/Thermal_Strategy/Thermal_Strategy.md: Thermal budget allocation per component, heat dissipation paths, passive vs active cooling analysis for each tier, thermal interface materials, operating temperature range (-40C to +85C ambient), derating curves.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/01_Architecture/Mechanical_Envelope/Mechanical_Envelope.md: Target form factor for windshield-mount module, enclosure dimensions (estimated), mounting strategy, IP rating target, connector access zones, weight budget, vibration tolerance.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/01_Architecture/SoC_Variants/SoC_Variant_Matrix.md: Compatibility matrix for AM62A, AM68A/TDA4VM, TDA4VH, SA8295. Include: camera inputs, AI performance (TOPS), power budget, memory, CSI-2 lanes, supported tier, carrier compatibility notes.",
+    "Update /projects/sandbox/ADVIS_Hwpackage/01_Architecture/Modular_Platform_Definition/Platform_Modularity_Concept.md: Replace all IND-VIAS with ADVIS.",
+    "Update /projects/sandbox/ADVIS_Hwpackage/05_Interface_Control_Documents/README.md: Replace IND-VIAS with ADVIS.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/05_Interface_Control_Documents/SoM_Carrier_ICD/SoM_Carrier_Interface_Specification.md: Define the logical interface between SoM and carrier. List all signals by function group (power rails, CSI-2, I2C, SPI, UART, CAN, USB, GPIO, reset, clocks). Define electrical requirements, sequencing, direction. Note: exact pinout is TRADE SECRET - do not include physical pin numbers.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/05_Interface_Control_Documents/Camera_ICD/Camera_Interface_Specification.md: FPD-Link III interface spec for both forward and DMS cameras. Include: cable type (coax), PoC voltage, data rate, virtual channel assignment (VC0=Forward, VC1=DMS), connector type, cable length limits, shielding requirements.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/05_Interface_Control_Documents/Vehicle_Connector_ICD/Vehicle_Connector_Interface_Specification.md: J100 vehicle harness interface. Define: 12V power pins, ground returns, CAN_H/CAN_L, ignition sense, wake input, GNSS antenna feed-through, shield/chassis ground. Include mating/unmating requirements.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/05_Interface_Control_Documents/IR_Daughterboard_ICD/IR_Daughterboard_Interface_Specification.md: J800 8-pin IR illumination board interface. Define: power supply (voltage, current limit), IR_LED_EN, IR_PWM, FAULT_N, ground, shield. Include enable/disable logic, PWM frequency range, thermal protection.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/05_Interface_Control_Documents/Pin_Mux_Maps/Pin_Mux_Strategy.md: Document pin multiplexing approach per SoC variant. Define which SoC peripherals map to which carrier functions. Note: exact pin assignments are TRADE SECRET - document the strategy and allocation method only."
+  ],
+  "acceptance_criteria": [
+    "All files listed in steps exist with substantive content (minimum 50 lines each for architecture docs)",
+    "All IND-VIAS references in updated files are changed to ADVIS",
+    "ASCII block diagrams are present in System_Block_Diagrams and Power_Tree documents",
+    "No trade secrets (exact pinout, PCB layout rules, calibration thresholds) appear in any document",
+    "Safety boundary (observation/processing/logging only, no actuation) is clearly stated where applicable"
+  ],
+  "verification": [
+    "Check all created files exist and have content over 50 lines",
+    "Grep for 'IND-VIAS' in modified files to confirm none remain",
+    "Grep for 'trade secret' markers to confirm sensitive info is properly protected"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

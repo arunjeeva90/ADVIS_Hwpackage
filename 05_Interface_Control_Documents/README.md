@@ -32,4 +32,4 @@ The SoM-Carrier ICD is the most critical IP document in this platform. It define
 - Sequencing requirements
 - Mechanical constraints
 
-Any SoM vendor wanting to be compatible with the IND-VIAS carrier must conform to this ICD. This creates platform lock-in and ecosystem value.
+Any SoM vendor wanting to be compatible with the ADVIS carrier must conform to this ICD. This creates platform lock-in and ecosystem value.

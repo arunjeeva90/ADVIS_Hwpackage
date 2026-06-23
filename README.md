@@ -1,6 +1,6 @@
-# IND-VIAS Hardware Package (ADVIS_Hwpackage)
+# ADVIS Hardware Package (ADVIS_Hwpackage)
 
-## Project: IND-VIAS ADAS + DMS ECU
+## Project: ADVIS - Adaptive Driver & Vehicle Intelligence System
 
 **Version:** v0.4.4  
 **Status:** A-sample production-intent architecture and schematic capture baseline
@@ -9,13 +9,13 @@
 
 ## What Is This Repository?
 
-This repository is the complete hardware IP package for the IND-VIAS dual-camera ADAS + DMS vehicle ECU platform. It contains architecture definitions, schematic capture assets, firmware abstraction layers, interface control documents, patent/IP strategy, validation plans, and OEM customization frameworks.
+This repository is the complete hardware IP package for the ADVIS dual-camera ADAS + DMS vehicle ECU platform. It contains architecture definitions, schematic capture assets, firmware abstraction layers, interface control documents, patent/IP strategy, validation plans, and OEM customization frameworks.
 
 ---
 
 ## Platform Overview
 
-The IND-VIAS ECU is a vehicle-mounted edge compute unit that:
+The ADVIS ECU is a vehicle-mounted edge compute unit that:
 
 - Receives two camera streams (Forward + DMS) via FPD-Link III
 - Processes perception and monitoring workloads on a TDA4VM/AM68A-class SOM
@@ -24,7 +24,20 @@ The IND-VIAS ECU is a vehicle-mounted edge compute unit that:
 - Exposes engineering/service interfaces (UART, USB, microSD)
 - Supports external IR illumination for DMS
 
-**Safety boundary:** This is an observation/processing/logging ECU. It does NOT perform actuation (brake, steering, throttle, powertrain).
+**Safety boundary:** This is an observation/processing/logging ECU. It does NOT perform actuation (brake, steering, throttle, powertrain). ADVIS generates safety-supervised actuation REQUESTS to OEM vehicle controllers only.
+
+---
+
+## Product Family
+
+| Product | Sensor Set | Feature Scope |
+|---------|-----------|---------------|
+| ADVIS Assist | Forward camera + DMS camera | FCW, LDW, TSR, PCW, DMS |
+| ADVIS Control | Same two-camera hardware | AEB, ACC, LKA request outputs, driver-aware speed moderation |
+| ADVIS Fusion | Camera + DMS + radar | Sensor fusion, enhanced AEB/ACC/LKA, blind-spot/moving-off support |
+| ADVIS Fleet | Camera + DMS, later radar optional | Fleet safety, driver behavior, event logging |
+
+All product tiers share a common carrier board. Tier differentiation is achieved through SoM selection and firmware feature licensing.
 
 ---
 
@@ -73,6 +86,18 @@ ADVIS_Hwpackage/
 - **Schematic skeleton capture:** CAN BEGIN
 - **ERC-clean schematic:** BLOCKED (pending SOM pinout, camera ICD, PoC values)
 - **PCB layout release:** BLOCKED
+
+---
+
+## Version History
+
+| Version | Date | Description |
+|---------|------|-------------|
+| v0.4.4 | 2026-06 | Architecture lock, initial document population |
+| v0.4.3 | 2026-05 | Platform modularity concept finalized |
+| v0.4.2 | 2026-04 | ICD signal lists defined |
+| v0.4.1 | 2026-03 | Component selection baseline |
+| v0.4.0 | 2026-02 | Repository structure created |
 
 ---
 

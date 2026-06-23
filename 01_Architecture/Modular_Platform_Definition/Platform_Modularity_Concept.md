@@ -1,4 +1,4 @@
-# IND-VIAS Platform Modularity Concept
+# ADVIS Platform Modularity Concept
 
 ## Version
 v1.0 - June 2026
@@ -7,7 +7,7 @@ v1.0 - June 2026
 
 ## Core Principle
 
-The IND-VIAS platform separates **compute** from **vehicle interface** through a standardized carrier-to-SoM boundary. The carrier board owns all vehicle-facing interfaces and protection. The SoM owns all compute and high-level processing. This separation is the foundation of platform IP.
+The ADVIS platform separates **compute** from **vehicle interface** through a standardized carrier-to-SoM boundary. The carrier board owns all vehicle-facing interfaces and protection. The SoM owns all compute and high-level processing. This separation is the foundation of platform IP.
 
 ---
 
@@ -20,14 +20,14 @@ The IND-VIAS platform separates **compute** from **vehicle interface** through a
 +-----------------------------------------------+
           |
 +-----------------------------------------------+
-|         IND-VIAS CARRIER BOARD                |
+|           ADVIS CARRIER BOARD                 |
 |                                                |
 |  [Power Protection] [Camera Deser] [CAN PHY] |
 |  [GNSS Rx] [IMU] [USB] [Storage] [IR I/F]   |
 |                                                |
 |  +---------+  Standardized                    |
 |  | SoM     |  Interface                       |
-|  | Module  |◄─────────────►                   |
+|  | Module  |<-------------->                  |
 |  |         |  (Power + Signals)               |
 |  +---------+                                  |
 |                                                |
@@ -98,6 +98,6 @@ Any compatible SoM must provide:
 ## Why This Is Defensible IP
 
 1. **Network effect**: More SoM vendors supporting the interface = more valuable platform
-2. **Switching cost**: OEMs invested in IND-VIAS firmware + validation don't want to change carrier
+2. **Switching cost**: OEMs invested in ADVIS firmware + validation don't want to change carrier
 3. **Integration cost**: Vehicle-side harness and qualification is tied to carrier, not SoM
 4. **Time-to-market**: SoM swap is weeks, full board redesign is months

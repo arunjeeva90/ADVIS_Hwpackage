@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This folder contains the locked system architecture for the IND-VIAS ECU platform. All architectural decisions documented here are considered **frozen** for the v0.4.4 baseline.
+This folder contains the locked system architecture for the ADVIS ECU platform. All architectural decisions documented here are considered **frozen** for the v0.4.4 baseline.
 
 ## Sub-folders
 
