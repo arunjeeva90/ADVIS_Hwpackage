@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This folder defines how the IND-VIAS platform scales and customizes for different OEM requirements. The modular architecture enables multiple product variants from a single carrier design.
+This folder defines how the ADVIS platform scales and customizes for different OEM requirements. The modular architecture enables multiple product variants from a single carrier design.
 
 ## Sub-folders
 
