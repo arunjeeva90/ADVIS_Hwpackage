@@ -1,0 +1,43 @@
+{
+  "id": "FEAT-002",
+  "type": "docs",
+  "description": "Populate 02_Schematic, 03_PCB_Layout, and 04_Firmware_HAL folders with comprehensive technical documentation. This covers schematic review checklists, BOM templates, PCB stackup and routing constraints, firmware HAL architecture, driver specs, device trees, boot sequence, and build system documentation.",
+  "status": "completed",
+  "steps": [
+    "Update /projects/sandbox/ADVIS_Hwpackage/02_Schematic/README.md: Replace IND-VIAS with ADVIS.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/02_Schematic/Review_Checklists/Schematic_Review_Checklist.md: Comprehensive schematic review checklist organized by subsystem (Power, Protection, Camera/Deser, CAN, GNSS, IMU, USB, Watchdog, SOM interface). Include check items for: component ratings, pin connections, decoupling, ESD protection, pull-up/pull-down values, test points, silkscreen.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/02_Schematic/BOM/BOM_Template.md: Production BOM template with columns: RefDes, Value, Part Number, Manufacturer, Package, Tolerance, Voltage Rating, AEC-Q qualification, Alternate PN, DNI flag, Notes. Include seed BOM with known components (LM61460-Q1, TPS62130A-Q1, TLV75518-Q1, TPS3808G33-Q1, TPS3431-Q1, DS90UB954-Q1, TCAN1044AV-Q1, NEO-M9N-00B, BMI088).",
+    "Create /projects/sandbox/ADVIS_Hwpackage/02_Schematic/BOM/BOM_Management_Process.md: Document BOM lifecycle from seed through production release. Include variant handling (Entry/Mid/High tier), DNI strategy, alternate sourcing rules, obsolescence monitoring.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/02_Schematic/Sheets/Sheet_Hierarchy.md: Document the target 12-sheet hierarchy from the README. For each sheet, describe: purpose, key components, interfaces to other sheets, critical nets, review priority.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/02_Schematic/ERC_Reports/ERC_Waiver_Policy.md: Define ERC waiver policy - what checks can be waived, approval process, documentation requirements. Include common automotive ERC exceptions.",
+    "Update /projects/sandbox/ADVIS_Hwpackage/03_PCB_Layout/README.md: Replace IND-VIAS with ADVIS.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/03_PCB_Layout/Stackup/PCB_Stackup_Definition.md: Define target stackup (8-layer recommended for this complexity). Include: layer assignment (signal/plane/signal/plane pattern), impedance targets (50ohm single-ended, 100ohm differential for CSI-2/FPD-Link, 120ohm CAN), material selection (FR4 or higher Tg), copper weights, dielectric thickness targets.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/03_PCB_Layout/Routing_Constraints/High_Speed_Routing_Rules.md: Define routing constraints for CSI-2 (4 differential pairs, length matching within 0.5mm), FPD-Link III (controlled impedance coax), USB 2.0 (90ohm differential), CAN-FD (120ohm differential). Include via restrictions, reference plane requirements, guard traces. Note: exact routing topology is TRADE SECRET - document constraints only.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/03_PCB_Layout/Placement/Placement_Strategy.md: Define component placement zones and priorities (power entry near connector, buck converters with tight loops, deser near SOM connector, CAN PHY near vehicle connector). Include keep-out zones, thermal relief requirements.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/03_PCB_Layout/DFM_Reports/DFM_Checklist.md: Design-for-manufacturing checklist: minimum trace/space, via sizes, solder mask openings, pad shapes, fiducial locations, panelization requirements, testpad access for ICT.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/03_PCB_Layout/Assembly_Drawings/Assembly_Drawing_Requirements.md: Define what assembly drawings must include: layer-by-layer views, polarity markings, placement coordinates, BOM cross-reference, special assembly notes (thermal pads, underfill, selective soldering).",
+    "Update /projects/sandbox/ADVIS_Hwpackage/04_Firmware_HAL/README.md: Replace IND-VIAS with ADVIS.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/04_Firmware_HAL/Drivers/Driver_Specifications.md: Document driver interfaces for all peripherals: DS90UB954-Q1 (I2C config, VC mapping, lock detection), TCAN1044AV-Q1 (mode control via STB pin), NEO-M9N (UART UBX/NMEA parsing, PPS), BMI088 (SPI dual-CS, interrupt handling), TPS3431 (heartbeat timing, window constraints).",
+    "Create /projects/sandbox/ADVIS_Hwpackage/04_Firmware_HAL/Platform_Abstraction/Platform_API_Specification.md: Define the SoC-agnostic platform abstraction API: camera_init(), camera_get_frame(), can_send(), can_receive(), gnss_get_position(), imu_read(), ir_set_mode(), watchdog_kick(), storage_write(). Include function signatures, error codes, thread safety notes.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/04_Firmware_HAL/Boot_Sequence/Boot_Sequence_Document.md: Document the complete boot flow: power-on -> PMOS enable -> sequencing (5V->3.3V->1.8V) -> SOM boot -> SOM_BOOT_OK assertion -> watchdog enable -> peripheral init -> camera lock -> system ready. Include timing requirements and failure modes.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/04_Firmware_HAL/Watchdog_Service/Watchdog_Service_Design.md: TPS3431 watchdog service design: heartbeat interval, window constraints, SOM_BOOT_OK gating logic, failure recovery, safe state definition.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/04_Firmware_HAL/Device_Trees/Device_Tree_Strategy.md: Document device tree overlay strategy for multi-SoC support. Define base DTS structure, overlay mechanism for carrier peripherals, runtime configuration approach.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/04_Firmware_HAL/SoC_Profiles/SoC_Profile_Format.md: Define the SoC profile configuration format: what parameters each profile contains (pin mux, clock config, power rails, peripheral assignments), how profiles are selected at boot, validation rules.",
+    "Create /projects/sandbox/ADVIS_Hwpackage/04_Firmware_HAL/Build_System/Build_System_Architecture.md: Document build system: Yocto/Buildroot layer structure, cross-compilation targets per SoC, CI/CD integration points, artifact management, version tagging."
+  ],
+  "acceptance_criteria": [
+    "All files listed in steps exist with substantive content (minimum 40 lines each)",
+    "All IND-VIAS references in updated files are changed to ADVIS",
+    "BOM template includes all known components from the v0.4.4 handoff",
+    "PCB stackup defines impedance targets for all high-speed interfaces",
+    "Firmware HAL documents define clear APIs with function signatures",
+    "No trade secrets (exact routing topology, calibration thresholds) appear in documents"
+  ],
+  "verification": [
+    "Check all created files exist and have substantive content",
+    "Grep for 'IND-VIAS' in modified files to confirm none remain",
+    "Confirm BOM template lists DS90UB954-Q1, LM61460-Q1, TPS62130A-Q1, TPS3431-Q1, TCAN1044AV-Q1, NEO-M9N, BMI088"
+  ],
+  "blocked_reason": null,
+  "findings": "All 17 new files created plus 2 README updates (19 files total, 4169 lines added). Line counts range from 135 to 456 lines per document. All IND-VIAS references replaced with ADVIS in 02_Schematic/README.md and 04_Firmware_HAL/README.md (03_PCB_Layout/README.md had no IND-VIAS references). BOM template includes all 7 required key components (LM61460-Q1, TPS62130A-Q1, TLV75518-Q1, TPS3808G33-Q1, TPS3431-Q1, DS90UB954-Q1, TCAN1044AV-Q1, NEO-M9N-00B, BMI088). PCB stackup defines impedance targets for CSI-2 (100ohm), FPD-Link III (100ohm), USB 2.0 (90ohm), CAN-FD (120ohm), and single-ended (50ohm). Platform API includes full function signatures with error codes and thread safety notes. No trade secrets leaked - routing topology kept generic, no exact pin numbers or calibration values disclosed."
+}
