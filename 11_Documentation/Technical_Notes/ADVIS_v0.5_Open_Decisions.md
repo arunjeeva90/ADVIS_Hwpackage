@@ -38,9 +38,9 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Target Date** | TBD |
 | **Options** | TDA4VL-Q1 (preferred), AM62A7 (single-camera variants only), J722S (deferred - specs not public) |
 | **Recommendation** | TDA4VL-Q1 (PRELIMINARY) |
-| **Rationale** | 8 TOPS MMA with lower cost/power than TDA4VM, plus 2x CSI-2 RX ports for dual-camera. AM62A7 has single CSI-2 port constraint (see OD-020). J722S is not publicly confirmed. |
+| **Rationale** | TDA4VL-Q1: 4 TOPS per TI product headline. TI family/datasheet-level text may mention MMA up to 8 TOPS; exact applicability to the evaluated TDA4VL-Q1 orderable variant requires TI FAE / exact datasheet / ordering-table confirmation. Until clarified, use 4 TOPS as the conservative product-selection value. At 4 TOPS conservative, still viable for Assist tier (FCW, LDW, TSR, DMS) with lower cost/power than TDA4VM, plus 2x CSI-2 RX ports for dual-camera. AM62A7 has single CSI-2 port constraint (see OD-020). J722S is not publicly confirmed. |
 | **Blocking** | PCB schematic entry, BGA fanout, DDR routing, power tree sizing |
-| **Dependencies** | OD-002 (sensor selection affects CSI lane requirements), OD-009 (SDK evaluation) |
+| **Dependencies** | OD-002 (sensor selection affects CSI lane requirements), OD-009 (SDK evaluation), **OD-019 (datasheet verification must resolve TOPS ambiguity before final selection)** |
 
 ### OD-002: Primary SoC for ADVIS Control v0.5
 
@@ -52,11 +52,11 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Status** | OPEN |
 | **Owner** | Systems Engineering |
 | **Target Date** | TBD |
-| **Options** | TDA4VM-Q1 (primary), TDA4VL-Q1 (cost-explore - same 8 TOPS MMA but lower A72 clock) |
+| **Options** | TDA4VM-Q1 (primary), TDA4VL-Q1 (cost-explore - only if TI confirms 8 TOPS for this variant) |
 | **Recommendation** | TDA4VM-Q1 (PRELIMINARY) |
-| **Rationale** | TDA4VM-Q1 provides 8 TOPS MMA plus higher A72 clock (2.0 GHz vs 1.2 GHz) and more R5F cores (6 vs 2) for safety partitioning. TDA4VL-Q1 also has 8 TOPS MMA but lower CPU performance may limit non-MMA workloads in safety-critical pipelines. J722S at unknown TOPS (not publicly confirmed) cannot be evaluated. |
+| **Rationale** | TDA4VM-Q1 provides confirmed 8 TOPS per product headline plus higher A72 clock (2.0 GHz vs 1.2 GHz) and more R5F cores (6 vs 4) for safety partitioning. TDA4VL-Q1 product headline states 4 TOPS; family text mentions "up to 8 TOPS" but this is ambiguous for the specific orderable variant. Until TI FAE confirms, TDA4VL-Q1 cannot be relied upon for Control tier at 8 TOPS. J722S at unknown TOPS (not publicly confirmed) cannot be evaluated. |
 | **Blocking** | PCB layout (23x23mm BGA requires more area), thermal design, power budget |
-| **Dependencies** | OD-010 (thermal feasibility in windshield mount) |
+| **Dependencies** | OD-010 (thermal feasibility in windshield mount), **OD-019 (datasheet verification must resolve TDA4VL-Q1 TOPS ambiguity)** |
 
 ### OD-003: PCB Compatibility Strategy (Single PCB vs. Dual PCB)
 
@@ -72,7 +72,7 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Recommendation** | None yet - requires BGA pinout compatibility analysis |
 | **Rationale** | Single PCB reduces NRE but may compromise board area and layer count. Dual PCB allows per-tier optimization. |
 | **Blocking** | PCB stackup definition, mechanical envelope finalization |
-| **Dependencies** | OD-001, OD-002, OD-011 |
+| **Dependencies** | OD-001, OD-002, OD-011, **OD-019 (TOPS ambiguity resolution affects whether TDA4VL-Q1 is viable for Control tier, which impacts single-PCB feasibility)** |
 
 ---
 
@@ -357,8 +357,8 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Owner** | Systems Engineering + TI FAE |
 | **Target Date** | TBD |
 | **Question** | Have all SoC specifications used in ADVIS design documents been verified against official TI datasheets (not marketing summaries, not community posts, not third-party reports)? |
-| **Background** | The v0.1 SoC Selection Matrix contained a critical error: TDA4VL-Q1 was listed as "~1 TOPS (C7x DSP only, no MMA)" when the official TI product page confirms 8 TOPS MMA. This error would have resulted in incorrect SoC selection and product architecture decisions. |
-| **Required Actions** | (1) Obtain official TI datasheets (under NDA if needed) for TDA4VL-Q1, TDA4VM-Q1, and AM62A7-Q1; (2) Cross-reference every specification in ARCH-SOC-002 against official datasheet tables; (3) Flag any value that cannot be traced to an official source; (4) Establish a process to prevent unverified specifications from entering design documents |
+| **Background** | The v0.1 SoC Selection Matrix contained a critical error: TDA4VL-Q1 was listed as "~1 TOPS (C7x DSP only, no MMA)" when the official TI product page lists an MMA accelerator. However, the v0.2 correction overstated confidence by claiming "confirmed 8 TOPS" when in fact the TI product headline for TDA4VL-Q1 states 4 TOPS and only the family-level text mentions "MMA up to 8 TOPS (8b)". This ambiguity between product headline (4 TOPS) and family text (up to 8 TOPS) must be resolved via TI FAE engagement or exact datasheet review before SoC selection can proceed. |
+| **Required Actions** | (1) Obtain official TI datasheets (under NDA if needed) for TDA4VL-Q1, TDA4VM-Q1, and AM62A7-Q1; (2) Cross-reference every specification in ARCH-SOC-002 against official datasheet tables; (3) Specifically resolve TDA4VL-Q1 TOPS ambiguity (product headline = 4 TOPS vs. family text = up to 8 TOPS); (4) Flag any value that cannot be traced to an official source; (5) Establish a process to prevent unverified specifications from entering design documents |
 | **Acceptance Criteria** | Every numerical specification in the SoC matrix has a traceable reference to an official TI document (product page, datasheet, or errata) |
 | **Blocking** | OD-001, OD-002, OD-003, and all downstream SoC-dependent decisions |
 | **Dependencies** | TI FAE engagement, NDA execution if needed for full datasheets |
@@ -428,16 +428,17 @@ OD-020 (AM62A7 single-port) depends on OD-019, blocks Fleet tier SoC selection
 
 ## 13. Next Steps
 
-1. **URGENT:** Obtain official TI datasheets for TDA4VL-Q1, TDA4VM-Q1, AM62A7-Q1 and verify all specifications (OD-019)
-2. Schedule SoC selection review meeting (resolve OD-001, OD-002) - now informed by corrected TDA4VL-Q1 8 TOPS data
-3. Formally resolve AM62A7 single CSI-2 port finding (OD-020) - determine if single-camera product variant is desired
-4. Request TI samples: TDA4VL-Q1 EVM (J721S2), TDA4VM SK (if not already available)
-5. Request sensor evaluation kits: OX03C10, OX01N1B, IMX390
-6. Initiate thermal simulation for windshield-mount module (OD-011)
-7. Begin SDK evaluation on TDA4VM SK platform (OD-009), with plan to evaluate J721S2 (TDA4VL family) SDK
-8. Define housing envelope options with mechanical team (OD-012)
-9. Confirm J722S availability timeline and SDK roadmap with TI FAE
-10. Conduct TDA4VL vs TDA4VM pinout compatibility analysis (see ARCH-SOC-003 checklist)
+1. **URGENT:** Obtain official TI datasheets for TDA4VL-Q1, TDA4VM-Q1, AM62A7-Q1 and verify all specifications (OD-019). Specifically resolve TDA4VL-Q1 TOPS ambiguity (product headline = 4 TOPS vs. family text = up to 8 TOPS).
+2. Engage TI FAE to confirm exact AI accelerator performance for TDA4VL-Q1 orderable variant (is it 4 TOPS or 8 TOPS for this specific part?)
+3. Schedule SoC selection review meeting (resolve OD-001, OD-002) - BLOCKED until OD-019 resolves TOPS ambiguity
+4. Formally resolve AM62A7 single CSI-2 port finding (OD-020) - determine if single-camera product variant is desired
+5. Request TI samples: TDA4VL-Q1 EVM (J721S2), TDA4VM SK (if not already available)
+6. Request sensor evaluation kits: OX03C10, OX01N1B, IMX390
+7. Initiate thermal simulation for windshield-mount module (OD-011)
+8. Begin SDK evaluation on TDA4VM SK platform (OD-009), with plan to evaluate J721S2 (TDA4VL family) SDK
+9. Define housing envelope options with mechanical team (OD-012)
+10. Confirm J722S availability timeline and SDK roadmap with TI FAE
+11. Conduct TDA4VL vs TDA4VM pinout compatibility analysis (see ARCH-SOC-003 checklist)
 
 ---
 
@@ -447,6 +448,7 @@ OD-020 (AM62A7 single-port) depends on OD-019, blocks Fleet tier SoC selection
 |-----|------|--------|--------|
 | 0.1 | 2026-06 | Systems Engineering | Initial open decisions register for v0.5 compact module |
 | 0.2 | 2026-06 | Systems Engineering | Added OD-019 (datasheet verification) and OD-020 (AM62A7 single CSI-2 port critical constraint); updated priority summary and dependency graph; corrected date from July to June 2026 |
+| 0.3 | 2026-06 | Systems Engineering | AMBIGUITY CORRECTION: OD-001/OD-002 rationale updated to reflect TDA4VL-Q1 TOPS ambiguity (product headline 4 TOPS vs. family text up to 8 TOPS). OD-001/OD-002/OD-003 now depend on OD-019 for resolution. OD-019 background corrected. Next steps updated to prioritize TOPS ambiguity resolution. |
 
 ---
 

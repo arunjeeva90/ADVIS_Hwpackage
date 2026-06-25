@@ -171,6 +171,8 @@ This document presents the top-level system block diagram for the ADVIS v0.5 Com
 
 ### 5.2 Power Budget Targets by Product Tier
 
+**Note:** Power values in ADVIS tier tables are module design targets, not official SoC power consumption values. Actual SoC power consumption requires per-use-case characterization from TI datasheet power tables or TI power estimation tools.
+
 | Tier | SoC | Module Power Target (Typical) | Module Power (Absolute Max) | Thermal Strategy |
 |------|-----|-------------------------------|-----------------------------|--------------------|
 | ADVIS Assist | TDA4VL-Q1 | Less than 6W | Less than 8W | Standard compact thermal spreader |
@@ -200,7 +202,7 @@ This document presents the top-level system block diagram for the ADVIS v0.5 Com
 - Direct MIPI CSI-2 traces must be length-matched within 0.5mm intra-pair, 2mm inter-pair
 - DMS flex cable must maintain MIPI D-PHY differential impedance per final stackup/SI review (preliminary planning range: 90-100 ohm differential)
 - Ground domains: single digital ground plane (no analog ground split on compact PCB)
-- Total module power budget: target less than 8W at nominal for Assist tier (TDA4VL-Q1); target less than 15W for Control tier (TDA4VM-Q1); final values pending SoC datasheet power characterization
+- Total module power budget: target less than 8W at nominal for Assist tier (TDA4VL-Q1); target less than 15W for Control tier (TDA4VM-Q1); these are module design targets, not official SoC power consumption values; final values pending SoC datasheet power characterization
 - Watchdog disabled during boot (BOOT_OK gates enable)
 - SoC thermal pad must have direct thermal path to aluminum rear plate
 - Optical baffle required between forward and DMS light paths

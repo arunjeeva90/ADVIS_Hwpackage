@@ -68,9 +68,9 @@ Final sensor selection is an open item that affects MIPI lane requirements and p
 
 | SoC | AI Performance | CSI Ports | Power | Target Tier |
 |-----|---------------|-----------|-------|-------------|
-| AM62A | Entry-level ML | 1-2 CSI-Rx | Low | Assist (basic) |
-| TDA4VL | Mid-level deep learning | 2 CSI-Rx | Medium | Assist, Control, Fleet |
-| TDA4VM | High-performance deep learning | 4 CSI-Rx | Higher | Control, Fleet, Fusion |
+| AM62A | 2 TOPS (product headline) | 1 CSI-Rx | Low | Single-camera DMS-only, fleet-lite |
+| TDA4VL | 4 TOPS per product headline (family text mentions up to 8 TOPS; ambiguous, requires TI confirmation) | 2 CSI-Rx | Medium | Assist, Fleet |
+| TDA4VM | 8 TOPS (confirmed per product headline) | 4 CSI-Rx | Higher | Control, Fleet, Fusion |
 
 ### 4.3 Variant ID Mechanism
 

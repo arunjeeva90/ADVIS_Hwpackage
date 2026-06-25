@@ -15,6 +15,10 @@ The matrix evaluates candidates across AI performance, camera interface capabili
 
 **Data Integrity Note:** All specifications in this document are sourced from official TI product pages (ti.com) as of June 2026. Values not publicly confirmed are explicitly marked. No approximate values are used unless the source datasheet itself provides a range.
 
+**Scope Warning:** This revision verifies only selected Texas Instruments SoCs using official TI sources. Ambarella, Renesas, Qualcomm, Mobileye, indie/GEO/Nextchip and other SoC families are not yet verified.
+
+**Power Note:** Power values in ADVIS tier tables are module design targets, not official SoC power consumption values. Actual SoC power consumption requires per-use-case characterization from TI datasheet power tables or TI power estimation tools.
+
 ---
 
 ## 2. Source References
@@ -30,31 +34,31 @@ The matrix evaluates candidates across AI performance, camera interface capabili
 
 ## 3. SoC Comparison Matrix (Verified Official Data)
 
-| Parameter | TDA4VL-Q1 | TDA4VM-Q1 | AM62A7 | J722S / AM67A |
-|-----------|-----------|-----------|--------|---------------|
-| **Vendor** | Texas Instruments | Texas Instruments | Texas Instruments | Texas Instruments |
-| **Official Description** | Targeted at Smart Vision Camera applications | 8 TOPS of AI | 2 TOPS vision SoC with RGB-IR ISP for 1-2 cameras, driver monitoring | Not publicly confirmed |
-| **CPU** | 2x Arm Cortex-A72 at up to 1200 MHz | 2x Arm Cortex-A72 at up to 2.0 GHz | Up to Quad Arm Cortex-A53 at up to 1.4 GHz | Not publicly confirmed |
-| **Coprocessors** | Up to 4x Arm Cortex-R5F at up to 1.0 GHz (2x in TDA4VL variant) | 6x Arm Cortex-R5F at up to 1.0 GHz | 1x Arm Cortex-R5F at up to 800 MHz (MCU island) + 1x Cortex-R5F (device mgmt) | Not publicly confirmed |
-| **DSP** | Two C7x at up to 1.0 GHz, 160 GFLOPS, 512 GOPS | C7x up to 1.0 GHz (80 GFLOPS, 256 GOPS) + Two C66x at up to 1.35 GHz | Single C7x at 1.0 GHz, 40 GFLOPS | Not publicly confirmed |
-| **AI Accelerator** | MMA deep-learning accelerator, up to 8 TOPS (8b) at 1.0 GHz | MMA deep-learning accelerator, up to 8 TOPS (8b) at 1.0 GHz | MMA up to 2 TOPS (8b) at 1.0 GHz | Not publicly confirmed - requires vendor NDA/datasheet confirmation |
-| **Vision Processing** | VPAC with ISP + DMPAC | VPAC with ISP + DMPAC | VPAC with ISP, 315 MPixel/s, up to 5MP@60fps, supports 12-bit RGB-IR | Not publicly confirmed |
-| **GPU** | IMG BXS-4-64, up to 800 MHz, 50 GFLOPS | PowerVR Rogue 8XE GE8430, up to 750 MHz | None listed on product page | Not publicly confirmed |
-| **CSI-2 RX Ports** | Two CSI2.0 4L RX + Two CSI2.0 4L TX with DPHY | Two CSI2.0 4L RX + One CSI2.0 4L TX | **ONE CSI-2 Receiver with 4-Lane D-PHY (CRITICAL: single port only)** | Not publicly confirmed |
-| **CSI-2 Lane Speed** | Up to 2.5 Gbps per lane | Up to 2.5 Gbps per lane | Up to 2.5 Gbps per lane | Not publicly confirmed |
-| **Virtual Channel Support** | Yes | Yes | Yes (up to 16 VCs on single port) | Not publicly confirmed |
-| **CAN-FD Controllers** | Twenty MCAN modules with full CAN-FD | Sixteen MCAN modules with full CAN-FD | 3x CAN modules with CAN-FD (up to 8 Mbps) | Not publicly confirmed |
-| **Ethernet** | Two RMII/RGMII interfaces | Integrated switch supporting up to 8 external ports (2.5Gb SGMII) | Integrated switch with 2 external ports (RMII/RGMII, TSN) | Not publicly confirmed |
-| **Memory** | LPDDR4, One 32-bit bus, up to 4266 MT/s, up to 4MB L3 RAM | LPDDR4, 32-bit with inline ECC, up to 4266 MT/s | LPDDR4, 32-bit with inline ECC, up to 3733 MT/s, max 8GB | Not publicly confirmed |
-| **Video Codec** | H.264/H.265 Encode/Decode up to 240MP/s | Yes (details per datasheet) | H.265/H.264 encode/decode, up to 4K UHD | Not publicly confirmed |
-| **Storage** | Per datasheet (eMMC, SD, OSPI) | Per datasheet (eMMC, SD, OSPI) | eMMC 5.1, SD 3.0, OSPI/QSPI | Not publicly confirmed |
-| **Package** | 23mm x 23mm, 0.8mm pitch, 770-pin FCBGA (ALZ) | 24mm x 24mm, 0.8mm pitch, 827-pin FCBGA (ALF) | 18mm x 18mm, 0.8mm pitch, 484-pin FCBGA (AMB) or FCCSP (ANF) | Not publicly confirmed |
-| **Safety Certification** | ISO 26262/IEC 61508 certified up to ASIL D/SC 3 by TUV SUD | ISO 26262 certified up to ASIL D (MCU domain), ASIL B (Main domain), by TUV SUD | Functional Safety-Compliant targeted, ASIL D systematic, ASIL B HW integrity targeted, ISO 26262 by TUV SUD planned | Not publicly confirmed |
-| **AEC-Q100** | Yes (Q1 variants) | Yes (Q1 variants) | Yes (AM62A7-Q1 automotive variant) | Not publicly confirmed |
-| **Operating Temperature** | -40 to 125C | -40 to 105C | -40 to 125C | Not publicly confirmed |
-| **Process Node** | 16nm FinFET | 16nm FinFET | 16nm FinFET | Not publicly confirmed |
-| **PMIC** | TPS6594-Q1 | TPS6594-Q1 | Per datasheet | Not publicly confirmed |
-| **Official Source / Evidence** | ti.com/product/TDA4VL-Q1 | ti.com/product/TDA4VM | ti.com/product/AM62A7 | Requires NDA/vendor confirmation for detailed specs |
+| Parameter | TDA4VL-Q1 | TDA4VM-Q1 | AM62A7 | J722S / AM67A | Source Type / Confidence | Conservative Planning Value |
+|-----------|-----------|-----------|--------|---------------|--------------------------|----------------------------|
+| **Vendor** | Texas Instruments | Texas Instruments | Texas Instruments | Texas Instruments | Product page (HIGH) | N/A |
+| **Official Product Headline** | "SoC with Dual Arm Cortex-A72, 4 TOPS of AI, C7xDSP, and GPU for vision perception and analytics" | "SoC with Dual Arm Cortex-A72, 8 TOPS of AI, C7xDSP, and GPU for vision perception and analytics" | "2 TOPS vision SoC with RGB-IR ISP for 1-2 cameras, driver monitoring" | Not publicly confirmed | Product page headline (HIGH) | TDA4VL-Q1: 4 TOPS; TDA4VM: 8 TOPS; AM62A7: 2 TOPS |
+| **CPU** | 2x Arm Cortex-A72 at up to 1200 MHz | 2x Arm Cortex-A72 at up to 2.0 GHz | Up to Quad Arm Cortex-A53 at up to 1.4 GHz | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Coprocessors** | 4 total Arm Cortex-R5F cores: 2 in isolated MCU subsystem, 2 in general compute partition, subject to exact part documentation confirmation | 6x Arm Cortex-R5F at up to 1.0 GHz | 1x Arm Cortex-R5F at up to 800 MHz (MCU island) + 1x Cortex-R5F (device mgmt) | Not publicly confirmed | Product page / family text (MEDIUM for TDA4VL partition detail) | As stated, pending TI FAE confirmation for TDA4VL |
+| **DSP** | Two C7x at up to 1.0 GHz, 160 GFLOPS, 512 GOPS | C7x up to 1.0 GHz (80 GFLOPS, 256 GOPS) + Two C66x at up to 1.35 GHz | Single C7x at 1.0 GHz, 40 GFLOPS | Not publicly confirmed | Product page (HIGH) | As stated |
+| **AI Accelerator** | TI product headline: 4 TOPS. TI family/datasheet-level text mentions "MMA up to 8 TOPS (8b) at 1.0 GHz" but this is family-level text covering TDA4VE/TDA4AL/TDA4VL. Exact applicability to evaluated TDA4VL-Q1 orderable variant requires TI FAE / exact datasheet / ordering-table confirmation. | MMA deep-learning accelerator, up to 8 TOPS (8b) at 1.0 GHz (product headline confirms 8 TOPS) | MMA up to 2 TOPS (8b) at 1.0 GHz | Not publicly confirmed - requires vendor NDA/datasheet confirmation | Product headline (HIGH) for TDA4VM/AM62A7; AMBIGUOUS for TDA4VL-Q1 (headline says 4, family text says up to 8) | **TDA4VL-Q1: 4 TOPS (conservative); TDA4VM: 8 TOPS; AM62A7: 2 TOPS** |
+| **Vision Processing** | VPAC with ISP + DMPAC | VPAC with ISP + DMPAC | VPAC with ISP, 315 MPixel/s, up to 5MP@60fps, supports 12-bit RGB-IR | Not publicly confirmed | Product page (HIGH) | As stated |
+| **GPU** | IMG BXS-4-64, up to 800 MHz, 50 GFLOPS | PowerVR Rogue 8XE GE8430, up to 750 MHz | None listed on product page | Not publicly confirmed | Product page (HIGH) | As stated |
+| **CSI-2 RX Ports** | Two CSI2.0 4L RX + Two CSI2.0 4L TX with DPHY | Two CSI2.0 4L RX + One CSI2.0 4L TX | **ONE CSI-2 Receiver with 4-Lane D-PHY (CRITICAL: single port only)** | Not publicly confirmed | Product page (HIGH) | As stated |
+| **CSI-2 Lane Speed** | Up to 2.5 Gbps per lane | Up to 2.5 Gbps per lane | Up to 2.5 Gbps per lane | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Virtual Channel Support** | Yes | Yes | Yes (up to 16 VCs on single port) | Not publicly confirmed | Product page (HIGH) | As stated |
+| **CAN-FD Controllers** | Twenty MCAN modules with full CAN-FD | Sixteen MCAN modules with full CAN-FD | 3x CAN modules with CAN-FD (up to 8 Mbps) | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Ethernet** | Two RMII/RGMII interfaces | Integrated switch supporting up to 8 external ports (2.5Gb SGMII) | Integrated switch with 2 external ports (RMII/RGMII, TSN) | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Memory** | LPDDR4, One 32-bit bus, up to 4266 MT/s, up to 4MB L3 RAM | LPDDR4, 32-bit with inline ECC, up to 4266 MT/s | LPDDR4, 32-bit with inline ECC, up to 3733 MT/s, max 8GB | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Video Codec** | H.264/H.265 Encode/Decode up to 240MP/s | Yes (details per datasheet) | H.265/H.264 encode/decode, up to 4K UHD | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Storage** | Per datasheet (eMMC, SD, OSPI) | Per datasheet (eMMC, SD, OSPI) | eMMC 5.1, SD 3.0, OSPI/QSPI | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Package** | 23mm x 23mm, 0.8mm pitch, 770-pin FCBGA (ALZ) | 24mm x 24mm, 0.8mm pitch, 827-pin FCBGA (ALF) | 18mm x 18mm, 0.8mm pitch, 484-pin FCBGA (AMB) or FCCSP (ANF) | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Safety Certification** | ISO 26262/IEC 61508 certified up to ASIL D/SC 3 by TUV SUD | ISO 26262 certified up to ASIL D (MCU domain), ASIL B (Main domain), by TUV SUD | Functional Safety-Compliant targeted, ASIL D systematic, ASIL B HW integrity targeted, ISO 26262 by TUV SUD planned | Not publicly confirmed | Product page (HIGH) | As stated |
+| **AEC-Q100** | Yes (Q1 variants) | Yes (Q1 variants) | Yes (AM62A7-Q1 automotive variant) | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Operating Temperature** | -40 to 125C | -40 to 105C | -40 to 125C | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Process Node** | 16nm FinFET | 16nm FinFET | 16nm FinFET | Not publicly confirmed | Product page (HIGH) | As stated |
+| **PMIC** | TPS6594-Q1 | TPS6594-Q1 | Per datasheet | Not publicly confirmed | Product page (HIGH) | As stated |
+| **Official Source / Evidence** | ti.com/product/TDA4VL-Q1 | ti.com/product/TDA4VM | ti.com/product/AM62A7 | Requires NDA/vendor confirmation for detailed specs | Direct links (HIGH) | N/A |
 
 ---
 
@@ -75,23 +79,41 @@ The AM62A7 has **only ONE CSI-2 Receiver** (4-lane D-PHY). For the ADVIS dual-ca
 
 ---
 
-## 5. Critical Finding: TDA4VL-Q1 AI Performance Correction
+## 5. Critical Finding: TDA4VL-Q1 AI Performance Ambiguity
 
-**CORRECTION FROM PREVIOUS REVISION (v0.1):**
+**AMBIGUITY IDENTIFIED IN PREVIOUS REVISION (v0.2):**
 
-The v0.1 SoC matrix incorrectly stated TDA4VL has "~1 TOPS (C7x DSP only, no MMA)". This was WRONG.
+The v0.2 SoC matrix stated TDA4VL-Q1 has "confirmed 8 TOPS MMA" based on TI family-level text. This was an overstatement of confidence.
 
-**Official TI data confirms:** TDA4VL-Q1 has an MMA deep-learning accelerator with up to 8 TOPS (8b) at 1.0 GHz - the same AI accelerator class as TDA4VM-Q1.
+**The ambiguity:**
+- **TI product headline for TDA4VL-Q1** states: "SoC with Dual Arm Cortex-A72, **4 TOPS of AI**, C7xDSP, and GPU for vision perception and analytics"
+- **TI family/datasheet-level text** (covering the J721S2 family: TDA4VE, TDA4AL, TDA4VL) mentions: "MMA up to 8 TOPS (8b) at 1.0GHz"
+
+The product headline is the most specific source for the evaluated orderable part. The family-level text describes the maximum capability across all variants in the family and may not apply equally to all orderable parts.
+
+**Conservative planning decision:** Until TI FAE engagement or exact datasheet / ordering-table confirmation resolves this ambiguity, use **4 TOPS** as the conservative product-selection value for TDA4VL-Q1.
 
 Key differences between TDA4VL-Q1 and TDA4VM-Q1 per official product pages:
-- Fewer R5F cores: 2 (TDA4VL) vs. 6 (TDA4VM)
+- Fewer R5F cores: 4 total (2 in MCU subsystem, 2 in general compute) for TDA4VL vs. 6 for TDA4VM
 - Lower A72 clock: 1200 MHz (TDA4VL) vs. 2000 MHz (TDA4VM)
 - Smaller package: 23x23mm (TDA4VL) vs. 24x24mm (TDA4VM)
 - Fewer Ethernet ports: 2 RMII/RGMII (TDA4VL) vs. 8-port switch (TDA4VM)
 - Two C7x DSPs (TDA4VL) vs. one C7x + two C66x (TDA4VM)
-- **SAME** MMA AI performance: 8 TOPS (8b)
+- **AI performance:** TDA4VL-Q1 product headline = 4 TOPS; TDA4VM product headline = 8 TOPS. Family text mentions "up to 8 TOPS" for the J721S2 family but this requires confirmation for the specific TDA4VL-Q1 orderable variant.
 
-This makes TDA4VL-Q1 significantly more attractive for ADVIS than previously assessed.
+TDA4VL-Q1 remains attractive for ADVIS cost-down but at 4 TOPS (conservative) rather than 8 TOPS, performance headroom is reduced compared to TDA4VM-Q1.
+
+---
+
+## 5.1 Source Conflict and Conservative Planning Table
+
+| Specification | TI Product Headline | TI Family/Datasheet Text | Conflict? | Conservative Planning Value | Resolution Action |
+|--------------|--------------------|--------------------------|-----------|-----------------------------|-------------------|
+| TDA4VL-Q1 AI TOPS | 4 TOPS | "MMA up to 8 TOPS (8b) at 1.0GHz" (family text) | **YES** | **4 TOPS** | Requires TI FAE / exact datasheet / ordering-table confirmation |
+| TDA4VM AI TOPS | 8 TOPS | 8 TOPS (8b) at 1.0 GHz | No | 8 TOPS | Confirmed |
+| AM62A7 AI TOPS | 2 TOPS | 2 TOPS (8b) at 1.0 GHz | No | 2 TOPS | Confirmed |
+| TDA4VL-Q1 R5F cores | Not explicit in headline | "Up to 4x Arm Cortex-R5F" / family text mentions partition detail | Partial | 4 total R5F cores (2 MCU + 2 general), subject to exact part confirmation | Requires TI FAE confirmation |
+| TDA4VL-Q1 C7x DSPs | C7xDSP (singular in headline) | Two C7x at up to 1.0 GHz | Partial | Two C7x (per family page detail) | Low risk, family page is specific |
 
 ---
 
@@ -99,17 +121,17 @@ This makes TDA4VL-Q1 significantly more attractive for ADVIS than previously ass
 
 | Product Tier | TDA4VL-Q1 | TDA4VM-Q1 | AM62A7 | J722S / AM67A |
 |-------------|-----------|-----------|--------|---------------|
-| **ADVIS Assist** (FCW, LDW, TSR, PCW, DMS) | **Strong candidate** - 8 TOPS MMA with lower cost/power than TDA4VM | Capable but higher cost/power than needed for this tier | **CRITICAL: Single CSI-2 port limits dual-camera use** | Cannot assess - specs not publicly confirmed |
-| **ADVIS Control** (AEB, ACC, LKA requests) | **Viable** - same 8 TOPS MMA; lower A72 clock may limit non-MMA workloads | **Strong candidate** - higher A72 clock, more R5F cores for safety partitioning | Not viable for dual-camera; 2 TOPS may be limiting for safety-critical inference | Cannot assess - specs not publicly confirmed |
+| **ADVIS Assist** (FCW, LDW, TSR, PCW, DMS) | **Candidate** - 4 TOPS (conservative) with lower cost/power than TDA4VM; may have up to 8 TOPS pending confirmation | Capable but higher cost/power than needed for this tier | **CRITICAL: Single CSI-2 port limits dual-camera use.** However, may be valid for single-camera DMS-only, fleet-lite, or aggregated-input variants | Cannot assess - specs not publicly confirmed |
+| **ADVIS Control** (AEB, ACC, LKA requests) | **Conditional** - 4 TOPS (conservative) may limit safety-critical inference headroom; lower A72 clock may limit non-MMA workloads. If TI confirms 8 TOPS for this variant, viability improves significantly | **Strong candidate** - 8 TOPS confirmed, higher A72 clock, more R5F cores for safety partitioning | Not viable for dual-camera; 2 TOPS may be limiting for safety-critical inference | Cannot assess - specs not publicly confirmed |
 | **ADVIS Fleet** (logging, scoring, events) | Capable (may be over-specified for logging workload) | Capable but higher cost/power than needed | Viable for single-camera fleet use (e.g., forward-only dash-cam) | Cannot assess - specs not publicly confirmed |
-| **Single-Camera DMS Module** | Over-specified for single-camera DMS | Over-specified for single-camera DMS | **Good fit** - 2 TOPS adequate for DMS, single CSI-2 port sufficient | Cannot assess - specs not publicly confirmed |
+| **Single-Camera DMS Module** | Over-specified for single-camera DMS | Over-specified for single-camera DMS | **Good fit** - 2 TOPS adequate for DMS, single CSI-2 port sufficient for single-camera DMS-only or fleet-lite products | Cannot assess - specs not publicly confirmed |
 
 ### Tier Rationale (Revised)
 
-- **ADVIS Assist:** TDA4VL-Q1 provides 8 TOPS MMA (same as TDA4VM) at lower power and cost, with two CSI-2 RX ports for simultaneous dual-camera operation. This is now the leading candidate for Assist tier.
-- **ADVIS Control:** Both TDA4VL-Q1 and TDA4VM-Q1 provide 8 TOPS MMA. TDA4VM-Q1 offers higher CPU clock (2.0 vs 1.2 GHz) and more R5F cores (6 vs 2), which may benefit safety-critical partitioning and non-MMA workloads. The selection depends on whether the additional CPU headroom and R5F cores justify the power/cost increase.
+- **ADVIS Assist:** TDA4VL-Q1 provides 4 TOPS per product headline (possibly up to 8 TOPS per family text, pending confirmation) at lower power and cost, with two CSI-2 RX ports for simultaneous dual-camera operation. At 4 TOPS conservative, it remains a viable candidate for Assist tier workloads (FCW, LDW, TSR, DMS). TI FAE engagement is required to confirm actual TOPS for this orderable variant.
+- **ADVIS Control:** TDA4VM-Q1 provides confirmed 8 TOPS plus higher CPU clock (2.0 vs 1.2 GHz) and more R5F cores (6 vs 4), which benefit safety-critical partitioning and non-MMA workloads. TDA4VL-Q1 at 4 TOPS conservative may be insufficient for Control tier unless TI confirms 8 TOPS for this variant.
 - **ADVIS Fleet:** If dual-camera is required, TDA4VL-Q1 is the cost-effective choice. If single-camera logging is acceptable, AM62A7 offers the lowest cost.
-- **AM62A7 for ADVIS dual-camera:** Not recommended due to single CSI-2 RX port constraint. Workarounds (mux, time-multiplex) add complexity that defeats the cost-down architecture goal.
+- **AM62A7 for ADVIS dual-camera:** Not recommended due to single CSI-2 RX port constraint. Workarounds (mux, time-multiplex) add complexity that defeats the cost-down architecture goal. However, AM62A7 remains valid for single-camera use cases: DMS-only modules, fleet-lite (forward-only dash-cam), or designs using an external CSI-2 aggregator.
 
 ---
 
@@ -120,9 +142,9 @@ This makes TDA4VL-Q1 significantly more attractive for ADVIS than previously ass
 | FWD 2MP @ 30fps capture | Supported (CSI-2 RX port 0) | Supported (CSI-2 RX port 0) | Supported (single port, single camera) | Cannot assess |
 | DMS 1MP @ 30fps capture | Supported (CSI-2 RX port 1) | Supported (CSI-2 RX port 1) | **NOT NATIVELY SUPPORTED** - requires mux or time-sharing on single port | Cannot assess |
 | Both cameras simultaneous ISP | Supported (VPAC + ISP) | Supported (VPAC + ISP) | **Single port constraint prevents true simultaneous operation** | Cannot assess |
-| FWD object detection (CNN on MMA) | 8 TOPS available | 8 TOPS available | 2 TOPS available (if single-camera) | Cannot assess |
-| DMS face/gaze (CNN on MMA) | 8 TOPS shared with FWD | 8 TOPS shared with FWD | 2 TOPS (if single-camera) | Cannot assess |
-| Both CNNs simultaneous on MMA | Feasible - 8 TOPS shared across both models | Feasible - 8 TOPS + higher CPU assists scheduling | N/A - dual camera not natively supported | Cannot assess |
+| FWD object detection (CNN on MMA) | 4 TOPS available (conservative; up to 8 pending confirmation) | 8 TOPS available | 2 TOPS available (if single-camera) | Cannot assess |
+| DMS face/gaze (CNN on MMA) | 4 TOPS shared with FWD (conservative) | 8 TOPS shared with FWD | 2 TOPS (if single-camera) | Cannot assess |
+| Both CNNs simultaneous on MMA | Feasible at 4 TOPS (conservative) - may require model optimization; confirmed feasible if TI confirms 8 TOPS | Feasible - 8 TOPS + higher CPU assists scheduling | N/A - dual camera not natively supported | Cannot assess |
 | Headroom for future models | Moderate (A72 at 1.2 GHz may limit pre/post-processing) | Significant (A72 at 2.0 GHz + C66x assist) | Limited (2 TOPS, A53 cores) | Cannot assess |
 
 ---
@@ -130,6 +152,8 @@ This makes TDA4VL-Q1 significantly more attractive for ADVIS than previously ass
 ## 8. Power Budget Comparison
 
 ### 8.1 Power Targets by Tier
+
+**Note:** Power values in ADVIS tier tables are module design targets, not official SoC power consumption values. Actual SoC power consumption requires per-use-case characterization from TI datasheet power tables or TI power estimation tools.
 
 | Power Tier | Target (Typical) | Maximum (Absolute) | Thermal Constraint |
 |------------|-------------------|---------------------|-------------------|
@@ -220,10 +244,10 @@ This makes TDA4VL-Q1 significantly more attractive for ADVIS than previously ass
 
 | Product Tier | SoC | Forward Sensor | DMS Sensor | Rationale |
 |-------------|-----|----------------|------------|-----------|
-| ADVIS Assist (cost-optimized) | TDA4VL-Q1 | OX03C10 | OX01N1B | 8 TOPS MMA in smaller/lower-power package; two CSI-2 ports |
+| ADVIS Assist (cost-optimized) | TDA4VL-Q1 | OX03C10 | OX01N1B | 4 TOPS (conservative) in smaller/lower-power package; two CSI-2 ports; pending TI confirmation of actual TOPS |
 | ADVIS Assist (premium) | TDA4VL-Q1 | IMX390 | OX01N1B | Same SoC, premium sensor for better night performance |
-| ADVIS Control | TDA4VM-Q1 | IMX390 | OX01H1B | Higher CPU clock and more R5F cores for safety partitioning |
-| ADVIS Control (cost-explore) | TDA4VL-Q1 | IMX390 | OX01H1B | Evaluate if 1.2 GHz A72 + 2x R5F is sufficient for Control tier |
+| ADVIS Control | TDA4VM-Q1 | IMX390 | OX01H1B | Confirmed 8 TOPS, higher CPU clock and more R5F cores for safety partitioning |
+| ADVIS Control (cost-explore) | TDA4VL-Q1 | IMX390 | OX01H1B | Only viable if TI confirms 8 TOPS for TDA4VL-Q1 orderable variant; at 4 TOPS conservative, may be insufficient for Control |
 | Single-Camera DMS | AM62A7 | N/A | OX01N1B or RGB-IR | Single CSI-2 port sufficient; lowest cost for DMS-only product |
 | Single-Camera Forward | AM62A7 | OX03C10 | N/A | Single CSI-2 port sufficient; lowest cost for forward-only product |
 
@@ -247,10 +271,10 @@ This makes TDA4VL-Q1 significantly more attractive for ADVIS than previously ass
 
 | Decision | Status | Recommendation |
 |----------|--------|----------------|
-| Primary SoC for ADVIS Assist v0.5 | OPEN | TDA4VL-Q1 (8 TOPS MMA, lower cost/power, two CSI-2 RX ports) |
-| Primary SoC for ADVIS Control v0.5 | OPEN | TDA4VM-Q1 (8 TOPS MMA + higher CPU clock + more R5F for safety partitioning); TDA4VL-Q1 as cost-explore alternative |
+| Primary SoC for ADVIS Assist v0.5 | OPEN | TDA4VL-Q1 (4 TOPS conservative per product headline; pending TI confirmation of actual TOPS for this orderable variant; two CSI-2 RX ports) |
+| Primary SoC for ADVIS Control v0.5 | OPEN | TDA4VM-Q1 (confirmed 8 TOPS + higher CPU clock + more R5F for safety partitioning); TDA4VL-Q1 only viable for Control if TI confirms 8 TOPS |
 | AM62A7 for dual-camera ADVIS | **NOT RECOMMENDED** | Single CSI-2 RX port is a critical constraint for dual-camera architecture |
-| AM62A7 for single-camera variant | OPEN | Viable for DMS-only or forward-only single-camera products |
+| AM62A7 for single-camera variant | OPEN | Viable for DMS-only, forward-only, or fleet-lite single-camera products |
 | J722S / AM67A evaluation | DEFERRED | Cannot assess until official specifications are publicly available or NDA data obtained |
 | Forward sensor (Assist) | OPEN | OX03C10 (cost-optimized) or IMX390 (premium) |
 | Forward sensor (Control) | OPEN | IMX390 (best night/HDR, mature ISP tuning) |
@@ -266,7 +290,8 @@ All selections are PRELIMINARY and require vendor engagement, datasheet confirma
 | Rev | Date | Author | Change |
 |-----|------|--------|--------|
 | 0.1 | 2026-06 | Systems Engineering | Initial PRELIMINARY release for v0.5 compact module |
-| 0.2 | 2026-06 | Systems Engineering | MAJOR CORRECTION: TDA4VL-Q1 confirmed 8 TOPS MMA (not ~1 TOPS); AM62A7 single CSI-2 port identified as critical dual-camera constraint; all specs updated to verified TI product page data; removed unverified approximate values; added source references |
+| 0.2 | 2026-06 | Systems Engineering | MAJOR CORRECTION: TDA4VL-Q1 MMA corrected from ~1 TOPS; AM62A7 single CSI-2 port identified as critical dual-camera constraint; all specs updated to verified TI product page data; removed unverified approximate values; added source references |
+| 0.3 | 2026-06 | Systems Engineering | AMBIGUITY CORRECTION: TDA4VL-Q1 AI performance changed from "confirmed 8 TOPS" to "4 TOPS per product headline, up to 8 TOPS per family text (ambiguous)". Added Source Type/Confidence column, Conservative Planning Value column, Source Conflict table. Added scope warning for non-TI SoCs. Power values marked as module design targets. R5F wording corrected. AM62A7 conclusion nuanced for single-camera variants. |
 
 ---
 

@@ -10,7 +10,7 @@ This guide helps OEM customers select the appropriate SoC tier for their ADVIS i
 
 | Parameter | AM62A (Entry) | AM68A / TDA4VM (Mid) | TDA4VH (High) |
 |-----------|---------------|---------------------|----------------|
-| **AI Performance** | <1 TOPS | 8 TOPS | 32 TOPS |
+| **AI Performance** | 2 TOPS (per AM62A7 product headline) | 8 TOPS (per TDA4VM product headline) | 32 TOPS |
 | **CPU Cores** | 1x Cortex-A53 | 2x Cortex-A72 | 4x Cortex-A72 |
 | **CPU Clock** | 1.4 GHz | 2.0 GHz | 2.0 GHz |
 | **Safety MCU** | Cortex-M4F | Cortex-R5F | 2x Cortex-R5F |

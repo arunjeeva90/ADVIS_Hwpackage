@@ -153,7 +153,7 @@ The TDA4x family enables ADVIS to scale across product tiers:
 
 | ADVIS Tier | SoC | AI Performance | Camera Count | Use Case |
 |------------|-----|----------------|--------------|----------|
-| Entry | AM62A | <1 TOPS | 1 | DMS only, fleet monitoring |
+| Entry | AM62A | 2 TOPS (per AM62A7 product headline) | 1 | DMS only, fleet monitoring |
 | Mid (baseline) | AM68A/TDA4VM | 8 TOPS | 2 | Full ADAS+DMS, ADVIS Assist/Control |
 | High | TDA4VH | 32 TOPS | 4-8 | Surround view, sensor fusion, ADVIS Fusion |
 

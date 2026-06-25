@@ -14,7 +14,7 @@ The ADVIS platform defines three hardware scaling tiers that enable product vari
 |-----------|--------------|
 | **Target Use Case** | Single-camera DMS, basic fleet monitoring |
 | **SoC** | TI AM62A |
-| **AI Performance** | <1 TOPS |
+| **AI Performance** | 2 TOPS (per AM62A7 product headline) |
 | **Camera Count** | 1 (DMS only) |
 | **Sensor Set** | DMS camera, CAN monitor |
 | **Target BOM Cost** | Lowest tier |
