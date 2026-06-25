@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** PRELIMINARY - Subject to vendor/datasheet confirmation  
-**Version:** v0.1 - July 2026  
+**Version:** v0.1 - June 2026  
 **Document ID:** ARCH-SIG-002
 
 ---
@@ -83,7 +83,7 @@ This document defines the signal flow architecture for the ADVIS v0.5 Compact Mo
 | Data rate per lane | Up to 2.5 Gbps (D-PHY v1.2) |
 | Aggregate bandwidth (4-lane) | Up to 10 Gbps |
 | Aggregate bandwidth (2-lane) | Up to 5 Gbps |
-| Impedance | 100 ohm differential (+/- 10%) |
+| Impedance | MIPI D-PHY differential impedance target: TBD by selected SoC datasheet, selected sensor datasheet, connector/flex design and PCB stackup. Preliminary planning range: 90-100 ohm differential. Final value to be locked after stackup and SI review. |
 | Signal levels | LP: 0-1.2V; HS: 100-300 mV differential |
 | Trace routing | Sensor to SoC, PCB traces (no cable) |
 | Maximum trace length | 50mm recommended (PCB) |
@@ -101,7 +101,7 @@ This document defines the signal flow architecture for the ADVIS v0.5 Compact Mo
 | Via count | 0 preferred; maximum 1 via pair per lane |
 | Guard traces | Recommended between MIPI lanes and other high-speed signals |
 | Keepout from power inductors | Minimum 3mm from switching nodes |
-| Trace width / spacing (100 ohm) | Per stackup calculation (typ. 3.5/4.5 mil on 4-mil dielectric) |
+| Trace width / spacing (90-100 ohm range) | Per stackup calculation (typ. 3.5/4.5 mil on 4-mil dielectric) |
 
 ### 3.3 Forward Camera Connector (if not rigid-mount)
 
@@ -109,7 +109,7 @@ This document defines the signal flow architecture for the ADVIS v0.5 Compact Mo
 |-----------|---------------|
 | Connector type | 0.3mm pitch FPC connector (24-40 pin) |
 | FPC length | Less than 20mm (forward camera on same side as SoC) |
-| FPC impedance | 100 ohm differential (controlled impedance FPC) |
+| FPC impedance | MIPI D-PHY differential impedance target: TBD by selected SoC datasheet, selected sensor datasheet, connector/flex design and PCB stackup. Preliminary planning range: 90-100 ohm differential. Final value to be locked after stackup and SI review. |
 | FPC layer count | 2-layer minimum (signal + ground reference) |
 
 ---
@@ -124,7 +124,7 @@ This document defines the signal flow architecture for the ADVIS v0.5 Compact Mo
 | Lane configuration | 2-lane (1MP DMS sensor is bandwidth-adequate at 2-lane) |
 | Data rate per lane | Up to 1.5 Gbps (typical for 1MP @ 30fps RAW10) |
 | Aggregate bandwidth (2-lane) | Up to 3 Gbps (sufficient for 1MP RAW10 @ 30fps) |
-| Impedance | 100 ohm differential (+/- 10%) |
+| Impedance | MIPI D-PHY differential impedance target: TBD by selected SoC datasheet, selected sensor datasheet, connector/flex design and PCB stackup. Preliminary planning range: 90-100 ohm differential. Final value to be locked after stackup and SI review. |
 | Connection method | ~5cm rigid-flex or flex cable |
 | Maximum flex length | 50mm (target); 80mm absolute maximum |
 
@@ -134,7 +134,7 @@ This document defines the signal flow architecture for the ADVIS v0.5 Compact Mo
 |-----------|---------------|
 | Cable type | Rigid-flex (preferred) or controlled-impedance FPC |
 | Layer count | 4-layer rigid-flex (Sig-Gnd-Gnd-Sig) or 2-layer FPC |
-| Impedance control | 100 ohm differential on MIPI pairs |
+| Impedance control | MIPI D-PHY differential impedance target: TBD by selected SoC datasheet, selected sensor datasheet, connector/flex design and PCB stackup. Preliminary planning range: 90-100 ohm differential. Final value to be locked after stackup and SI review. |
 | Signals carried | CSI-2 CLK (P/N), D0 (P/N), D1 (P/N), I2C (SCL, SDA), XCLK, RST_N, PWDN, VDD_SENSOR, VDDIO, GND |
 | Total conductors | ~20 conductors minimum |
 | Connector (PCB side) | 0.3mm pitch FPC ZIF connector or board-to-board |
@@ -316,8 +316,8 @@ This document defines the signal flow architecture for the ADVIS v0.5 Compact Mo
 
 | Signal | Impedance Target | Tolerance | Routing Type |
 |--------|-----------------|-----------|--------------|
-| MIPI CSI-2 (PCB) | 100 ohm differential | +/- 10% | Diff pair, length matched |
-| MIPI CSI-2 (flex) | 100 ohm differential | +/- 15% | Controlled impedance flex |
+| MIPI CSI-2 (PCB) | TBD (preliminary planning range: 90-100 ohm differential) | TBD after stackup/SI review | Diff pair, length matched |
+| MIPI CSI-2 (flex) | TBD (preliminary planning range: 90-100 ohm differential) | TBD after stackup/SI review | Controlled impedance flex |
 | CAN bus (PCB) | 120 ohm differential | +/- 10% | Diff pair to connector |
 | XCLK/MCLK | 50 ohm single-ended | +/- 15% | Controlled (if over 20mm) |
 | I2C | No controlled impedance | N/A | Standard trace with pull-ups |
@@ -364,7 +364,7 @@ Note: Exact timing per sensor datasheet. Both cameras may be sequenced in parall
 
 | Rev | Date | Author | Change |
 |-----|------|--------|--------|
-| 0.1 | 2026-07 | Signal Integrity Team | Initial PRELIMINARY release for v0.5 direct-MIPI architecture |
+| 0.1 | 2026-06 | Signal Integrity Team | Initial PRELIMINARY release for v0.5 direct-MIPI architecture |
 
 ---
 

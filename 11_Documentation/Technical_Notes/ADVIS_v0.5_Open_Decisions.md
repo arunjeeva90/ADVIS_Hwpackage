@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** ACTIVE - Tracking document for open technical decisions  
-**Version:** v0.1 - July 2026  
+**Version:** v0.2 - June 2026  
 **Document ID:** TN-004
 
 ---
@@ -36,9 +36,9 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Status** | OPEN |
 | **Owner** | Systems Engineering |
 | **Target Date** | TBD |
-| **Options** | TDA4VL-Q1, AM62A, J722S |
+| **Options** | TDA4VL-Q1 (preferred), AM62A7 (single-camera variants only), J722S (deferred - specs not public) |
 | **Recommendation** | TDA4VL-Q1 (PRELIMINARY) |
-| **Rationale** | Lowest cost/power with 2x CSI-2 ports and adequate ~1 TOPS for warning-level perception. AM62A has single ISP pipeline concern for dual-camera. J722S is newer with less mature SDK. |
+| **Rationale** | 8 TOPS MMA with lower cost/power than TDA4VM, plus 2x CSI-2 RX ports for dual-camera. AM62A7 has single CSI-2 port constraint (see OD-020). J722S is not publicly confirmed. |
 | **Blocking** | PCB schematic entry, BGA fanout, DDR routing, power tree sizing |
 | **Dependencies** | OD-002 (sensor selection affects CSI lane requirements), OD-009 (SDK evaluation) |
 
@@ -52,9 +52,9 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Status** | OPEN |
 | **Owner** | Systems Engineering |
 | **Target Date** | TBD |
-| **Options** | TDA4VM-Q1 (primary), J722S (if 4 TOPS sufficient) |
+| **Options** | TDA4VM-Q1 (primary), TDA4VL-Q1 (cost-explore - same 8 TOPS MMA but lower A72 clock) |
 | **Recommendation** | TDA4VM-Q1 (PRELIMINARY) |
-| **Rationale** | Only candidate with ~8 TOPS MMA for AEB/ACC/LKA safety-critical inference. J722S at ~4 TOPS may be insufficient for safety margins. |
+| **Rationale** | TDA4VM-Q1 provides 8 TOPS MMA plus higher A72 clock (2.0 GHz vs 1.2 GHz) and more R5F cores (6 vs 2) for safety partitioning. TDA4VL-Q1 also has 8 TOPS MMA but lower CPU performance may limit non-MMA workloads in safety-critical pipelines. J722S at unknown TOPS (not publicly confirmed) cannot be evaluated. |
 | **Blocking** | PCB layout (23x23mm BGA requires more area), thermal design, power budget |
 | **Dependencies** | OD-010 (thermal feasibility in windshield mount) |
 
@@ -344,11 +344,49 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 
 ---
 
+## 10. Datasheet Verification and Architecture-Critical Decisions
+
+### OD-019: Official Datasheet Verification for All SoC Specifications
+
+| Field | Value |
+|-------|-------|
+| **ID** | OD-019 |
+| **Subsystem** | Systems Engineering / All |
+| **Priority** | P1 - Critical (blocks all SoC-dependent design decisions) |
+| **Status** | OPEN |
+| **Owner** | Systems Engineering + TI FAE |
+| **Target Date** | TBD |
+| **Question** | Have all SoC specifications used in ADVIS design documents been verified against official TI datasheets (not marketing summaries, not community posts, not third-party reports)? |
+| **Background** | The v0.1 SoC Selection Matrix contained a critical error: TDA4VL-Q1 was listed as "~1 TOPS (C7x DSP only, no MMA)" when the official TI product page confirms 8 TOPS MMA. This error would have resulted in incorrect SoC selection and product architecture decisions. |
+| **Required Actions** | (1) Obtain official TI datasheets (under NDA if needed) for TDA4VL-Q1, TDA4VM-Q1, and AM62A7-Q1; (2) Cross-reference every specification in ARCH-SOC-002 against official datasheet tables; (3) Flag any value that cannot be traced to an official source; (4) Establish a process to prevent unverified specifications from entering design documents |
+| **Acceptance Criteria** | Every numerical specification in the SoC matrix has a traceable reference to an official TI document (product page, datasheet, or errata) |
+| **Blocking** | OD-001, OD-002, OD-003, and all downstream SoC-dependent decisions |
+| **Dependencies** | TI FAE engagement, NDA execution if needed for full datasheets |
+
+### OD-020: AM62A7 Single CSI-2 Port - Impact on Dual-Camera Architecture
+
+| Field | Value |
+|-------|-------|
+| **ID** | OD-020 |
+| **Subsystem** | Compute / Camera Architecture |
+| **Priority** | P1 - Critical (affects product tier definition) |
+| **Status** | OPEN |
+| **Owner** | Systems Engineering |
+| **Target Date** | TBD |
+| **Finding** | AM62A7 has ONLY ONE CSI-2 Receiver (4-lane D-PHY). The ADVIS v0.5 dual-camera architecture requires two independent CSI-2 RX ports for simultaneous forward + DMS camera operation. |
+| **Impact** | AM62A7 cannot natively support the dual-camera ADVIS architecture without additional hardware (CSI-2 mux, SerDes hub, or time-multiplexing). Any workaround partially or completely defeats the direct-MIPI cost-down objective. |
+| **Options** | (A) Remove AM62A7 from dual-camera ADVIS consideration entirely; (B) Define a single-camera AM62A7 product variant (DMS-only or forward-only); (C) Evaluate CSI-2 mux solutions and their cost/complexity impact; (D) Evaluate Virtual Channel time-sharing on single port (performance impact) |
+| **Recommendation** | Option A + B: Remove AM62A7 from dual-camera tier candidates; define a separate single-camera product variant using AM62A7 if market demand exists |
+| **Blocking** | ADVIS Fleet tier SoC selection, cost-down BOM analysis for single-camera products |
+| **Dependencies** | OD-001 (Assist SoC selection now focuses on TDA4VL-Q1), market analysis for single-camera product demand |
+
+---
+
 ## 11. Decision Priority Summary
 
 | Priority | Count | IDs |
 |----------|-------|-----|
-| P1 - Critical (blocks major milestone) | 6 | OD-001, OD-002, OD-003, OD-007, OD-009, OD-011 |
+| P1 - Critical (blocks major milestone) | 8 | OD-001, OD-002, OD-003, OD-007, OD-009, OD-011, OD-019, OD-020 |
 | P2 - High (blocks detailed design) | 8 | OD-004, OD-005, OD-006, OD-008, OD-012, OD-013, OD-015, OD-016 |
 | P3 - Medium (can be deferred to later phase) | 4 | OD-010, OD-014, OD-017, OD-018 |
 
@@ -357,6 +395,10 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 ## 12. Decision Dependencies Graph
 
 ```
+OD-019 (Datasheet verification) --> OD-001 (SoC Assist)
+                                 --> OD-002 (SoC Control)
+                                 --> OD-020 (AM62A7 single-port)
+
 OD-001 (SoC Assist) ----+----> OD-003 (Single/Dual PCB)
                          |
 OD-002 (SoC Control) ---+----> OD-011 (Thermal feasibility)
@@ -379,19 +421,23 @@ OD-009 (SDK selection) depends on OD-001, OD-002
 OD-010 (DL models) depends on OD-001, OD-009
 OD-017 (Dual-source) depends on OD-004, OD-005, OD-007, OD-008
 OD-018 (Storage) depends on OD-001
+OD-020 (AM62A7 single-port) depends on OD-019, blocks Fleet tier SoC selection
 ```
 
 ---
 
 ## 13. Next Steps
 
-1. Schedule SoC selection review meeting (resolve OD-001, OD-002)
-2. Request TI samples: TDA4VL-Q1 EVM, TDA4VM SK (if not already available)
-3. Request sensor evaluation kits: OX03C10, OX01N1B, IMX390
-4. Initiate thermal simulation for windshield-mount module (OD-011)
-5. Begin SDK evaluation on TDA4VM SK platform (OD-009)
-6. Define housing envelope options with mechanical team (OD-012)
-7. Confirm J722S availability timeline and SDK roadmap with TI FAE
+1. **URGENT:** Obtain official TI datasheets for TDA4VL-Q1, TDA4VM-Q1, AM62A7-Q1 and verify all specifications (OD-019)
+2. Schedule SoC selection review meeting (resolve OD-001, OD-002) - now informed by corrected TDA4VL-Q1 8 TOPS data
+3. Formally resolve AM62A7 single CSI-2 port finding (OD-020) - determine if single-camera product variant is desired
+4. Request TI samples: TDA4VL-Q1 EVM (J721S2), TDA4VM SK (if not already available)
+5. Request sensor evaluation kits: OX03C10, OX01N1B, IMX390
+6. Initiate thermal simulation for windshield-mount module (OD-011)
+7. Begin SDK evaluation on TDA4VM SK platform (OD-009), with plan to evaluate J721S2 (TDA4VL family) SDK
+8. Define housing envelope options with mechanical team (OD-012)
+9. Confirm J722S availability timeline and SDK roadmap with TI FAE
+10. Conduct TDA4VL vs TDA4VM pinout compatibility analysis (see ARCH-SOC-003 checklist)
 
 ---
 
@@ -399,7 +445,8 @@ OD-018 (Storage) depends on OD-001
 
 | Rev | Date | Author | Change |
 |-----|------|--------|--------|
-| 0.1 | 2026-07 | Systems Engineering | Initial open decisions register for v0.5 compact module |
+| 0.1 | 2026-06 | Systems Engineering | Initial open decisions register for v0.5 compact module |
+| 0.2 | 2026-06 | Systems Engineering | Added OD-019 (datasheet verification) and OD-020 (AM62A7 single CSI-2 port critical constraint); updated priority summary and dependency graph; corrected date from July to June 2026 |
 
 ---
 

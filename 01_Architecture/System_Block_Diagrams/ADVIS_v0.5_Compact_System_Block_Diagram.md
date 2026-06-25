@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** PRELIMINARY - Subject to vendor/datasheet confirmation  
-**Version:** v0.1 - July 2026  
+**Version:** v0.1 - June 2026  
 **Document ID:** ARCH-SBD-002
 
 ---
@@ -156,6 +156,8 @@ This document presents the top-level system block diagram for the ADVIS v0.5 Com
 
 ## 5. Power Domain Mapping
 
+### 5.1 Power Rails
+
 | Rail | Voltage | Source | Loads |
 |------|---------|--------|-------|
 | 12V_BAT | 8-16V (nom 12V) | Vehicle battery via J100 | Protection stage input |
@@ -166,6 +168,16 @@ This document presents the top-level system block diagram for the ADVIS v0.5 Com
 | VDDA_SENSOR | 2.8V (typ) | Dedicated LDO | Image sensor analog supply |
 | VDDIO_SENSOR | 1.8V | Shared from 1V8_IO or LDO | Image sensor digital I/O |
 | VDD_DDR | 1.1V | SoC PMIC or LDO | LPDDR4/4X |
+
+### 5.2 Power Budget Targets by Product Tier
+
+| Tier | SoC | Module Power Target (Typical) | Module Power (Absolute Max) | Thermal Strategy |
+|------|-----|-------------------------------|-----------------------------|--------------------|
+| ADVIS Assist | TDA4VL-Q1 | Less than 6W | Less than 8W | Standard compact thermal spreader |
+| ADVIS Control | TDA4VM-Q1 | Less than 14W | Less than 18W | Large thermal spreader, DVFS management |
+| Single-Camera (if applicable) | AM62A7 | Less than 5W | Less than 7W | Minimal thermal challenge |
+
+*Note: SoC power figures are preliminary estimates based on TI product page power class descriptions. Final values require per-use-case characterization from TI datasheet power tables.*
 
 ---
 
@@ -186,9 +198,9 @@ This document presents the top-level system block diagram for the ADVIS v0.5 Com
 - All vehicle-facing signals must pass through ESD protection (minimum IEC 61000-4-2 Level 4)
 - CAN bus must tolerate +/-58V fault per ISO 11898-2
 - Direct MIPI CSI-2 traces must be length-matched within 0.5mm intra-pair, 2mm inter-pair
-- DMS flex cable must maintain 100 ohm differential impedance for MIPI lanes
+- DMS flex cable must maintain MIPI D-PHY differential impedance per final stackup/SI review (preliminary planning range: 90-100 ohm differential)
 - Ground domains: single digital ground plane (no analog ground split on compact PCB)
-- Total module power budget: less than 8W at nominal (less than 15W absolute max with TDA4VM)
+- Total module power budget: target less than 8W at nominal for Assist tier (TDA4VL-Q1); target less than 15W for Control tier (TDA4VM-Q1); final values pending SoC datasheet power characterization
 - Watchdog disabled during boot (BOOT_OK gates enable)
 - SoC thermal pad must have direct thermal path to aluminum rear plate
 - Optical baffle required between forward and DMS light paths
@@ -225,10 +237,10 @@ This document presents the top-level system block diagram for the ADVIS v0.5 Com
     +-------------------+
 ```
 
-- SoC TDP target: 3-5W (TDA4VL/AM62A) or 10-15W (TDA4VM)
+- SoC TDP target: TBD pending datasheet confirmation; preliminary estimate 3-5W class (TDA4VL) or 10-15W class (TDA4VM)
 - Thermal spreader area: minimum 2x SoC package footprint
 - TIM: graphite sheet or thermal pad (0.5-1.0 mm)
-- Ambient operating range: -40C to +85C (junction max 125C)
+- Ambient operating range: -40C to +85C (junction max per SoC datasheet: 125C for TDA4VL, 105C for TDA4VM)
 
 ---
 
@@ -236,7 +248,7 @@ This document presents the top-level system block diagram for the ADVIS v0.5 Com
 
 | Rev | Date | Author | Change |
 |-----|------|--------|--------|
-| 0.1 | 2026-07 | Architecture Team | Initial PRELIMINARY release for v0.5 compact module |
+| 0.1 | 2026-06 | Architecture Team | Initial PRELIMINARY release for v0.5 compact module |
 
 ---
 

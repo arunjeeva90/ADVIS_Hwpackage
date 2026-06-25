@@ -2,7 +2,7 @@
 
 **Classification:** Confidential - Engineering Use Only  
 **Version:** 0.1 (Draft)  
-**Date:** July 2026  
+**Date:** June 2026  
 **Applies to:** ADVIS v0.5 Compact Production-Cost-Down Module
 
 ---
@@ -22,7 +22,7 @@ This ICD defines the camera interfaces for the ADVIS v0.5 compact windshield-mou
 | Protocol | MIPI CSI-2 |
 | Lane count | 2-lane or 4-lane (TBD based on sensor and SoC port availability) |
 | Data rate per lane | Up to 2.5 Gbps (MIPI D-PHY v2.1 class) |
-| Differential impedance | 85-100 ohm (controlled impedance, target 90 ohm) |
+| Differential impedance | MIPI D-PHY differential impedance target: TBD by selected SoC datasheet, selected sensor datasheet, connector/flex design and PCB stackup. Preliminary planning range: 90-100 ohm differential. Final value to be locked after stackup and SI review. |
 | Trace length | Short (under 50 mm on PCB, sensor co-located in module) |
 | Connector | Direct PCB trace or short rigid-flex to sensor PCB |
 | Signal pairs | CLK+/CLK-, D0+/D0-, D1+/D1- [, D2+/D2-, D3+/D3- if 4-lane] |
@@ -76,7 +76,7 @@ This ICD defines the camera interfaces for the ADVIS v0.5 compact windshield-mou
 | Protocol | MIPI CSI-2 |
 | Lane count | 1-lane or 2-lane (TBD based on sensor resolution and frame rate) |
 | Data rate per lane | Up to 2.5 Gbps (MIPI D-PHY v2.1 class) |
-| Differential impedance | 85-100 ohm (controlled impedance, target 90 ohm) |
+| Differential impedance | MIPI D-PHY differential impedance target: TBD by selected SoC datasheet, selected sensor datasheet, connector/flex design and PCB stackup. Preliminary planning range: 90-100 ohm differential. Final value to be locked after stackup and SI review. |
 | Trace/flex length | Up to 50 mm (short flex or rigid-flex from main PCB to DMS sensor) |
 | Connector | ZIF flex connector or soldered rigid-flex |
 | Signal pairs | CLK+/CLK-, D0+/D0- [, D1+/D1- if 2-lane] |
@@ -120,7 +120,7 @@ This ICD defines the camera interfaces for the ADVIS v0.5 compact windshield-mou
 | Width | TBD (depends on signal count and layer count) |
 | Layers | Minimum 4-layer (signal-ground-ground-signal) for impedance control |
 | Signals carried | MIPI data lanes, MIPI clock, I2C (SCL, SDA), reset, MCLK, strobe, power rails, GND |
-| Impedance | 90 ohm differential (MIPI pairs) |
+| Impedance | MIPI D-PHY differential impedance target: TBD by selected SoC datasheet, selected sensor datasheet, connector/flex design and PCB stackup. Preliminary planning range: 90-100 ohm differential. Final value to be locked after stackup and SI review. |
 | Shielding | Ground planes in flex provide shielding |
 | Bend radius | Minimum 1 mm for flex portions |
 | Mating cycles | Minimum 20 cycles (production + service) for ZIF type |
@@ -150,7 +150,7 @@ This ICD defines the camera interfaces for the ADVIS v0.5 compact windshield-mou
 ### 4.2 Controlled Impedance
 
 - All MIPI differential pairs routed as controlled-impedance pairs
-- Target: 90 ohm differential (45 ohm single-ended)
+- Target: MIPI D-PHY differential impedance target: TBD by selected SoC datasheet, selected sensor datasheet, connector/flex design and PCB stackup. Preliminary planning range: 90-100 ohm differential. Final value to be locked after stackup and SI review.
 - Impedance tolerance: +/- 10%
 - Reference planes must be continuous under all MIPI traces
 - No trace routing over plane splits or voids
