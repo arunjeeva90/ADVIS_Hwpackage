@@ -48,7 +48,7 @@ Release States:
 - Core functional requirements captured from initial OEM discussions
 - Preliminary form factor and environmental requirements established
 - Three-tier product concept proposed (Entry / Mid / High)
-- Safety philosophy established: observation/processing/logging only
+- Safety philosophy established: ADVIS does not directly actuate brake, steering, throttle or powertrain; generates safety-supervised actuation requests only
 - Patent strategy initiated (two initial invention disclosures identified)
 - Initial cost targets set per product tier
 - Decision: combined ADAS+DMS in single ECU
@@ -169,9 +169,9 @@ Release States:
 
 **Scope of Changes:**
 - Safety boundary formally documented and approved:
-  - Observation/processing/logging ONLY
-  - Generates actuation REQUESTS (not commands)
-  - QM hardware classification (no ASIL hardware requirement)
+  - ADVIS does not directly actuate brake, steering, throttle or powertrain
+  - ADVIS Assist provides warning/advisory outputs
+  - ADVIS Control may generate safety-supervised actuation request messages over CAN/CAN-FD
 - ASIL decomposition analysis completed
 - Reset/watchdog topology finalized:
   - TPS3808G33 supervisor monitors 3V3_IO

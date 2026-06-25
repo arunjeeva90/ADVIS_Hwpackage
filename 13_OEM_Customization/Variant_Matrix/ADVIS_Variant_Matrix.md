@@ -12,7 +12,7 @@ This matrix maps every hardware subsystem, feature, and capability against the f
 | **Target Market** | OEM L1/L2 | OEM L2/L2+ | Fleet/aftermarket | OEM premium |
 | **Sensor Set** | Forward + DMS | Forward + DMS | Forward + DMS (later radar) | Camera + DMS + radar |
 | **SoC Tier** | Mid (AM68A/TDA4VM) | Mid (AM68A/TDA4VM) | Mid (AM68A/TDA4VM) | High (TDA4VH) |
-| **Safety Level** | QM (observation) | QM (request output) | QM (logging) | QM (request output) |
+| **Safety Level** | QM (advisory output) | QM (actuation request) | QM (advisory output) | QM (actuation request) |
 | **Cost Tier** | Standard | Standard | Standard | Premium |
 
 ---

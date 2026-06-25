@@ -267,10 +267,18 @@ When the watchdog triggers and recovery is exhausted, the system enters safe sta
 
 ### 6.1 Safety Boundary Reminder
 
-ADVIS is an observation/processing/logging system. It generates actuation REQUESTS
-to OEM controllers but does not directly control any vehicle actuator. Therefore, a
-watchdog reset results in loss of perception/advisory capability only. The OEM
-controller independently handles the absence of ADVIS advisory messages through its
+ADVIS does not directly actuate brake, steering, throttle or powertrain.
+
+ADVIS Assist provides warning/advisory outputs.
+
+ADVIS Control may generate perception-validated, safety-supervised actuation request
+messages over CAN/CAN-FD, depending on OEM integration.
+
+Final actuator authority, arbitration and vehicle-level safety release remain with the
+OEM brake, EPS and powertrain ECUs.
+
+Therefore, a watchdog reset results in loss of perception/advisory capability only.
+The OEM controller independently handles the absence of ADVIS messages through its
 own timeout mechanism.
 
 ---

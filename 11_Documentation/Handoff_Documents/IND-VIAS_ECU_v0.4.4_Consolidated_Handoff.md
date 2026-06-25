@@ -1,5 +1,7 @@
 # ADVIS ECU v0.4.4 Consolidated Hardware Handoff Document
 
+> **Note:** This document describes the ADVIS v0.4.4 A-sample SerDes/SOM validation baseline. It is not the compact v0.5 direct-MIPI production-cost-down architecture. The compact module is defined separately under `01_Architecture/Baselines/ADVIS_COMPACT_v0.5_Direct_MIPI.md`.
+
 ## 1. Document Status
 
 | Field | Value |
@@ -39,13 +41,19 @@ The ADVIS ECU is a vehicle-mounted ADAS + DMS edge compute unit intended to rece
 
 This ECU does NOT provide:
 
-- Brake actuation
-- Steering actuation
-- Throttle actuation
-- Powertrain actuation
-- Safety-critical vehicle control outputs
+- Direct brake actuation
+- Direct steering actuation
+- Direct throttle actuation
+- Direct powertrain actuation
+- ASIL-C or ASIL-D system-level compliance
 
-ADVIS is an observation / processing / logging ECU. It generates safety-supervised **actuation REQUESTS** to OEM vehicle controllers. It does NOT directly actuate any vehicle system.
+ADVIS does not directly actuate brake, steering, throttle or powertrain.
+
+ADVIS Assist provides warning/advisory outputs.
+
+ADVIS Control may generate perception-validated, safety-supervised actuation request messages over CAN/CAN-FD, depending on OEM integration.
+
+Final actuator authority, arbitration and vehicle-level safety release remain with the OEM brake, EPS and powertrain ECUs.
 
 ### 2.3 Product Family Context
 

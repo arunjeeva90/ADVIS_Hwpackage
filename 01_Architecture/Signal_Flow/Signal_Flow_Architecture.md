@@ -12,7 +12,7 @@ ARCH-SIG-001
 
 This document defines the signal flow architecture for the ADVIS ECU platform. It covers all inter-subsystem signal paths, their protocols, electrical characteristics, impedance targets, and routing requirements.
 
-**Safety boundary:** The ADVIS ECU processes sensor data and generates actuation requests only. All signal paths documented here serve observation, processing, and logging functions.
+**Safety boundary:** ADVIS does not directly actuate brake, steering, throttle or powertrain. ADVIS Assist provides warning/advisory outputs. ADVIS Control may generate perception-validated, safety-supervised actuation request messages over CAN/CAN-FD, depending on OEM integration. Final actuator authority, arbitration and vehicle-level safety release remain with the OEM brake, EPS and powertrain ECUs.
 
 ---
 

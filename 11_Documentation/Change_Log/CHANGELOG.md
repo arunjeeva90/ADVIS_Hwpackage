@@ -19,7 +19,7 @@ PATCH: Incremental refinement within a milestone
 ### Changes
 - Architecture formally locked via design review gate
 - Consolidated handoff document finalized with all technical details
-- Safety boundary explicitly defined: observation/processing/logging only
+- Safety boundary explicitly defined: ADVIS does not directly actuate brake, steering, throttle or powertrain; ADVIS Assist provides warning/advisory outputs; ADVIS Control may generate safety-supervised actuation request messages over CAN/CAN-FD
 - Power sequencing strategy finalized (cascaded enable with PG signals)
 - Watchdog strategy locked: TPS3431 with boot-gated enable
 - All component selections baselined with manufacturer part numbers

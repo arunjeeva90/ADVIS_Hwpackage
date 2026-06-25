@@ -12,7 +12,7 @@ ARCH-SBD-001
 
 This document presents the top-level system block diagram for the ADVIS ECU platform. The diagram shows all major subsystems, their interconnections, signal types, and bus widths.
 
-**Safety boundary:** The ADVIS ECU is an observation/processing/logging device. It generates actuation REQUESTS to downstream OEM controllers. It does NOT directly control any vehicle actuator.
+**Safety boundary:** ADVIS does not directly actuate brake, steering, throttle or powertrain. ADVIS Assist provides warning/advisory outputs. ADVIS Control may generate perception-validated, safety-supervised actuation request messages over CAN/CAN-FD, depending on OEM integration. Final actuator authority, arbitration and vehicle-level safety release remain with the OEM brake, EPS and powertrain ECUs.
 
 ---
 

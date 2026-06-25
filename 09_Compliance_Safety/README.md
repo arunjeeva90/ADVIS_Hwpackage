@@ -29,10 +29,18 @@ Automotive compliance documentation, safety analysis, and certification tracking
 
 ## Safety Boundary (Critical)
 
-This ECU is observation/processing/logging ONLY. It does NOT actuate:
-- Brakes
-- Steering
-- Throttle
-- Powertrain
+ADVIS does not directly actuate brake, steering, throttle or powertrain.
+
+ADVIS Assist provides warning/advisory outputs.
+
+ADVIS Control may generate perception-validated, safety-supervised actuation request messages over CAN/CAN-FD, depending on OEM integration.
+
+Final actuator authority, arbitration and vehicle-level safety release remain with the OEM brake, EPS and powertrain ECUs.
+
+ADVIS does not claim:
+- Direct brake actuation
+- Direct steering actuation
+- Direct throttle actuation
+- ASIL-C or ASIL-D system-level compliance
 
 This limits functional safety classification to QM (Quality Management) for most failure modes.

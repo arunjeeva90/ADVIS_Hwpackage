@@ -70,7 +70,7 @@
 
 | Item | Detail |
 |------|--------|
-| **Decision** | ECU is observation/processing/logging ONLY; generates actuation REQUESTS |
+| **Decision** | ADVIS does not directly actuate brake, steering, throttle or powertrain. ADVIS Assist provides warning/advisory outputs. ADVIS Control may generate perception-validated, safety-supervised actuation request messages over CAN/CAN-FD. Final actuator authority remains with OEM ECUs. |
 | **Rationale** | Avoids ASIL-B+ hardware requirements; reduces certification cost and timeline; OEM retains actuation authority |
 | **Alternatives Considered** | ASIL-B rated actuator output stage (significant cost/complexity increase) |
 | **Risk** | None - this simplifies the design significantly |
