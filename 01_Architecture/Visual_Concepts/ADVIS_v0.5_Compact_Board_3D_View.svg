@@ -1,0 +1,214 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650" width="900" height="650">
+  <title>ADVIS v0.5 Compact Board 3D Isometric View - Conceptual Visualization</title>
+  <desc>Conceptual visualization only - not production layout, not mechanical CAD release.</desc>
+
+  <!-- Background -->
+  <rect width="900" height="650" fill="#f8f9fa"/>
+
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">ADVIS v0.5 Compact Module - Isometric Board View (Conceptual)</text>
+  <text x="450" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#888">Conceptual visualization only - not production layout, not mechanical CAD release</text>
+
+  <!-- Thermal Spreader / Rear Plate (bottom layer, isometric) -->
+  <g id="thermal-plate">
+    <polygon points="150,520 450,570 750,520 450,470" fill="#d0d0d0" stroke="#999" stroke-width="1.5"/>
+    <polygon points="150,520 150,535 450,585 450,570" fill="#b8b8b8" stroke="#999" stroke-width="1"/>
+    <polygon points="450,570 450,585 750,535 750,520" fill="#a8a8a8" stroke="#999" stroke-width="1"/>
+    <text x="450" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#555">Thermal Spreader / Rear Plate (Aluminum)</text>
+  </g>
+
+  <!-- PCB Board (isometric rectangle) -->
+  <g id="pcb-board">
+    <polygon points="180,420 450,460 720,420 450,380" fill="#2d7a3a" stroke="#1a5c28" stroke-width="2"/>
+    <polygon points="180,420 180,430 450,470 450,460" fill="#246b30" stroke="#1a5c28" stroke-width="1"/>
+    <polygon points="450,460 450,470 720,430 720,420" fill="#1f5d2a" stroke="#1a5c28" stroke-width="1"/>
+  </g>
+
+  <!-- Main SoC (center, isometric box) -->
+  <g id="main-soc">
+    <polygon points="400,380 450,395 500,380 450,365" fill="#a8d4f0" stroke="#5ba3d9" stroke-width="1.5"/>
+    <polygon points="400,380 400,365 450,350 450,365" fill="#8ec4e8" stroke="#5ba3d9" stroke-width="1"/>
+    <polygon points="450,365 450,350 500,365 500,380" fill="#7ab8e0" stroke="#5ba3d9" stroke-width="1"/>
+    <text x="450" y="378" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#1a5c8a">Main SoC</text>
+    <text x="450" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#2a6c9a">TDA4VL/TDA4VM</text>
+  </g>
+
+  <!-- LPDDR4 (next to SoC, right) -->
+  <g id="lpddr4">
+    <polygon points="520,375 555,385 590,375 555,365" fill="#b8dcf5" stroke="#6aafdf" stroke-width="1"/>
+    <polygon points="520,375 520,367 555,357 555,365" fill="#a0d0f0" stroke="#6aafdf" stroke-width="1"/>
+    <polygon points="555,365 555,357 590,367 590,375" fill="#90c4e8" stroke="#6aafdf" stroke-width="1"/>
+    <text x="555" y="373" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#2a6c9a">LPDDR4</text>
+  </g>
+
+  <!-- eMMC (next to SoC, left) -->
+  <g id="emmc">
+    <polygon points="310,375 340,385 370,375 340,365" fill="#b8dcf5" stroke="#6aafdf" stroke-width="1"/>
+    <polygon points="310,375 310,369 340,359 340,365" fill="#a0d0f0" stroke="#6aafdf" stroke-width="1"/>
+    <polygon points="340,365 340,359 370,369 370,375" fill="#90c4e8" stroke="#6aafdf" stroke-width="1"/>
+    <text x="340" y="373" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#2a6c9a">eMMC</text>
+  </g>
+
+  <!-- Forward Camera (front-left area) -->
+  <g id="forward-camera">
+    <polygon points="220,395 255,405 290,395 255,385" fill="#b8f0c8" stroke="#4ab06a" stroke-width="1.5"/>
+    <polygon points="220,395 220,385 255,375 255,385" fill="#98e0a8" stroke="#4ab06a" stroke-width="1"/>
+    <polygon points="255,385 255,375 290,385 290,395" fill="#80d898" stroke="#4ab06a" stroke-width="1"/>
+    <text x="255" y="393" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#1a6030">Forward</text>
+    <text x="255" y="403" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#1a6030">Camera</text>
+  </g>
+
+  <!-- DMS Camera (connected via flex, upper-right) -->
+  <g id="dms-camera">
+    <polygon points="620,360 650,368 680,360 650,352" fill="#b8f0c8" stroke="#4ab06a" stroke-width="1.5"/>
+    <polygon points="620,360 620,352 650,344 650,352" fill="#98e0a8" stroke="#4ab06a" stroke-width="1"/>
+    <polygon points="650,352 650,344 680,352 680,360" fill="#80d898" stroke="#4ab06a" stroke-width="1"/>
+    <text x="650" y="358" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#1a6030">DMS</text>
+    <text x="650" y="367" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#1a6030">Camera</text>
+  </g>
+
+  <!-- DMS Flex Cable -->
+  <g id="dms-flex">
+    <path d="M590,385 C600,380 610,375 620,365" fill="none" stroke="#f0a040" stroke-width="3" stroke-dasharray="4,2"/>
+    <text x="605" y="370" font-family="Arial, sans-serif" font-size="7" fill="#c07020">DMS Flex</text>
+  </g>
+
+  <!-- PMIC / Power Tree (upper-left area) -->
+  <g id="pmic-power">
+    <polygon points="230,350 270,360 310,350 270,340" fill="#ffd4a8" stroke="#e09040" stroke-width="1.5"/>
+    <polygon points="230,350 230,342 270,332 270,340" fill="#f0c090" stroke="#e09040" stroke-width="1"/>
+    <polygon points="270,340 270,332 310,342 310,350" fill="#e8b080" stroke="#e09040" stroke-width="1"/>
+    <text x="270" y="348" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#8a5020">PMIC/Power</text>
+    <text x="270" y="358" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#8a5020">Tree</text>
+  </g>
+
+  <!-- CAN-FD PHY (lower-right area) -->
+  <g id="can-fd-phy">
+    <polygon points="580,410 610,418 640,410 610,402" fill="#d8c8f0" stroke="#8060c0" stroke-width="1.5"/>
+    <polygon points="580,410 580,404 610,396 610,402" fill="#c8b8e8" stroke="#8060c0" stroke-width="1"/>
+    <polygon points="610,402 610,396 640,404 640,410" fill="#b8a8e0" stroke="#8060c0" stroke-width="1"/>
+    <text x="610" y="409" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#4a3080">CAN-FD PHY</text>
+  </g>
+
+  <!-- Vehicle Connector (bottom-right) -->
+  <g id="vehicle-connector">
+    <polygon points="640,440 680,450 720,440 680,430" fill="#d0b8e8" stroke="#7050a0" stroke-width="1.5"/>
+    <polygon points="640,440 640,430 680,420 680,430" fill="#c0a8e0" stroke="#7050a0" stroke-width="1"/>
+    <polygon points="680,430 680,420 720,430 720,440" fill="#b098d8" stroke="#7050a0" stroke-width="1"/>
+    <text x="680" y="438" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#4a3080">Vehicle</text>
+    <text x="680" y="448" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#4a3080">Connector</text>
+  </g>
+
+  <!-- IR LEDs (near DMS camera area) -->
+  <g id="ir-leds">
+    <circle cx="670" cy="390" r="6" fill="#ffcccc" stroke="#cc4444" stroke-width="1"/>
+    <circle cx="685" cy="393" r="6" fill="#ffcccc" stroke="#cc4444" stroke-width="1"/>
+    <text x="677" y="383" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#cc4444">IR LEDs</text>
+  </g>
+
+  <!-- Test Pads (small dots, bottom-left) -->
+  <g id="test-pads">
+    <rect x="195" y="435" width="20" height="8" rx="1" fill="#e8e8e8" stroke="#888" stroke-width="0.5"/>
+    <rect x="195" y="445" width="20" height="8" rx="1" fill="#e8e8e8" stroke="#888" stroke-width="0.5"/>
+    <text x="205" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="#666">Test Pads</text>
+  </g>
+
+  <!-- Signal Path Arrows (blue) -->
+  <g id="signal-paths" fill="none" stroke="#2060c0" stroke-width="1.5">
+    <!-- Forward Camera to SoC -->
+    <line x1="290" y1="393" x2="395" y2="382" marker-end="url(#arrow-blue)"/>
+    <!-- DMS to SoC via flex -->
+    <path d="M620,362 L510,378" marker-end="url(#arrow-blue)"/>
+    <!-- SoC to CAN PHY -->
+    <line x1="505" y1="385" x2="575" y2="405" marker-end="url(#arrow-blue)"/>
+    <!-- CAN PHY to Vehicle Connector -->
+    <line x1="640" y1="415" x2="650" y2="432" marker-end="url(#arrow-blue)"/>
+  </g>
+
+  <!-- Optical Path Arrows (red) -->
+  <g id="optical-paths" fill="none" stroke="#cc2020" stroke-width="1.5" stroke-dasharray="5,3">
+    <!-- Forward Camera optical path (outward) -->
+    <line x1="255" y1="378" x2="200" y2="300" marker-end="url(#arrow-red)"/>
+    <!-- DMS Camera optical path (inward/cabin) -->
+    <line x1="650" y1="345" x2="700" y2="280" marker-end="url(#arrow-red)"/>
+  </g>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#2060c0"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#cc2020"/>
+    </marker>
+  </defs>
+
+  <!-- Labels with leader lines -->
+  <g id="labels" font-family="Arial, sans-serif" font-size="10" fill="#333">
+    <!-- Forward Camera Label -->
+    <line x1="255" y1="405" x2="130" y2="440" stroke="#666" stroke-width="0.5"/>
+    <text x="70" y="445" font-size="9" fill="#1a6030">Forward Camera</text>
+    <text x="70" y="455" font-size="7" fill="#666">IMX390/OX03C10/AR0233</text>
+
+    <!-- DMS Camera Label -->
+    <line x1="650" y1="368" x2="770" y2="330" stroke="#666" stroke-width="0.5"/>
+    <text x="772" y="328" font-size="9" fill="#1a6030">DMS Camera</text>
+    <text x="772" y="340" font-size="7" fill="#666">OX01N1B/OX01H1B</text>
+
+    <!-- SoC Label -->
+    <line x1="450" y1="360" x2="450" y2="310" stroke="#666" stroke-width="0.5"/>
+    <text x="450" y="305" text-anchor="middle" font-size="9" fill="#1a5c8a">Main SoC (TDA4VL-Q1/TDA4VM-Q1)</text>
+
+    <!-- LPDDR4 Label -->
+    <line x1="555" y1="360" x2="580" y2="330" stroke="#666" stroke-width="0.5"/>
+    <text x="582" y="328" font-size="9" fill="#2a6c9a">LPDDR4</text>
+
+    <!-- eMMC Label -->
+    <line x1="340" y1="360" x2="320" y2="330" stroke="#666" stroke-width="0.5"/>
+    <text x="280" y="328" font-size="9" fill="#2a6c9a">eMMC</text>
+
+    <!-- Power Label -->
+    <line x1="270" y1="335" x2="180" y2="290" stroke="#666" stroke-width="0.5"/>
+    <text x="100" y="288" font-size="9" fill="#8a5020">PMIC / Power Tree</text>
+    <text x="100" y="300" font-size="7" fill="#666">LM61460 + TPS62130A + TLV75518</text>
+
+    <!-- CAN Label -->
+    <line x1="640" y1="408" x2="740" y2="395" stroke="#666" stroke-width="0.5"/>
+    <text x="742" y="393" font-size="9" fill="#4a3080">CAN-FD PHY</text>
+    <text x="742" y="405" font-size="7" fill="#666">TCAN1044AV-Q1</text>
+
+    <!-- Vehicle Connector Label -->
+    <line x1="720" y1="440" x2="790" y2="460" stroke="#666" stroke-width="0.5"/>
+    <text x="792" y="458" font-size="9" fill="#4a3080">Vehicle Connector (J100)</text>
+
+    <!-- Thermal Plate Label -->
+    <text x="450" y="600" text-anchor="middle" font-size="9" fill="#555">Aluminum Thermal Spreader / Rear Plate</text>
+
+    <!-- IR LED Label -->
+    <line x1="685" y1="393" x2="780" y2="370" stroke="#666" stroke-width="0.5"/>
+    <text x="782" y="368" font-size="9" fill="#cc4444">IR LEDs (940nm)</text>
+
+    <!-- Optical path labels -->
+    <text x="165" y="290" font-size="8" fill="#cc2020">Road-facing</text>
+    <text x="165" y="300" font-size="8" fill="#cc2020">optical path</text>
+    <text x="710" y="270" font-size="8" fill="#cc2020">Cabin-facing</text>
+    <text x="710" y="280" font-size="8" fill="#cc2020">optical path</text>
+  </g>
+
+  <!-- Legend -->
+  <g id="legend" transform="translate(30,560)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#333">Legend:</text>
+    <rect x="0" y="8" width="12" height="8" fill="#a8d4f0" stroke="#5ba3d9" stroke-width="0.5"/>
+    <text x="16" y="16" font-family="Arial, sans-serif" font-size="8" fill="#333">Digital/Compute</text>
+    <rect x="100" y="8" width="12" height="8" fill="#b8f0c8" stroke="#4ab06a" stroke-width="0.5"/>
+    <text x="116" y="16" font-family="Arial, sans-serif" font-size="8" fill="#333">Camera/Optical</text>
+    <rect x="200" y="8" width="12" height="8" fill="#ffd4a8" stroke="#e09040" stroke-width="0.5"/>
+    <text x="216" y="16" font-family="Arial, sans-serif" font-size="8" fill="#333">Power</text>
+    <rect x="270" y="8" width="12" height="8" fill="#d8c8f0" stroke="#8060c0" stroke-width="0.5"/>
+    <text x="286" y="16" font-family="Arial, sans-serif" font-size="8" fill="#333">Communication</text>
+    <line x1="360" y1="12" x2="380" y2="12" stroke="#2060c0" stroke-width="1.5"/>
+    <text x="384" y="16" font-family="Arial, sans-serif" font-size="8" fill="#333">Signal path</text>
+    <line x1="440" y1="12" x2="460" y2="12" stroke="#cc2020" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="464" y="16" font-family="Arial, sans-serif" font-size="8" fill="#333">Optical path</text>
+  </g>
+</svg>

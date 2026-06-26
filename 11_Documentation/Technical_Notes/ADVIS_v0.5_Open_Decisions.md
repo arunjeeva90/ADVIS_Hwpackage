@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** ACTIVE - Tracking document for open technical decisions  
-**Version:** v0.2 - June 2026  
+**Version:** v0.3 - June 2026  
 **Document ID:** TN-004
 
 ---
@@ -52,9 +52,9 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Status** | OPEN |
 | **Owner** | Systems Engineering |
 | **Target Date** | TBD |
-| **Options** | TDA4VM-Q1 (primary), TDA4VL-Q1 (cost-explore - only if TI confirms 8 TOPS for this variant) |
+| **Options** | TDA4VM-Q1 (primary), TDA4VL-Q1 (cost-explore - only if vendor confirms higher TOPS for this variant) |
 | **Recommendation** | TDA4VM-Q1 (PRELIMINARY) |
-| **Rationale** | TDA4VM-Q1 provides confirmed 8 TOPS per product headline plus higher A72 clock (2.0 GHz vs 1.2 GHz) and more R5F cores (6 vs 4) for safety partitioning. TDA4VL-Q1 product headline states 4 TOPS; family text mentions "up to 8 TOPS" but this is ambiguous for the specific orderable variant. Until TI FAE confirms, TDA4VL-Q1 cannot be relied upon for Control tier at 8 TOPS. J722S at unknown TOPS (not publicly confirmed) cannot be evaluated. |
+| **Rationale** | TDA4VM-Q1 provides 8 TOPS per TI product headline plus higher A72 clock (2.0 GHz vs 1.2 GHz) and more R5F cores (6 vs 4) for safety partitioning. TDA4VL-Q1 product headline states 4 TOPS; family text mentions "up to 8 TOPS" but applicability to this specific orderable variant requires vendor confirmation. Until confirmed, TDA4VL-Q1 cannot be relied upon for Control tier at 8 TOPS. J722S at unknown TOPS (not publicly confirmed) cannot be evaluated. |
 | **Blocking** | PCB layout (23x23mm BGA requires more area), thermal design, power budget |
 | **Dependencies** | OD-010 (thermal feasibility in windshield mount), **OD-019 (datasheet verification must resolve TDA4VL-Q1 TOPS ambiguity)** |
 
@@ -357,7 +357,7 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Owner** | Systems Engineering + TI FAE |
 | **Target Date** | TBD |
 | **Question** | Have all SoC specifications used in ADVIS design documents been verified against official TI datasheets (not marketing summaries, not community posts, not third-party reports)? |
-| **Background** | The v0.1 SoC Selection Matrix contained a critical error: TDA4VL-Q1 was listed as "~1 TOPS (C7x DSP only, no MMA)" when the official TI product page lists an MMA accelerator. However, the v0.2 correction overstated confidence by claiming "confirmed 8 TOPS" when in fact the TI product headline for TDA4VL-Q1 states 4 TOPS and only the family-level text mentions "MMA up to 8 TOPS (8b)". This ambiguity between product headline (4 TOPS) and family text (up to 8 TOPS) must be resolved via TI FAE engagement or exact datasheet review before SoC selection can proceed. |
+| **Background** | The TI product headline for TDA4VL-Q1 states 4 TOPS, while family-level text mentions "MMA up to 8 TOPS (8b)." This discrepancy between product headline and family text must be resolved via TI FAE engagement or exact datasheet review before SoC selection can proceed. Conservative planning uses the product headline value (4 TOPS) until vendor confirmation is obtained. |
 | **Required Actions** | (1) Obtain official TI datasheets (under NDA if needed) for TDA4VL-Q1, TDA4VM-Q1, and AM62A7-Q1; (2) Cross-reference every specification in ARCH-SOC-002 against official datasheet tables; (3) Specifically resolve TDA4VL-Q1 TOPS ambiguity (product headline = 4 TOPS vs. family text = up to 8 TOPS); (4) Flag any value that cannot be traced to an official source; (5) Establish a process to prevent unverified specifications from entering design documents |
 | **Acceptance Criteria** | Every numerical specification in the SoC matrix has a traceable reference to an official TI document (product page, datasheet, or errata) |
 | **Blocking** | OD-001, OD-002, OD-003, and all downstream SoC-dependent decisions |
@@ -376,7 +376,7 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Finding** | AM62A7 has ONLY ONE CSI-2 Receiver (4-lane D-PHY). The ADVIS v0.5 dual-camera architecture requires two independent CSI-2 RX ports for simultaneous forward + DMS camera operation. |
 | **Impact** | AM62A7 cannot natively support the dual-camera ADVIS architecture without additional hardware (CSI-2 mux, SerDes hub, or time-multiplexing). Any workaround partially or completely defeats the direct-MIPI cost-down objective. |
 | **Options** | (A) Remove AM62A7 from dual-camera ADVIS consideration entirely; (B) Define a single-camera AM62A7 product variant (DMS-only or forward-only); (C) Evaluate CSI-2 mux solutions and their cost/complexity impact; (D) Evaluate Virtual Channel time-sharing on single port (performance impact) |
-| **Recommendation** | Option A + B: Remove AM62A7 from dual-camera tier candidates; define a separate single-camera product variant using AM62A7 if market demand exists |
+| **Recommendation** | Option A + B: AM62A7 not recommended for default dual-independent-MIPI v0.5 architecture; define a separate single-camera/aggregated product variant using AM62A7 if market demand exists |
 | **Blocking** | ADVIS Fleet tier SoC selection, cost-down BOM analysis for single-camera products |
 | **Dependencies** | OD-001 (Assist SoC selection now focuses on TDA4VL-Q1), market analysis for single-camera product demand |
 
@@ -447,8 +447,8 @@ OD-020 (AM62A7 single-port) depends on OD-019, blocks Fleet tier SoC selection
 | Rev | Date | Author | Change |
 |-----|------|--------|--------|
 | 0.1 | 2026-06 | Systems Engineering | Initial open decisions register for v0.5 compact module |
-| 0.2 | 2026-06 | Systems Engineering | Added OD-019 (datasheet verification) and OD-020 (AM62A7 single CSI-2 port critical constraint); updated priority summary and dependency graph; corrected date from July to June 2026 |
-| 0.3 | 2026-06 | Systems Engineering | AMBIGUITY CORRECTION: OD-001/OD-002 rationale updated to reflect TDA4VL-Q1 TOPS ambiguity (product headline 4 TOPS vs. family text up to 8 TOPS). OD-001/OD-002/OD-003 now depend on OD-019 for resolution. OD-019 background corrected. Next steps updated to prioritize TOPS ambiguity resolution. |
+| 0.2 | 2026-06 | Systems Engineering | Added OD-019 (datasheet verification) and OD-020 (AM62A7 single CSI-2 port constraint); updated priority summary and dependency graph |
+| 0.3 | 2026-06 | Systems Engineering | Professional language pass: OD-019 background cleaned to current-state description; OD-001/OD-002 rationale updated with standardized planning terminology; AM62A7 scope refined for single-camera/aggregated variants. |
 
 ---
 

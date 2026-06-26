@@ -246,7 +246,19 @@ This document presents the top-level system block diagram for the ADVIS v0.5 Com
 
 ---
 
-## 9. Revision History
+## 9. Visual Concept References
+
+Conceptual 3D visualizations of this module are available for architecture communication:
+
+- [Compact Board 3D View (isometric)](../Visual_Concepts/ADVIS_v0.5_Compact_Board_3D_View.svg) - Component placement and signal paths
+- [Compact Module Exploded View](../Visual_Concepts/ADVIS_v0.5_Compact_Module_Exploded_View.svg) - Assembly stack and mechanical layers
+- [3D View Description Document](../Visual_Concepts/ADVIS_v0.5_Compact_Board_3D_View.md) - Detailed element descriptions
+
+These are conceptual visualizations only - not production layout, not mechanical CAD release.
+
+---
+
+## 10. Revision History
 
 | Rev | Date | Author | Change |
 |-----|------|--------|--------|

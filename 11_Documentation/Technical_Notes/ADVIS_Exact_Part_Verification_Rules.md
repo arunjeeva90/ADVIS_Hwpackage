@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** ACTIVE - Mandatory for all SoC/component specification entries  
-**Version:** v1.0 - June 2026  
+**Version:** v1.1 - June 2026  
 **Document ID:** TN-005
 
 ---
@@ -86,13 +86,13 @@ Before adding or updating any SoC specification in ADVIS documents:
 ## 5. Consequences of Non-Compliance
 
 Specifications entered without proper source verification may result in:
-- Incorrect SoC selection (wrong TOPS budget for AI models)
-- Incorrect power budget (thermal design based on wrong TDP)
-- Incorrect safety partitioning (wrong R5F core count for ASIL allocation)
-- PCB design rework (wrong pin count or package assumptions)
-- Supply chain errors (ordering wrong variant)
+- Incorrect SoC selection (inaccurate TOPS budget for AI models)
+- Incorrect power budget (thermal design based on inaccurate TDP)
+- Incorrect safety partitioning (inaccurate R5F core count for ASIL allocation)
+- PCB design rework (inaccurate pin count or package assumptions)
+- Supply chain issues (ordering an unintended variant)
 
-The v0.1 SoC matrix error (TDA4VL-Q1 listed as "~1 TOPS, no MMA") and the v0.2 overstatement ("confirmed 8 TOPS" based on family text) demonstrate the real-world impact of insufficient source verification.
+Source verification discipline prevents these outcomes and ensures all design decisions are based on traceable, vendor-confirmed data.
 
 ---
 
@@ -104,16 +104,65 @@ These verification rules apply to:
 - All power budget assumptions
 - All AI performance claims in product tier definitions
 - All component specifications in BOM documents
+- All sensor specifications (image sensors, IMU, GNSS)
+- All PMIC and power component selections
+- All transceiver and interface component specifications
 
-Any engineer adding or modifying SoC specifications must follow this checklist before committing changes to the repository.
+Any engineer adding or modifying component specifications must follow this checklist before committing changes to the repository.
 
 ---
 
-## 7. Revision History
+## 7. Component-Specific Verification Examples
+
+### 7.1 Image Sensors (Forward Camera, DMS Camera)
+
+| Verification Item | Example | Accept Criteria |
+|-------------------|---------|-----------------|
+| Resolution | "1936x1100" for IMX390 | Matches sensor product brief or datasheet |
+| Interface | "MIPI CSI-2, 2 or 4 lanes" | Confirmed in datasheet pin table |
+| HDR Mode | "DOL-HDR, up to 120dB" | Confirmed in features section, not inferred from family |
+| Automotive Grade | "AEC-Q100 Grade 2" | Confirmed on product page for exact part number |
+| Power | "~250 mW typical" | From datasheet typical operating conditions, not estimated |
+| Frame Rate | "60 fps at full resolution (4-lane)" | Confirmed for stated lane count and resolution mode |
+
+### 7.2 PMIC (Power Management IC)
+
+| Verification Item | Example | Accept Criteria |
+|-------------------|---------|-----------------|
+| Output Rails | "5 configurable bucks + 4 LDOs" for TPS6594-Q1 | Matches datasheet block diagram |
+| Sequencing | "Programmable power-up/down sequencing" | Confirmed in datasheet functional description |
+| I2C/SPI Address | Specific slave address or address pin configuration | Confirmed in datasheet register map |
+| PMIC-SoC Compatibility | "Supported PMIC for J721S2 family" | Confirmed in TI SoC power design guide or EVM schematic |
+| Functional Safety | "Supports ASIL-D system power management" | Confirmed in PMIC safety manual |
+
+### 7.3 CAN-FD Transceiver
+
+| Verification Item | Example | Accept Criteria |
+|-------------------|---------|-----------------|
+| Data Rate | "CAN-FD up to 8 Mbps" for TCAN1044AV-Q1 | Matches datasheet maximum data rate spec |
+| Supply Voltage | "4.5V to 5.5V Vcc" | Confirmed in absolute maximum ratings |
+| Bus Fault Tolerance | "+/-58V bus fault" | Confirmed in datasheet electrical characteristics |
+| Standby Current | Specific value in microamps | From datasheet typical/max standby current row |
+| Operating Mode Pins | STB, EN pin logic levels | Confirmed in datasheet truth table |
+
+### 7.4 Watchdog Timer
+
+| Verification Item | Example | Accept Criteria |
+|-------------------|---------|-----------------|
+| Timeout Period | "Programmable 200ms to 2.5s" for TPS3431-Q1 | Matches datasheet timing table |
+| Reset Pulse Width | Specific milliseconds value | From datasheet output characteristics |
+| Window Mode | "Open-window or closed-window" | Confirmed in datasheet functional modes |
+| Input Threshold | WDI trigger voltage levels | From datasheet electrical specifications |
+| Enable Control | "EN pin or VDD ramp" | Confirmed in datasheet application section |
+
+---
+
+## 8. Revision History
 
 | Rev | Date | Author | Change |
 |-----|------|--------|--------|
-| 1.0 | 2026-06 | Systems Engineering | Initial release; motivated by TDA4VL-Q1 TOPS ambiguity discovery |
+| 1.0 | 2026-06 | Systems Engineering | Initial release; establishes verification discipline for all component specifications |
+| 1.1 | 2026-06 | Systems Engineering | Expanded scope to all components (sensors, PMIC, CAN transceiver, watchdog). Added component-specific verification examples. Cleaned language to current-state professional format. |
 
 ---
 

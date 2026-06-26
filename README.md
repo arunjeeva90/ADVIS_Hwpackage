@@ -98,6 +98,7 @@ All product tiers share a common carrier board. Tier differentiation is achieved
 ADVIS_Hwpackage/
 |
 |-- 01_Architecture/          Architecture definitions, block diagrams, baselines
+|   |-- Visual_Concepts/      Conceptual 3D visualizations and exploded views
 |-- 02_Schematic/             Schematic sheets, symbols, BOM, netlists
 |-- 03_PCB_Layout/            Stackup, placement, routing, gerbers, DFM
 |-- 04_Firmware_HAL/          Hardware abstraction layer, drivers, device trees
@@ -111,6 +112,18 @@ ADVIS_Hwpackage/
 |-- 12_Configuration_Management/  Version control, ECO tracking, BOM variants
 |-- 13_OEM_Customization/     Variant matrix, SoC options, feature tiers
 ```
+
+---
+
+## Visual Concept Assets
+
+Conceptual visualizations of the v0.5 Compact Module are available for architecture communication:
+
+- [Compact Board 3D View (description)](01_Architecture/Visual_Concepts/ADVIS_v0.5_Compact_Board_3D_View.md)
+- [Compact Board 3D View (SVG)](01_Architecture/Visual_Concepts/ADVIS_v0.5_Compact_Board_3D_View.svg)
+- [Compact Module Exploded View (SVG)](01_Architecture/Visual_Concepts/ADVIS_v0.5_Compact_Module_Exploded_View.svg)
+
+These are conceptual visualizations only - not production layout, not mechanical CAD release.
 
 ---
 
