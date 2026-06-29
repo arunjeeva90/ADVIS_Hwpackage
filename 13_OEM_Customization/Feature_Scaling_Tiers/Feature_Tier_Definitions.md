@@ -171,19 +171,23 @@ The ADVIS platform defines three hardware scaling tiers that enable product vari
 
 ## 5. Tier Comparison Summary
 
-| Attribute | Entry | Mid | High |
-|-----------|-------|-----|------|
-| SoC | AM62A | AM68A/TDA4VM | TDA4VH |
-| TOPS | <1 | 8 | 32 |
-| Cameras | 1 | 2 | 4-8 |
-| Power | <5W | 10-15W | 20-30W |
-| Cooling | None/passive | Passive heatsink | Active fan/TEC |
-| CAN channels | 1 | 1 | 2+ |
-| Ethernet | No | No | Yes |
-| GNSS | Optional | Yes | Yes |
-| IMU | No | Yes | Yes |
-| Radar | No | No | Yes |
-| BOM Relative | 0.5x | 1.0x (baseline) | 1.8x |
+| Attribute | Entry | Mid (v0.5 Assist) | Mid (v0.5 Control) | High |
+|-----------|-------|-------------------|---------------------|------|
+| SoC | AM62A | TDA4VL-Q1 | TDA4VM-Q1 | TDA4VH |
+| TOPS | 2 | 4 | 8 | 32 |
+| Cameras | 1 | 2 | 2 | 4-8 |
+| Power | <5W | <8W | 10-15W | 20-30W |
+| Cooling | None/passive | Passive (compact spreader) | Passive heatsink | Active fan/TEC |
+| CAN channels | 1 | 1 | 1 | 2+ |
+| Ethernet | No | No | No | Yes |
+| GNSS | Optional | Optional | Optional | Yes |
+| IMU | No | Optional | Optional | Yes |
+| Radar | No | No | No | Yes |
+| BOM Relative | 0.5x | 0.7x | 1.0x (baseline) | 1.8x |
+
+**SoC Comparison Candidates (not automatically selected):**
+- TDA4AL-Q1: 8 TOPS, no GPU, video encode only, analytics-focused
+- TDA4VE-Q1: 8 TOPS, GPU, more resources than TDA4VL
 
 ---
 

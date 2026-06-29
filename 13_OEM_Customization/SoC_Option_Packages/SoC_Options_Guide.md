@@ -8,20 +8,24 @@ This guide helps OEM customers select the appropriate SoC tier for their ADVIS i
 
 ## 2. SoC Options Overview
 
-| Parameter | AM62A (Entry) | AM68A / TDA4VM (Mid) | TDA4VH (High) |
-|-----------|---------------|---------------------|----------------|
-| **AI Performance** | 2 TOPS (per AM62A7 product headline) | 8 TOPS (per TDA4VM product headline) | 32 TOPS |
-| **CPU Cores** | 1x Cortex-A53 | 2x Cortex-A72 | 4x Cortex-A72 |
-| **CPU Clock** | 1.4 GHz | 2.0 GHz | 2.0 GHz |
-| **Safety MCU** | Cortex-M4F | Cortex-R5F | 2x Cortex-R5F |
-| **Camera Support** | 1 (CSI-2, 2-lane) | 2-4 (CSI-2, 4-lane) | 4-8 (multiple CSI-2) |
-| **Max Resolution** | 5MP | 8MP | 8MP per port |
-| **Memory** | 1-2GB LPDDR4 | 2-4GB LPDDR4 | 4-8GB LPDDR4x |
-| **Storage** | 4-8GB eMMC | 16-32GB eMMC | 32-64GB eMMC |
-| **Power Budget** | <5W | 10-15W | 20-30W |
-| **Package** | 13x13mm | 23x23mm | 29x29mm |
-| **Automotive Grade** | AEC-Q100 Grade 2 | AEC-Q100 Grade 2 | AEC-Q100 Grade 2 |
-| **Temperature** | -40 to +105C Tj | -40 to +105C Tj | -40 to +105C Tj |
+| Parameter | AM62A (Entry) | TDA4VL-Q1 (Assist) | AM68A / TDA4VM (Control) | TDA4VH (High) |
+|-----------|---------------|---------------------|---------------------|----------------|
+| **AI Performance** | 2 TOPS (per AM62A7 product headline) | 4 TOPS (per TDA4VL-Q1 product headline, H speed grade) | 8 TOPS (per TDA4VM product headline) | 32 TOPS |
+| **CPU Cores** | 1x Cortex-A53 | 2x Cortex-A72 | 2x Cortex-A72 | 4x Cortex-A72 |
+| **CPU Clock** | 1.4 GHz | 1.2 GHz | 2.0 GHz | 2.0 GHz |
+| **Safety MCU** | Cortex-M4F | Cortex-R5F (4 cores) | Cortex-R5F (6 cores) | 2x Cortex-R5F |
+| **Camera Support** | 1 (CSI-2, 2-lane) | 2 (CSI-2, 4-lane) | 2-4 (CSI-2, 4-lane) | 4-8 (multiple CSI-2) |
+| **Max Resolution** | 5MP | 8MP | 8MP | 8MP per port |
+| **Memory** | 1-2GB LPDDR4 | 2-4GB LPDDR4 | 2-4GB LPDDR4 | 4-8GB LPDDR4x |
+| **Storage** | 4-8GB eMMC | 16-32GB eMMC | 16-32GB eMMC | 32-64GB eMMC |
+| **Power Budget** | <5W | <8W | 10-15W | 20-30W |
+| **Package** | 18x18mm | 23x23mm | 23x23mm (TDA4VM: 24x24mm) | 29x29mm |
+| **Automotive Grade** | AEC-Q100 Grade 2 | AEC-Q100 Grade 2 | AEC-Q100 Grade 2 | AEC-Q100 Grade 2 |
+| **Temperature** | -40 to +125C | -40 to +125C | -40 to +105C | -40 to +105C Tj |
+
+**Comparison Candidates (not automatically selected for ADVIS):**
+- TDA4AL-Q1: 8 TOPS, no GPU, video encode only, analytics-focused
+- TDA4VE-Q1: 8 TOPS, GPU, higher resources than TDA4VL-Q1
 
 ---
 
@@ -263,12 +267,13 @@ TDA4VH (High)
 | If you need... | Select... |
 |----------------|-----------|
 | DMS-only, lowest cost | AM62A (Entry) |
-| Dual-camera ADAS+DMS, Euro NCAP | AM68A/TDA4VM (Mid) |
-| AEB/ACC/LKA request outputs | AM68A/TDA4VM (Mid) with ADVIS Control |
-| Fleet monitoring + driver behavior | AM68A/TDA4VM (Mid) with ADVIS Fleet |
+| Dual-camera ADAS+DMS, Euro NCAP (cost-optimized) | TDA4VL-Q1 (Assist) - 4 TOPS |
+| AEB/ACC/LKA request outputs | TDA4VM-Q1 (Control) - 8 TOPS |
+| Fleet monitoring + driver behavior | TDA4VL-Q1 (Assist) with ADVIS Fleet |
 | Multi-camera surround view | TDA4VH (High) |
 | Radar fusion | TDA4VH (High) with ADVIS Fusion |
 | L2+ perception platform | TDA4VH (High) |
+| Fleet-lite (single-camera forward only) | AM62A (Entry) |
 
 ### 7.2 Volume Pricing Guidance
 

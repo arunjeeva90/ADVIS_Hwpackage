@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** ACTIVE - Mandatory for all SoC/component specification entries  
-**Version:** v1.1 - June 2026  
+**Version:** v1.2 - July 2026  
 **Document ID:** TN-005
 
 ---
@@ -74,16 +74,23 @@ Before adding or updating any SoC specification in ADVIS documents:
 
 ---
 
-## 4. Known Ambiguities Register
+## 4. Resolved Source Interpretation Cases
+
+| Part | Topic | Product Headline | Family-Level Maximum | ADVIS Planning Value | Status | Remaining |
+|------|-------|-----------------|---------------------|---------------------|--------|-----------|
+| TDA4VL-Q1 | AI TOPS | 4 TOPS (H speed grade, 500 MHz MMA) | "MMA up to 8 TOPS (8b) at 1.0 GHz" (applies to TDA4VE/TDA4AL, speed grades S/P) | 4 TOPS | **RESOLVED** | Benchmark and power/thermal validation |
+
+---
+
+## 5. Open Verification Items
 
 | Part | Specification | Product Headline Value | Family Text Value | Status | Resolution Owner |
 |------|--------------|----------------------|-------------------|--------|-----------------|
-| TDA4VL-Q1 | AI Accelerator TOPS | 4 TOPS | "MMA up to 8 TOPS (8b) at 1.0GHz" | OPEN - Ambiguous | Systems Engineering + TI FAE |
 | TDA4VL-Q1 | R5F core partition | Not explicit | "Up to 4x Arm Cortex-R5F" with partition detail in family text | OPEN - Requires confirmation | Systems Engineering + TI FAE |
 
 ---
 
-## 5. Consequences of Non-Compliance
+## 6. Consequences of Non-Compliance
 
 Specifications entered without proper source verification may result in:
 - Incorrect SoC selection (inaccurate TOPS budget for AI models)
@@ -96,7 +103,7 @@ Source verification discipline prevents these outcomes and ensures all design de
 
 ---
 
-## 6. Process Integration
+## 7. Process Integration
 
 These verification rules apply to:
 - All entries in ARCH-SOC-002 (SoC Selection Matrix)
@@ -112,9 +119,9 @@ Any engineer adding or modifying component specifications must follow this check
 
 ---
 
-## 7. Component-Specific Verification Examples
+## 8. Component-Specific Verification Examples
 
-### 7.1 Image Sensors (Forward Camera, DMS Camera)
+### 8.1 Image Sensors (Forward Camera, DMS Camera)
 
 | Verification Item | Example | Accept Criteria |
 |-------------------|---------|-----------------|
@@ -125,7 +132,7 @@ Any engineer adding or modifying component specifications must follow this check
 | Power | "~250 mW typical" | From datasheet typical operating conditions, not estimated |
 | Frame Rate | "60 fps at full resolution (4-lane)" | Confirmed for stated lane count and resolution mode |
 
-### 7.2 PMIC (Power Management IC)
+### 8.2 PMIC (Power Management IC)
 
 | Verification Item | Example | Accept Criteria |
 |-------------------|---------|-----------------|
@@ -135,7 +142,7 @@ Any engineer adding or modifying component specifications must follow this check
 | PMIC-SoC Compatibility | "Supported PMIC for J721S2 family" | Confirmed in TI SoC power design guide or EVM schematic |
 | Functional Safety | "Supports ASIL-D system power management" | Confirmed in PMIC safety manual |
 
-### 7.3 CAN-FD Transceiver
+### 8.3 CAN-FD Transceiver
 
 | Verification Item | Example | Accept Criteria |
 |-------------------|---------|-----------------|
@@ -145,7 +152,7 @@ Any engineer adding or modifying component specifications must follow this check
 | Standby Current | Specific value in microamps | From datasheet typical/max standby current row |
 | Operating Mode Pins | STB, EN pin logic levels | Confirmed in datasheet truth table |
 
-### 7.4 Watchdog Timer
+### 8.4 Watchdog Timer
 
 | Verification Item | Example | Accept Criteria |
 |-------------------|---------|-----------------|
@@ -157,12 +164,13 @@ Any engineer adding or modifying component specifications must follow this check
 
 ---
 
-## 8. Revision History
+## 9. Revision History
 
 | Rev | Date | Author | Change |
 |-----|------|--------|--------|
 | 1.0 | 2026-06 | Systems Engineering | Initial release; establishes verification discipline for all component specifications |
 | 1.1 | 2026-06 | Systems Engineering | Expanded scope to all components (sensors, PMIC, CAN transceiver, watchdog). Added component-specific verification examples. Cleaned language to current-state professional format. |
+| 1.2 | 2026-07 | Systems Engineering | TDA4VL-Q1 AI TOPS moved from Known Ambiguities to Resolved Source Interpretation Cases. Status: 4 TOPS confirmed per product headline and H speed grade. Remaining: benchmark and power/thermal validation. |
 
 ---
 

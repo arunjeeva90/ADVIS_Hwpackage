@@ -94,24 +94,85 @@ All product tiers share a common carrier board. Tier differentiation is achieved
 
 ## Repository Structure
 
-```
-ADVIS_Hwpackage/
-|
-|-- 01_Architecture/          Architecture definitions, block diagrams, baselines
-|   |-- Visual_Concepts/      Conceptual 3D visualizations and exploded views
-|-- 02_Schematic/             Schematic sheets, symbols, BOM, netlists
-|-- 03_PCB_Layout/            Stackup, placement, routing, gerbers, DFM
-|-- 04_Firmware_HAL/          Hardware abstraction layer, drivers, device trees
-|-- 05_Interface_Control_Documents/  ICDs for all subsystem boundaries
-|-- 06_Patent_Strategy/       Invention disclosures, claims, prior art, filings
-|-- 07_IP_Protection/         Trade secrets, licensing, competitive analysis
-|-- 08_Validation_Testing/    PI, SI, EMC, environmental, DVT, DVP&R
-|-- 09_Compliance_Safety/     Automotive standards, eye safety, FMEA
-|-- 10_Manufacturing/         Assembly, test fixtures, production BOM
-|-- 11_Documentation/         Handoff docs, design reviews, change log
-|-- 12_Configuration_Management/  Version control, ECO tracking, BOM variants
-|-- 13_OEM_Customization/     Variant matrix, SoC options, feature tiers
-```
+> **Note:** This repository is currently architecture-definition focused. Schematic/PCB/manufacturing folders may contain placeholders until corresponding engineering phases begin.
+
+### 01_Architecture/
+- **Purpose:** Top-level system architecture definitions, design decisions, and hardware baselines
+- **Contains:** System block diagrams, signal flow diagrams, power tree, ground domains, thermal strategy, mechanical envelope, SoC variant analysis, modular platform definition, visual concept assets, and locked baseline documents
+- **Used by:** Systems Engineering, Hardware Architecture, Mechanical Engineering, Thermal Engineering
+- **Output:** Architecture baselines (v0.4.4, v0.5), SoC selection decisions, board-level signal/power topology
+
+### 02_Schematic/
+- **Purpose:** Schematic capture assets, component libraries, and electrical design verification
+- **Contains:** Schematic sheets (hierarchical), BOM management, ERC reports and waiver policies, net lists, symbols, review checklists
+- **Used by:** Electrical Engineering, Schematic Capture, Component Engineering
+- **Output:** Verified schematic netlists, production BOM, ERC-clean design release
+
+### 03_PCB_Layout/
+- **Purpose:** PCB physical design, manufacturing data, and design-for-manufacturing validation
+- **Contains:** Stackup definitions, component placement strategy, routing constraints (high-speed rules), Gerber outputs, assembly drawings, DFM reports
+- **Used by:** Layout Engineering, Signal Integrity, Manufacturing Engineering
+- **Output:** Gerber release package, assembly drawings, DFM-validated board design
+
+### 04_Firmware_HAL/
+- **Purpose:** Hardware abstraction layer definitions, device tree overlays, and low-level driver interfaces
+- **Contains:** HAL API definitions, peripheral driver specifications, boot sequence, device tree templates
+- **Used by:** Firmware Engineering, BSP/SDK Team, Software Integration
+- **Output:** HAL interface contracts, device tree configurations, driver specifications for software team
+
+### 05_Interface_Control_Documents/
+- **Purpose:** Formal interface definitions between all subsystem boundaries
+- **Contains:** Signal lists, timing diagrams, protocol specifications, connector pinouts, voltage/current specs
+- **Used by:** All engineering disciplines (hardware/firmware/software), System Integration, Test Engineering
+- **Output:** ICD releases that define the contract between hardware subsystems and external interfaces
+
+### 06_Patent_Strategy/
+- **Purpose:** Invention disclosure tracking, patent claim drafts, and prior art analysis
+- **Contains:** Invention disclosures, claim drafts and guidelines, prior art searches, freedom-to-operate analysis
+- **Used by:** Systems Engineering, Patent Counsel, IP Management
+- **Output:** Patent filing decisions, FTO risk assessments, claim language for filings
+
+### 07_IP_Protection/
+- **Purpose:** Trade secret identification, licensing strategy, and competitive positioning
+- **Contains:** Trade secret registers, licensing frameworks, competitive analysis, IP protection policies
+- **Used by:** IP Management, Legal, Business Development
+- **Output:** IP protection policies, licensing terms, competitive differentiation documentation
+
+### 08_Validation_Testing/
+- **Purpose:** Hardware validation plans, test procedures, and results tracking
+- **Contains:** Power integrity (PI), signal integrity (SI), EMC/EMI, environmental testing, DVT plans, DVP&R matrices
+- **Used by:** Validation Engineering, Test Engineering, Signal Integrity, EMC Lab
+- **Output:** Test reports, pass/fail matrices, compliance evidence, design validation closure
+
+### 09_Compliance_Safety/
+- **Purpose:** Automotive standards compliance, functional safety, and regulatory requirements
+- **Contains:** ISO 26262 work products, FMEA documents, eye safety analysis (IR), ASIL decomposition, regulatory mapping
+- **Used by:** Safety Engineering, Compliance, Systems Engineering, Quality
+- **Output:** Safety cases, FMEA reports, compliance matrices, ASIL allocation documents
+
+### 10_Manufacturing/
+- **Purpose:** Production readiness, assembly processes, test fixtures, and cost management
+- **Contains:** Assembly process definitions, test fixture specifications, production BOM, yield tracking, production costing
+- **Used by:** Manufacturing Engineering, Production, Quality, Procurement
+- **Output:** Assembly instructions, test fixture designs, production cost models, yield baselines
+
+### 11_Documentation/
+- **Purpose:** Engineering documentation, design reviews, handoff packages, and technical notes
+- **Contains:** Handoff documents, design review records, change log, technical notes (open decisions, verification rules, part selection)
+- **Used by:** All engineering disciplines, Program Management, Quality
+- **Output:** Design review approvals, handoff packages for downstream phases, technical decision records
+
+### 12_Configuration_Management/
+- **Purpose:** Version control, engineering change order (ECO) tracking, and BOM variant management
+- **Contains:** ECO log, BOM variant definitions, version tagging policy, configuration baselines
+- **Used by:** Configuration Management, Program Management, Quality, Procurement
+- **Output:** ECO approvals, variant matrices, release baselines
+
+### 13_OEM_Customization/
+- **Purpose:** Customer-facing variant definitions, feature tier scaling, and SoC option packages
+- **Contains:** Feature tier definitions (Entry/Assist/Control/High), SoC option packages guide, OEM-specific variant configurations
+- **Used by:** Sales Engineering, Systems Engineering, Program Management, OEM Integration
+- **Output:** OEM-ready variant specifications, feature/cost trade-off guides, customization options
 
 ---
 
@@ -155,6 +216,16 @@ These are conceptual visualizations only - not production layout, not mechanical
 | Supervisor | TPS3808G33-Q1 class |
 | Watchdog | TPS3431-Q1 |
 | CAN-FD | TCAN1044AV-Q1 |
+
+### SoC Position Summary (v0.5)
+
+| SoC | AI Performance | Target Tier | Notes |
+|-----|---------------|-------------|-------|
+| AM62A7-Q1 | 2 TOPS | Single-camera DMS, fleet-lite | Single CSI-2 RX port |
+| TDA4VL-Q1 | 4 TOPS | Assist, Fleet (dual-camera) | H speed grade: A72 at 1200 MHz, C7x at 500 MHz |
+| TDA4AL-Q1 | 8 TOPS | Comparison candidate | No GPU, encode only, analytics-focused |
+| TDA4VE-Q1 | 8 TOPS | Comparison candidate | GPU, higher resources |
+| TDA4VM-Q1 | 8 TOPS | Control | J721E platform, A72 at 2.0 GHz |
 
 ---
 

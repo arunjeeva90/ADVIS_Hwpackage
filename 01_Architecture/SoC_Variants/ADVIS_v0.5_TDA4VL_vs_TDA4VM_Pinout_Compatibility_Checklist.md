@@ -12,7 +12,7 @@
 
 This checklist documents the pinout compatibility analysis between TDA4VL-Q1 (770-pin FCBGA, ALZ package) and TDA4VM-Q1 (827-pin FCBGA, ALF package) to determine whether a single ADVIS v0.5 PCB design can support both SoC variants via BOM population options.
 
-A compatible pinout would enable a single PCB revision for both ADVIS Assist (TDA4VL-Q1, 4 TOPS conservative planning value per product headline) and ADVIS Control (TDA4VM-Q1, 8 TOPS per TI product headline), reducing NRE and simplifying the product platform.
+A compatible pinout would enable a single PCB revision for both ADVIS Assist (TDA4VL-Q1, 4 TOPS) and ADVIS Control (TDA4VM-Q1, 8 TOPS per TI product headline), reducing NRE and simplifying the product platform.
 
 ---
 

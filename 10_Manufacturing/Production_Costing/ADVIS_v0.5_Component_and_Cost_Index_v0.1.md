@@ -108,7 +108,7 @@ This document provides a structured component and cost index for the ADVIS v0.5 
 
 | Cost Driver | Impact | Mitigation Strategy |
 |-------------|--------|---------------------|
-| SoC selection | Largest single BOM item; TDA4VM significantly more expensive than TDA4VL | Use TDA4VL-Q1 for Assist tier (4 TOPS conservative per product headline; cost/power advantage over TDA4VM; actual TOPS pending TI confirmation) |
+| SoC selection | Largest single BOM item; TDA4VM significantly more expensive than TDA4VL | Use TDA4VL-Q1 for Assist tier (4 TOPS; cost/power advantage over TDA4VM) |
 | Forward image sensor | Second largest cost item; IMX390 premium over OX03C10/AR0233 | Use OX03C10 for cost-optimized Assist; reserve IMX390 for premium/Control |
 | PCB layer count | 8-10 layers for TDA4VM significantly more expensive than 6-layer | TDA4VL (0.8mm pitch, 770 pins) may escape on fewer layers |
 | Flex cable | Controlled-impedance rigid-flex adds cost vs. standard FPC | Minimize flex length; optimize layer count |
