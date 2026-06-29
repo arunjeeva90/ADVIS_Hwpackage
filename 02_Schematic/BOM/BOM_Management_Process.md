@@ -65,7 +65,7 @@ management to ensure uninterrupted production availability.
 
 ### 4.1 Product Tier Variants
 
-The ADVIS platform supports three product tiers from a single PCB design:
+The ADVIS v0.4.4 SOM-based platform supports three product tiers from a single carrier PCB design (carrier board is SoC-agnostic because the SoC resides on the SoM). For the v0.5 direct-SoC architecture, PCB commonality is a decision output of the pinout compatibility analysis (see OD-003), not an assumption:
 
 | Tier | Target Application | BOM Strategy |
 |------|-------------------|--------------|

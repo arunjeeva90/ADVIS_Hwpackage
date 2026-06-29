@@ -10,7 +10,7 @@ Compact Dual-Facing Windshield-Mounted Camera Module with Integrated Optical Iso
 
 ## 2. Date
 
-July 2026
+June 2026
 
 ## 3. Inventors
 
@@ -227,7 +227,7 @@ A method of manufacturing a dual-facing vehicle camera module, comprising:
 ---
 
 **Document Version:** 1.0  
-**Last Updated:** July 2026  
+**Last Updated:** June 2026  
 **Classification:** CONFIDENTIAL - INTERNAL DRAFT  
 **Witness Signature:** _________________ Date: _________  
 **Witness Signature:** _________________ Date: _________

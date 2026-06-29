@@ -88,7 +88,7 @@ Camera connection method depends on hardware baseline:
 | ADVIS Fusion | Camera + DMS + radar | Sensor fusion, enhanced AEB/ACC/LKA, blind-spot/moving-off support |
 | ADVIS Fleet | Camera + DMS, later radar optional | Fleet safety, driver behavior, event logging |
 
-All product tiers share a common carrier board. Tier differentiation is achieved through SoC selection and firmware feature licensing.
+Common carrier-board reuse applies primarily to the v0.4.4 SOM-based A-sample architecture, where compute variation can be handled through the SoM. For the v0.5 compact direct-SoC architecture, product tiers aim to share common mechanical, optical, connector, software and calibration architecture. PCB commonality depends on SoC pinout, power-tree, DDR, thermal and cost feasibility. Tier differentiation is achieved through SoC selection, sensor population, firmware feature licensing and OEM integration scope.
 
 ---
 
@@ -242,7 +242,7 @@ These are conceptual visualizations only - not production layout, not mechanical
 
 | Version | Date | Description |
 |---------|------|-------------|
-| v0.5.0 | 2026-07 | Compact direct-MIPI architecture definition started |
+| v0.5.0 | 2026-06 | Compact direct-MIPI architecture definition started |
 | v0.4.4 | 2026-06 | Architecture lock, initial document population |
 | v0.4.3 | 2026-05 | Platform modularity concept finalized |
 | v0.4.2 | 2026-04 | ICD signal lists defined |

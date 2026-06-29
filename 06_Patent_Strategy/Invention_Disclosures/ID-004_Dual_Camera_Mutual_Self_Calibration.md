@@ -10,7 +10,7 @@ Dual-Camera Mutual Self-Calibration for Windshield-Mounted ADAS/DMS Module
 
 ## 2. Date
 
-July 2026
+June 2026
 
 ## 3. Inventors
 
@@ -209,7 +209,7 @@ A vehicle camera system comprising:
 ---
 
 **Document Version:** 1.0  
-**Last Updated:** July 2026  
+**Last Updated:** June 2026  
 **Classification:** CONFIDENTIAL - INTERNAL DRAFT  
 **Witness Signature:** _________________ Date: _________  
 **Witness Signature:** _________________ Date: _________

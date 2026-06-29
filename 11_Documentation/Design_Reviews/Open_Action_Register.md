@@ -2,8 +2,8 @@
 
 **Classification:** Confidential - Engineering Use Only  
 **Version:** 0.1  
-**Date:** July 2026  
-**Last Updated:** July 2026
+**Date:** June 2026  
+**Last Updated:** June 2026
 
 ---
 
@@ -49,8 +49,8 @@ This register tracks all open design actions, decisions, and deliverables across
 | ACT-007 | Create direct-MIPI signal integrity assumptions | SI Engineer | P2 | Open | TBD | Trace length budget, impedance, crosstalk, eye diagram targets |
 | ACT-008 | Prepare invention disclosure pack for patent attorney | IP Lead | P2 | Open | TBD | Five invention disclosures drafted; attorney review needed |
 | ACT-009 | Create first ADVIS DVP&R (Design Verification Plan and Report) | Validation Lead | P2 | Open | TBD | Initial DVP&R v0.1 created; requires test method detail |
-| ACT-010 | Create cost-down BOM comparison | Hardware Lead | P2 | Complete | July 2026 | BOM comparison document created |
-| ACT-011 | Verify safety boundary wording across repository | Systems Lead | P1 | Complete | July 2026 | Updated all instances to tiered language |
+| ACT-010 | Create cost-down BOM comparison | Hardware Lead | P2 | Complete | June 2026 | BOM comparison document created |
+| ACT-011 | Verify safety boundary wording across repository | Systems Lead | P1 | Complete | June 2026 | Updated all instances to tiered language |
 | ACT-012 | Decide what remains trade secret vs. patent disclosure | IP Lead / Legal | P2 | Open | TBD | Must finalize before patent attorney briefing |
 | ACT-013 | Prepare patent attorney briefing pack | IP Lead | P3 | Open | TBD | Blocked on ACT-012 completion |
 | ACT-014 | Create v0.5 system block diagram | Systems Lead | P1 | Open | TBD | New block diagram without SerDes, showing direct MIPI |
@@ -62,8 +62,8 @@ This register tracks all open design actions, decisions, and deliverables across
 
 | ID | Action | Owner | Completed | Notes |
 |----|--------|-------|-----------|-------|
-| ACT-010 | Create cost-down BOM comparison | Hardware Lead | July 2026 | See 02_Schematic/BOM/ADVIS_Cost_Down_BOM_Comparison_v0.1.md |
-| ACT-011 | Verify safety boundary wording across repository | Systems Lead | July 2026 | All files updated to tiered safety language |
+| ACT-010 | Create cost-down BOM comparison | Hardware Lead | June 2026 | See 02_Schematic/BOM/ADVIS_Cost_Down_BOM_Comparison_v0.1.md |
+| ACT-011 | Verify safety boundary wording across repository | Systems Lead | June 2026 | All files updated to tiered safety language |
 
 ---
 

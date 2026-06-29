@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** ACTIVE - Mandatory for all SoC/component specification entries  
-**Version:** v1.2 - July 2026  
+**Version:** v1.2 - June 2026  
 **Document ID:** TN-005
 
 ---
@@ -170,7 +170,7 @@ Any engineer adding or modifying component specifications must follow this check
 |-----|------|--------|--------|
 | 1.0 | 2026-06 | Systems Engineering | Initial release; establishes verification discipline for all component specifications |
 | 1.1 | 2026-06 | Systems Engineering | Expanded scope to all components (sensors, PMIC, CAN transceiver, watchdog). Added component-specific verification examples. Cleaned language to current-state professional format. |
-| 1.2 | 2026-07 | Systems Engineering | TDA4VL-Q1 AI TOPS moved from Known Ambiguities to Resolved Source Interpretation Cases. Status: 4 TOPS confirmed per product headline and H speed grade. Remaining: benchmark and power/thermal validation. |
+| 1.2 | 2026-06 | Systems Engineering | TDA4VL-Q1 AI TOPS moved from Known Ambiguities to Resolved Source Interpretation Cases. Status: 4 TOPS confirmed per product headline and H speed grade. Remaining: benchmark and power/thermal validation. |
 
 ---
 

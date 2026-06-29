@@ -10,6 +10,8 @@
 
 ## 1. Purpose
 
+**Key Principle:** Do not assume one v0.5 PCB can support both TDA4VL-Q1 and TDA4VM-Q1. Common mechanical and software architecture is the target; PCB reuse is a decision output, not an assumption.
+
 This checklist documents the pinout compatibility analysis between TDA4VL-Q1 (770-pin FCBGA, ALZ package) and TDA4VM-Q1 (827-pin FCBGA, ALF package) to determine whether a single ADVIS v0.5 PCB design can support both SoC variants via BOM population options.
 
 A compatible pinout would enable a single PCB revision for both ADVIS Assist (TDA4VL-Q1, 4 TOPS) and ADVIS Control (TDA4VM-Q1, 8 TOPS per TI product headline), reducing NRE and simplifying the product platform.
@@ -137,14 +139,17 @@ Given the different package sizes (23mm vs 24mm) and different pin counts (770 v
 
 ---
 
-## 7. Alternative Strategies if Incompatible
+## 7. Decision Output Options
 
-| Strategy | Pros | Cons |
-|----------|------|------|
-| Two dedicated PCB designs (one per SoC) | Optimized per SoC, smaller board possible for TDA4VL | Higher NRE (two sets of Gerbers, two qualifications) |
-| Single PCB with superset footprint | One NRE, BOM-variant flexibility | May be larger than needed for TDA4VL, potential SI compromises |
-| TDA4VL-only PCB, separate TDA4VM board later | Ships Assist tier faster, defers Control investment | Two PCB programs eventually needed |
-| TDA4VL for both tiers (if A72@1.2GHz sufficient) | Single SoC, single PCB, maximum cost-down | May limit Control tier performance; requires benchmarking |
+| Option | Strategy | Pros | Cons |
+|--------|----------|------|------|
+| A | Single PCB with superset footprint (both SoCs via BOM variants) | One NRE, BOM-variant flexibility | May be larger than needed for TDA4VL, potential SI compromises, requires proven pinout compatibility |
+| B | Two dedicated PCB designs (one per SoC) | Optimized per SoC, smaller board possible for TDA4VL | Higher NRE (two sets of Gerbers, two qualifications) |
+| C | Shared housing + optics + camera flex + connector + software/HAL, separate compute PCB per SoC variant | Maximum non-PCB reuse, per-SoC PCB optimization, shared production tooling for housing/optics | Two PCB programs, slightly higher per-unit cost vs. single PCB |
+
+**Additional sub-options:**
+- TDA4VL-only PCB, separate TDA4VM board later: Ships Assist tier faster, defers Control investment (two PCB programs eventually needed)
+- TDA4VL for both tiers (if A72@1.2GHz sufficient): Single SoC, single PCB, maximum cost-down (may limit Control tier performance; requires benchmarking)
 
 ---
 

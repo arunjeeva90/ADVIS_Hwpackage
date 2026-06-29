@@ -2,7 +2,7 @@
 
 **Classification:** Confidential - Engineering Use Only  
 **Version:** 0.1  
-**Date:** July 2026  
+**Date:** June 2026  
 **Applies to:** ADVIS v0.5 Compact Module and v0.4.4 A-sample (where noted)
 
 ---

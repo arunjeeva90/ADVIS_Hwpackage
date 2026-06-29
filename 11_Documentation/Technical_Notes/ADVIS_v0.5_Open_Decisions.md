@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** ACTIVE - Tracking document for open technical decisions  
-**Version:** v0.4 - July 2026  
+**Version:** v0.4 - June 2026  
 **Document ID:** TN-004
 
 ---
@@ -68,11 +68,11 @@ This document tracks all open technical decisions for the ADVIS v0.5 Compact Mod
 | **Status** | OPEN |
 | **Owner** | Hardware Architecture |
 | **Target Date** | TBD |
-| **Options** | (A) Single PCB with superset footprint supporting TDA4VL and TDA4VM via BOM variants; (B) Two separate PCB designs optimized per SoC |
+| **Options** | (A) Single PCB with superset footprint supporting TDA4VL and TDA4VM via BOM variants; (B) Two separate PCB designs optimized per SoC; (C) Shared housing + shared optics + shared camera flex + shared connector + shared software/HAL + separate compute PCB variants |
 | **Recommendation** | None yet - requires BGA pinout compatibility analysis |
-| **Rationale** | Single PCB reduces NRE but may compromise board area and layer count. Dual PCB allows per-tier optimization. |
+| **Rationale** | For v0.4.4 SOM architecture, carrier-board reuse is practical because the SoC resides on the SoM and the carrier board is SoC-agnostic. For v0.5 direct-SoC architecture, single PCB reuse across TDA4VL-Q1 (23x23mm, 770-pin ALZ) and TDA4VM-Q1 (24x24mm, 827-pin ALF) is NOT assumed. Different BGA packages mean PCB commonality requires pinout, DDR routing, power-tree, and thermal compatibility analysis that has not yet been completed. The practical strategy may be: shared housing + shared optics + shared camera flex + shared connector + shared software/HAL + separate compute PCB variants if SoC pinout compatibility is not practical. Single PCB reduces NRE but may compromise board area and layer count. Dual PCB allows per-tier optimization. |
 | **Blocking** | PCB stackup definition, mechanical envelope finalization |
-| **Dependencies** | OD-001, OD-002, OD-011 |
+| **Dependencies** | OD-001, OD-002, OD-011, ARCH-SOC-003 (pinout compatibility checklist) |
 
 ---
 
@@ -450,7 +450,7 @@ OD-020 (AM62A7 single-port) depends on OD-019, blocks Fleet tier SoC selection
 | 0.1 | 2026-06 | Systems Engineering | Initial open decisions register for v0.5 compact module |
 | 0.2 | 2026-06 | Systems Engineering | Added OD-019 (datasheet verification) and OD-020 (AM62A7 single CSI-2 port constraint); updated priority summary and dependency graph |
 | 0.3 | 2026-06 | Systems Engineering | Professional language pass: OD-019 background cleaned to current-state description; OD-001/OD-002 rationale updated with standardized planning terminology; AM62A7 scope refined for single-camera/aggregated variants. |
-| 0.4 | 2026-07 | Systems Engineering | TDA4VL-Q1 AI performance confirmed at 4 TOPS (H speed grade). OD-001/OD-002 updated with confirmed rationale. OD-019 renamed to "Exact SoC Specification Verification and Benchmark Closure"; remaining items: power estimation, SDK support, orderable part selection, pinout/PCB reuse, benchmark validation. Removed all TOPS ambiguity language. |
+| 0.4 | 2026-06 | Systems Engineering | TDA4VL-Q1 AI performance confirmed at 4 TOPS (H speed grade). OD-001/OD-002 updated with confirmed rationale. OD-003 expanded: v0.4.4 SOM carrier-board reuse is practical; v0.5 direct-SoC PCB reuse is NOT assumed without pinout/DDR/power/thermal analysis. Added Option C (shared non-PCB architecture + separate compute PCBs). OD-019 renamed to "Exact SoC Specification Verification and Benchmark Closure"; remaining items: power estimation, SDK support, orderable part selection, pinout/PCB reuse, benchmark validation. Removed all TOPS ambiguity language. |
 
 ---
 

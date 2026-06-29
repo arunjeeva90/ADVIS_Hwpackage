@@ -2,7 +2,7 @@
 
 **Classification:** CONFIDENTIAL - ENGINEERING USE ONLY  
 **Status:** PRELIMINARY - Subject to benchmark and thermal validation  
-**Version:** v0.4 - July 2026  
+**Version:** v0.4 - June 2026  
 **Document ID:** ARCH-SOC-002
 
 ---
@@ -27,6 +27,8 @@ The matrix evaluates candidates across AI performance, camera interface capabili
 |-----|--------------------------|------------|-------------------|
 | TDA4VM-Q1 | [ti.com/product/TDA4VM](https://www.ti.com/product/TDA4VM) | Processor SDK Linux/RTOS/QNX for J721E | SK-TDA4VM, J721EXCPXEVM + J721EXSOMXEVM |
 | TDA4VL-Q1 | [ti.com/product/TDA4VL-Q1](https://www.ti.com/product/TDA4VL-Q1) | Processor SDK Linux/QNX/RTOS for J721S2 | J721EXCPXEVM + J721S2XSOMXEVM; PHYTEC phyCORE-AM68 |
+| TDA4AL-Q1 | Official TI source required - verify at ti.com/product/TDA4AL-Q1 | Processor SDK Linux/QNX/RTOS for J721S2 (same family as TDA4VL) | Official TI source required |
+| TDA4VE-Q1 | Official TI source required - verify at ti.com/product/TDA4VE-Q1 | Processor SDK Linux/QNX/RTOS for J721S2 (same family as TDA4VL) | Official TI source required |
 | AM62A7 | [ti.com/product/AM62A7](https://www.ti.com/product/AM62A7) | Processor SDK Linux for AM62A, MCU+ SDK | SK-AM62A-LP |
 | J722S / AM67A | Not publicly confirmed | Not publicly confirmed | Not publicly confirmed |
 
@@ -303,7 +305,7 @@ All selections are PRELIMINARY and require vendor engagement, datasheet confirma
 | 0.1 | 2026-06 | Systems Engineering | Initial PRELIMINARY release for v0.5 compact module |
 | 0.2 | 2026-06 | Systems Engineering | Updated all specs to verified TI product page data; added source references; AM62A7 single CSI-2 port identified as dual-camera constraint; removed unverified approximate values |
 | 0.3 | 2026-06 | Systems Engineering | TDA4VL-Q1 AI performance set to 4 TOPS conservative planning value (product headline) with family text up-to-8 noted as vendor-confirmation pending. Added Source Interpretation table and Verification Status columns. Sensor specs marked preliminary. Power values marked as module design targets. AM62A7 scope refined for single-camera/aggregated variants. Professional language pass applied throughout. |
-| 0.4 | 2026-07 | Systems Engineering | TDA4VL-Q1 AI performance confirmed at 4 TOPS per product headline and H speed-grade operating point. Removed all ambiguity/vendor-confirmation-pending language. Added TDA4AL-Q1 and TDA4VE-Q1 as comparison candidates. Updated source interpretation table to Exact/Family-max/Planning format. Revised recommended combos: Assist=TDA4VL, Control=TDA4VM, Control cost-down=TDA4VL after benchmark only. |
+| 0.4 | 2026-06 | Systems Engineering | TDA4VL-Q1 AI performance confirmed at 4 TOPS per product headline and H speed-grade operating point. Removed all ambiguity/vendor-confirmation-pending language. Added TDA4AL-Q1 and TDA4VE-Q1 as comparison candidates. Updated source interpretation table to Exact/Family-max/Planning format. Revised recommended combos: Assist=TDA4VL, Control=TDA4VM, Control cost-down=TDA4VL after benchmark only. |
 
 ---
 

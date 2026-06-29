@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The ADVIS carrier PCB supports multiple product configurations through BOM variants. A single PCB design accommodates Entry, Mid, and High tier products by populating or depopulating specific components and changing strap resistor values.
+The ADVIS v0.4.4 carrier PCB supports multiple product configurations through BOM variants. In the SOM-based architecture, a single carrier PCB design accommodates Entry, Mid, and High tier products by populating or depopulating specific components and changing strap resistor values, because the SoC resides on the interchangeable SoM. For the v0.5 direct-SoC architecture, PCB commonality across SoC variants is subject to pinout compatibility analysis (see OD-003).
 
 ## 2. Variant Summary
 

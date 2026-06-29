@@ -187,7 +187,7 @@ For production cost-down, the carrier PCB can be designed with:
 2. DS90UB954 footprint DNI + direct MIPI connector populated (Track 1 / direct variant)
 3. Both share same SOM CSI-2 port via board-level mux or alternate routing layer
 
-This enables single PCB design serving both tracks via BOM variant management.
+This enables single carrier PCB design serving both tracks via BOM variant management (applicable to v0.4.4 SOM-based architecture where the carrier board is SoC-agnostic).
 
 ## 7. PoC (Power-over-Coax) Considerations
 
