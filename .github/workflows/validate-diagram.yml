@@ -1,0 +1,117 @@
+name: Validate Interactive Diagram
+
+on:
+  push:
+    paths:
+      - '01_Architecture/Web_Interactive_Block_Diagram/**'
+      - 'README.md'
+  pull_request:
+    paths:
+      - '01_Architecture/Web_Interactive_Block_Diagram/**'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate index.html
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check file exists and is non-empty
+        run: |
+          FILE="01_Architecture/Web_Interactive_Block_Diagram/index.html"
+          if [ ! -f "$FILE" ]; then
+            echo "ERROR: $FILE not found"
+            exit 1
+          fi
+          SIZE=$(wc -c < "$FILE")
+          if [ "$SIZE" -lt 10000 ]; then
+            echo "ERROR: $FILE is suspiciously small (${SIZE} bytes)"
+            exit 1
+          fi
+          echo "OK: $FILE exists (${SIZE} bytes)"
+
+      - name: Validate HTML structure (Node.js)
+        run: |
+          node - <<'NODEEOF'
+          const fs = require('fs');
+          const path = '01_Architecture/Web_Interactive_Block_Diagram/index.html';
+          const html = fs.readFileSync(path, 'utf8');
+
+          const checks = [
+            ['DOCTYPE declaration',      /<!DOCTYPE html>/i],
+            ['charset meta tag',         /<meta charset=/i],
+            ['viewport meta tag',        /name=["']viewport["']/i],
+            ['page title',               /<title>.+</title>/i],
+            ['startup overlay',          /id=["']startup-overlay["']/i],
+            ['signal SVG layer',         /id=["']signal-svg["']/i],
+            ['mode selector',            /id=["']mode-selector["']/i],
+            ['Assist Mode button',       /data-mode=["']assist["']/i],
+            ['Control Mode button',      /data-mode=["']control["']/i],
+            ['Fleet Mode button',        /data-mode=["']fleet["']/i],
+            ['Validation Board button',  /data-mode=["']validation["']/i],
+            ['side panel',               /id=["']side-panel["']/i],
+            ['tooltip element',          /id=["']tooltip["']/i],
+            ['forward camera block',     /data-id=["']fwd-cam["']/i],
+            ['DMS camera block',         /data-id=["']dms-cam["']/i],
+            ['primary SoC block',        /data-id=["']soc["']/i],
+            ['CAN-FD block',             /data-id=["']can["']/i],
+            ['safety monitor block',     /data-id=["']safety["']/i],
+            ['fallback path block',      /data-id=["']fallback["']/i],
+            ['TDA4VL mention',           /TDA4VL-Q1/],
+            ['TDA4VM mention',           /TDA4VM-Q1/],
+            ['AM62A7 mention',           /AM62A7-Q1/],
+            ['ASIL-B mention',           /ASIL-B/],
+            ['MIPI CSI-2 mention',       /MIPI CSI-2/],
+            ['CAN-FD mention',           /CAN-FD/],
+            ['no direct actuation note', /OEM/],
+            ['setMode function',         /function setMode/],
+            ['selectBlock function',     /function selectBlock/],
+            ['renderSignals function',   /function renderSignals/],
+            ['legend section',           /id=["']legend["']/i],
+            ['key targets section',      /id=["']key-targets["']/i],
+            ['footer section',           /id=["']footer["']/i],
+            ['no external CDN calls',    /cdnjs|jsdelivr|unpkg|skypack/i, true],
+          ];
+
+          let passed = 0, failed = 0;
+          for (const [label, regex, shouldNotMatch] of checks) {
+            const matched = regex.test(html);
+            const ok = shouldNotMatch ? !matched : matched;
+            const icon = ok ? 'PASS' : 'FAIL';
+            console.log(`  [${icon}] ${label}`);
+            if (ok) passed++; else failed++;
+          }
+
+          console.log(`
+Results: ${passed} passed, ${failed} failed`);
+          if (failed > 0) process.exit(1);
+          NODEEOF
+
+      - name: Check README links
+        run: |
+          README="README.md"
+          if ! grep -q 'Web_Interactive_Block_Diagram' "$README"; then
+            echo "ERROR: Root README.md does not link to the interactive diagram"
+            exit 1
+          fi
+          echo "OK: Root README.md links to the interactive diagram"
+
+      - name: Check documentation file
+        run: |
+          DOCFILE="01_Architecture/Web_Interactive_Block_Diagram/README.md"
+          if [ ! -f "$DOCFILE" ]; then
+            echo "ERROR: Documentation README.md not found"
+            exit 1
+          fi
+          SIZE=$(wc -c < "$DOCFILE")
+          echo "OK: Documentation README.md exists (${SIZE} bytes)"
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "Validation complete for ADVIS v0.5 Interactive Hardware Architecture Diagram"
+          echo "All checks passed. The diagram is ready to open locally in a browser."
