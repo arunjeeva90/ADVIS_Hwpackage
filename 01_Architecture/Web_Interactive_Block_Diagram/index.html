@@ -3,566 +3,404 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IND-VIAS / ADVIS v0.5 — Hardware Architecture Diagram</title>
+<title>IND-VIAS | DUAL-VISION SMART SAFETY ECU — E/E Hardware Architecture</title>
 <style>
-  /* ─── RESET & BASE ─────────────────────────────────────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ─── RESET ─────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-  :root {
-    --bg-base:      #080c14;
-    --bg-panel:     #0d1422;
-    --bg-card:      #111827;
-    --bg-card-h:    #162035;
-    --border:       #1e2d45;
-    --border-h:     #2a4060;
+/* ─── TOKENS ─────────────────────────────────────────────────────── */
+:root{
+  --navy-0:#020810;--navy-1:#050d1a;--navy-2:#091324;--navy-3:#0d1b30;
+  --navy-4:#12243d;--navy-5:#1a2f50;
+  --glass:#ffffff08;--glass-b:#ffffff12;--glass-border:#ffffff14;
+  --c-cam-fwd:#00d4ff;--c-cam-dms:#00ff9d;
+  --c-soc:#39ff14;--c-soc-dim:#2aaa0f;
+  --c-mem:#c77dff;--c-stor:#9b5de5;
+  --c-pwr:#ffd166;--c-can:#ff6b35;--c-can2:#ff9f0a;
+  --c-eth:#4cc9f0;--c-safety:#ff4d6d;--c-fallback:#ff9e00;
+  --c-cmp:#6c757d;--c-ecu:#1e90ff;
+  --text-h:#f0f4ff;--text-b:#c8d6e8;--text-s:#7b90ae;--text-d:#3a4d62;
+  --r:10px;--r-sm:6px;--r-lg:16px;
+  --panel-w:360px;
+  --trans:0.25s ease;
+}
 
-    --c-camera:     #00e5ff;
-    --c-soc:        #39ff14;
-    --c-mem:        #bf5af2;
-    --c-power:      #ffd60a;
-    --c-safety:     #ff453a;
-    --c-can:        #ff9f0a;
-    --c-eth:        #0a84ff;
-    --c-dms:        #30d158;
-    --c-adas:       #64d2ff;
-    --c-fallback:   #ff6b6b;
-    --c-compare:    #8e8ea0;
+/* ─── BASE ────────────────────────────────────────────────────────── */
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;
+  background:var(--navy-0);color:var(--text-b);
+}
 
-    --text-primary:   #e8eaf6;
-    --text-secondary: #8898aa;
-    --text-dim:       #4a5568;
+/* ─── DOT GRID BG ─────────────────────────────────────────────────── */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 0%,#0e2040 0%,transparent 70%),
+    radial-gradient(ellipse 60% 60% at 20% 80%,#071428 0%,transparent 60%),
+    var(--navy-0);
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(circle,#ffffff0a 1px,transparent 1px);
+  background-size:28px 28px;
+}
 
-    --glow-green:  0 0 8px #39ff14, 0 0 20px #39ff1440;
-    --glow-cyan:   0 0 8px #00e5ff, 0 0 20px #00e5ff40;
-    --glow-orange: 0 0 8px #ff9f0a, 0 0 20px #ff9f0a40;
-    --glow-red:    0 0 8px #ff453a, 0 0 20px #ff453a40;
-    --glow-purple: 0 0 8px #bf5af2, 0 0 20px #bf5af240;
-    --glow-yellow: 0 0 8px #ffd60a, 0 0 20px #ffd60a40;
-    --glow-blue:   0 0 8px #0a84ff, 0 0 20px #0a84ff40;
+/* ─── APP SHELL ───────────────────────────────────────────────────── */
+#app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
-    --transition: 0.25s ease;
-    --panel-w: 340px;
-  }
+/* ─── TOPBAR ──────────────────────────────────────────────────────── */
+#topbar{
+  flex-shrink:0;
+  background:linear-gradient(90deg,#070f1e,#0c1829);
+  border-bottom:1px solid #1a2f50;
+  padding:0 20px;
+  display:flex;align-items:stretch;gap:0;
+  height:56px;position:relative;z-index:100;
+}
 
-  html, body {
-    height: 100%;
-    background: var(--bg-base);
-    color: var(--text-primary);
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    font-size: 13px;
-    overflow-x: hidden;
-  }
+.tb-brand{
+  display:flex;flex-direction:column;justify-content:center;
+  padding-right:20px;border-right:1px solid #1a2f50;
+  flex-shrink:0;
+}
+.tb-brand .t1{
+  font-size:14px;font-weight:800;letter-spacing:.06em;
+  color:var(--c-soc);text-shadow:0 0 12px #39ff1460;
+}
+.tb-brand .t2{
+  font-size:9.5px;color:var(--text-s);letter-spacing:.09em;
+  text-transform:uppercase;margin-top:2px;
+}
+.tb-brand .t3{
+  font-size:8px;color:#2a7fff;letter-spacing:.07em;
+  text-transform:uppercase;margin-top:1px;
+}
 
-  /* ─── LAYOUT ────────────────────────────────────────────────────── */
-  #app {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
+.tb-center{flex:1;display:flex;align-items:center;justify-content:center;padding:0 20px;}
+.tb-banner{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-s);display:flex;align-items:center;gap:10px;
+}
+.tb-banner span{color:var(--c-ecu);font-weight:700;}
+.tb-sep{color:#2a3f5f;}
 
-  /* ─── TOP BAR ───────────────────────────────────────────────────── */
-  #topbar {
-    background: var(--bg-panel);
-    border-bottom: 1px solid var(--border);
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+.tb-modes{display:flex;align-items:center;gap:6px;padding-left:20px;border-left:1px solid #1a2f50;flex-shrink:0;}
+.mode-btn{
+  padding:7px 14px;border-radius:5px;
+  border:1px solid #1e3050;background:transparent;
+  color:var(--text-s);font-size:10px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;cursor:pointer;
+  transition:all var(--trans);white-space:nowrap;
+}
+.mode-btn:hover{border-color:#2a4a70;color:var(--text-b);}
+.mode-btn.active{background:#0f2040;color:#fff;border-color:var(--c-soc);
+  box-shadow:0 0 10px #39ff1430,inset 0 0 10px #39ff1410;}
+.mode-btn[data-mode="assist"].active{border-color:var(--c-cam-fwd);color:var(--c-cam-fwd);box-shadow:0 0 10px #00d4ff30,inset 0 0 10px #00d4ff10;}
+.mode-btn[data-mode="control"].active{border-color:var(--c-soc);color:var(--c-soc);}
+.mode-btn[data-mode="fleet"].active{border-color:var(--c-can2);color:var(--c-can2);box-shadow:0 0 10px #ff9f0a30,inset 0 0 10px #ff9f0a10;}
+.mode-btn[data-mode="validation"].active{border-color:var(--c-cmp);color:var(--c-cmp);}
 
-  .topbar-title {
-    display: flex;
-    flex-direction: column;
-  }
-  .topbar-title .t1 {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--c-soc);
-    text-shadow: var(--glow-green);
-    letter-spacing: 0.04em;
-  }
-  .topbar-title .t2 {
-    font-size: 10px;
-    color: var(--text-secondary);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+.tb-status{
+  display:flex;align-items:center;gap:7px;padding-left:14px;
+  border-left:1px solid #1a2f50;flex-shrink:0;
+  font-size:9.5px;color:var(--text-s);letter-spacing:.05em;white-space:nowrap;
+}
+.tb-status .dot{width:7px;height:7px;border-radius:50%;background:var(--c-soc);
+  box-shadow:0 0 6px var(--c-soc);animation:pdot 2s ease-in-out infinite;}
+@keyframes pdot{0%,100%{opacity:1}50%{opacity:.25}}
 
-  .topbar-divider { width: 1px; height: 36px; background: var(--border); flex-shrink: 0; }
+/* ─── MAIN AREA ───────────────────────────────────────────────────── */
+#main{flex:1;display:flex;overflow:hidden;position:relative;}
 
-  /* Mode selector */
-  #mode-selector {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .mode-btn {
-    padding: 6px 14px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all var(--transition);
-  }
-  .mode-btn:hover { border-color: var(--border-h); color: var(--text-primary); }
-  .mode-btn.active {
-    background: #1a2840;
-    color: #fff;
-    border-color: var(--c-soc);
-    box-shadow: var(--glow-green);
-  }
-  .mode-btn[data-mode="assist"].active   { border-color: var(--c-adas);   box-shadow: var(--glow-cyan);   color: var(--c-adas); }
-  .mode-btn[data-mode="control"].active  { border-color: var(--c-soc);    box-shadow: var(--glow-green);  color: var(--c-soc); }
-  .mode-btn[data-mode="fleet"].active    { border-color: var(--c-can);    box-shadow: var(--glow-orange); color: var(--c-can); }
-  .mode-btn[data-mode="validation"].active { border-color: var(--c-compare); color: var(--c-compare); box-shadow: 0 0 8px #8e8ea040; }
+/* ─── DIAGRAM SCROLL ─────────────────────────────────────────────── */
+#diagram-wrap{
+  flex:1;overflow:auto;padding:18px 20px 10px;
+  position:relative;z-index:1;
+  transition:margin-right .3s ease;
+}
+#diagram-wrap.panel-open{margin-right:var(--panel-w);}
 
-  /* Status pill */
-  .status-pill {
-    margin-left: auto;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-  }
-  .status-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--c-soc);
-    box-shadow: var(--glow-green);
-    animation: pulse-dot 2s ease-in-out infinite;
-  }
-  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+/* ─── DIAGRAM CANVAS ─────────────────────────────────────────────── */
+#diagram{
+  position:relative;
+  width:1460px;min-height:670px;
+  margin:0 auto;
+}
 
-  /* ─── MAIN CONTENT ──────────────────────────────────────────────── */
-  #main {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-  }
+/* ─── SVG LAYER ───────────────────────────────────────────────────── */
+#sig-svg{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:2;overflow:visible;
+}
 
-  /* ─── DIAGRAM AREA ──────────────────────────────────────────────── */
-  #diagram-wrap {
-    flex: 1;
-    overflow: auto;
-    padding: 24px;
-    position: relative;
-    transition: margin-right var(--transition);
-  }
-  #diagram-wrap.panel-open { margin-right: var(--panel-w); }
+/* ─── ECU ENCLOSURE ───────────────────────────────────────────────── */
+#ecu-boundary{
+  position:absolute;
+  left:228px;top:12px;width:920px;height:620px;
+  border:2px dashed #1e4a8a;
+  border-radius:20px;
+  background:linear-gradient(145deg,#07132280,#0a1c3060);
+  box-shadow:0 0 40px #0a84ff15,inset 0 0 60px #0a1c3830;
+  z-index:3;
+}
+#ecu-label{
+  position:absolute;top:-13px;left:24px;
+  background:var(--navy-1);
+  padding:2px 14px;border-radius:4px;
+  font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--c-ecu);border:1px solid #1e4a8a;
+  box-shadow:0 0 8px #1e90ff30;
+}
 
-  #diagram {
-    position: relative;
-    width: 1100px;
-    min-height: 740px;
-    margin: 0 auto;
-  }
+/* ─── SECTION LABELS ─────────────────────────────────────────────── */
+.sec-lbl{
+  position:absolute;font-size:8.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--text-d);z-index:10;pointer-events:none;
+}
 
-  /* ─── SVG SIGNAL LINES ──────────────────────────────────────────── */
-  #signal-svg {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    overflow: visible;
-  }
+/* ─── BLOCKS ─────────────────────────────────────────────────────── */
+.blk{
+  position:absolute;z-index:10;
+  border-radius:var(--r);border:1px solid var(--glass-border);
+  background:linear-gradient(145deg,#0f1e3090,#091524a0);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  padding:12px 14px;cursor:pointer;
+  transition:all .28s ease;
+  opacity:0;transform:scale(.9) translateY(6px);
+  user-select:none;
+}
+.blk.visible{opacity:1;transform:scale(1) translateY(0);}
+.blk:hover{
+  background:linear-gradient(145deg,#162a4a90,#0f2038a0);
+  border-color:#2a4a70;transform:scale(1.025) translateY(-1px);z-index:20;
+}
+.blk.selected{z-index:30;transform:scale(1.03) translateY(-2px);}
+.blk.dimmed{opacity:.18!important;pointer-events:none;}
 
-  .sig-line {
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: 0;
-    transition: opacity 0.6s;
-  }
-  .sig-line.visible { opacity: 1; }
+/* Block color themes */
+.blk.cam-fwd{border-color:#00d4ff50;box-shadow:0 0 16px #00d4ff18,inset 0 1px 0 #00d4ff20;}
+.blk.cam-fwd:hover,.blk.cam-fwd.selected{border-color:var(--c-cam-fwd);box-shadow:0 0 24px #00d4ff35,inset 0 1px 0 #00d4ff30;}
+.blk.cam-dms{border-color:#00ff9d50;box-shadow:0 0 16px #00ff9d18,inset 0 1px 0 #00ff9d20;}
+.blk.cam-dms:hover,.blk.cam-dms.selected{border-color:var(--c-cam-dms);box-shadow:0 0 24px #00ff9d35,inset 0 1px 0 #00ff9d30;}
+.blk.soc-pri{border-color:#39ff1450;box-shadow:0 0 20px #39ff1420,inset 0 1px 0 #39ff1430;}
+.blk.soc-pri:hover,.blk.soc-pri.selected{border-color:var(--c-soc);box-shadow:0 0 32px #39ff1440,inset 0 1px 0 #39ff1440;}
+.blk.mem{border-color:#c77dff40;box-shadow:0 0 14px #c77dff18;}
+.blk.mem:hover{border-color:var(--c-mem);box-shadow:0 0 22px #c77dff35;}
+.blk.stor{border-color:#9b5de540;box-shadow:0 0 14px #9b5de518;}
+.blk.stor:hover{border-color:var(--c-stor);box-shadow:0 0 22px #9b5de535;}
+.blk.pwr{border-color:#ffd16640;box-shadow:0 0 14px #ffd16618;}
+.blk.pwr:hover{border-color:var(--c-pwr);box-shadow:0 0 22px #ffd16635;}
+.blk.can-if{border-color:#ff6b3550;box-shadow:0 0 14px #ff6b3518;}
+.blk.can-if:hover,.blk.can-if.selected{border-color:var(--c-can);box-shadow:0 0 22px #ff6b3535;}
+.blk.eth-if{border-color:#4cc9f040;box-shadow:0 0 14px #4cc9f018;}
+.blk.eth-if:hover{border-color:var(--c-eth);box-shadow:0 0 22px #4cc9f035;}
+.blk.safety{border-color:#ff4d6d40;box-shadow:0 0 14px #ff4d6d18;}
+.blk.safety:hover,.blk.safety.selected{border-color:var(--c-safety);box-shadow:0 0 22px #ff4d6d35;}
+.blk.fallback{border-color:#ff9e0040;box-shadow:0 0 14px #ff9e0018;}
+.blk.fallback:hover{border-color:var(--c-fallback);box-shadow:0 0 22px #ff9e0035;}
+.blk.compare{border-color:#6c757d30;opacity:.75;}
+.blk.compare:hover{border-color:#6c757d70;opacity:1;}
 
-  .sig-mipi   { stroke: var(--c-camera); }
-  .sig-dms    { stroke: var(--c-dms); }
-  .sig-can    { stroke: var(--c-can); }
-  .sig-eth    { stroke: var(--c-eth); stroke-dasharray: 6 4; }
-  .sig-safety { stroke: var(--c-safety); stroke-dasharray: 4 3; }
-  .sig-power  { stroke: var(--c-power); stroke-dasharray: 3 3; }
-  .sig-mem    { stroke: var(--c-mem); }
-  .sig-fallback { stroke: var(--c-fallback); stroke-dasharray: 5 4; }
+/* Block typography */
+.blk-cat{font-size:8px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px;opacity:.8;}
+.blk-name{font-size:15px;font-weight:700;color:var(--text-h);line-height:1.2;margin-bottom:3px;}
+.blk-sub{font-size:10px;color:var(--text-s);line-height:1.5;margin-bottom:6px;}
+.blk-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 8px;border-radius:4px;font-size:8.5px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;
+}
+.badge-cyan{background:#00d4ff18;color:var(--c-cam-fwd);border:1px solid #00d4ff35;}
+.badge-green{background:#39ff1418;color:var(--c-soc);border:1px solid #39ff1435;}
+.badge-dms{background:#00ff9d18;color:var(--c-cam-dms);border:1px solid #00ff9d35;}
+.badge-purple{background:#c77dff18;color:var(--c-mem);border:1px solid #c77dff35;}
+.badge-yellow{background:#ffd16618;color:var(--c-pwr);border:1px solid #ffd16635;}
+.badge-orange{background:#ff6b3518;color:var(--c-can);border:1px solid #ff6b3535;}
+.badge-blue{background:#4cc9f018;color:var(--c-eth);border:1px solid #4cc9f035;}
+.badge-red{background:#ff4d6d18;color:var(--c-safety);border:1px solid #ff4d6d35;}
+.badge-amber{background:#ff9e0018;color:var(--c-fallback);border:1px solid #ff9e0035;}
+.badge-gray{background:#6c757d18;color:var(--c-cmp);border:1px solid #6c757d35;}
 
-  /* Animated flow markers */
-  .flow-dot {
-    r: 3.5;
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-  .flow-dot.visible { opacity: 1; }
-  .sig-mipi + .flow-dot, .flow-dot.mipi   { fill: var(--c-camera); filter: drop-shadow(0 0 4px var(--c-camera)); }
-  .flow-dot.dms    { fill: var(--c-dms);    filter: drop-shadow(0 0 4px var(--c-dms)); }
-  .flow-dot.can    { fill: var(--c-can);    filter: drop-shadow(0 0 4px var(--c-can)); }
-  .flow-dot.eth    { fill: var(--c-eth);    filter: drop-shadow(0 0 4px var(--c-eth)); }
-  .flow-dot.safety { fill: var(--c-safety); filter: drop-shadow(0 0 4px var(--c-safety)); }
-  .flow-dot.power  { fill: var(--c-power);  filter: drop-shadow(0 0 4px var(--c-power)); }
-  .flow-dot.mem    { fill: var(--c-mem);    filter: drop-shadow(0 0 4px var(--c-mem)); }
-  .flow-dot.fallback { fill: var(--c-fallback); filter: drop-shadow(0 0 4px var(--c-fallback)); }
+/* ─── SoC INNER SECTIONS ─────────────────────────────────────────── */
+.soc-inner{
+  position:absolute;border-radius:7px;border:1px dashed #1e3d6060;
+  background:#07122080;padding:8px 10px;
+}
+.soc-inner-title{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.soc-inner-sub{font-size:8.5px;color:var(--text-s);line-height:1.4;}
 
-  /* ─── BLOCKS ────────────────────────────────────────────────────── */
-  .block {
-    position: absolute;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    padding: 10px 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 10;
-    user-select: none;
-    opacity: 0;
-    transform: scale(0.92);
-  }
-  .block.visible {
-    opacity: 1;
-    transform: scale(1);
-  }
-  .block:hover {
-    background: var(--bg-card-h);
-    border-color: var(--border-h);
-    z-index: 20;
-    transform: scale(1.02);
-  }
-  .block.selected {
-    z-index: 30;
-    transform: scale(1.03);
-  }
-  .block.dimmed {
-    opacity: 0.25;
-  }
+/* ─── SIDE PANEL ─────────────────────────────────────────────────── */
+#side-panel{
+  position:fixed;top:56px;right:calc(-1 * var(--panel-w));
+  width:var(--panel-w);height:calc(100vh - 56px);
+  background:linear-gradient(180deg,#0a1428,#071020);
+  border-left:1px solid #1a2f50;overflow-y:auto;
+  transition:right .3s ease,opacity .3s;opacity:0;z-index:200;
+}
+#side-panel.open{right:0;opacity:1;}
+.sp-head{padding:16px 18px 12px;border-bottom:1px solid #1a2f50;display:flex;justify-content:space-between;align-items:flex-start;}
+.sp-title{font-size:15px;font-weight:700;}
+.sp-cat{font-size:9px;color:var(--text-s);margin-top:2px;text-transform:uppercase;letter-spacing:.08em;}
+.sp-close{background:none;border:none;color:var(--text-s);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:color var(--trans);}
+.sp-close:hover{color:var(--text-h);}
+.sp-sec{padding:13px 18px;border-bottom:1px solid #111e30;}
+.sp-sec:last-child{border-bottom:none;}
+.sp-sec-ttl{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:var(--text-d);margin-bottom:8px;}
+.sp-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #0e1c2c;font-size:11px;}
+.sp-row:last-child{border-bottom:none;}
+.sp-row .k{color:var(--text-s);flex-shrink:0;}
+.sp-row .v{color:var(--text-h);font-weight:600;text-align:right;max-width:58%;}
+.sp-desc{font-size:11px;color:var(--text-s);line-height:1.65;}
+.sp-warn{margin-top:8px;padding:9px 11px;background:#ff4d6d12;border:1px solid #ff4d6d28;border-radius:6px;font-size:10px;color:#ff8fa0;line-height:1.55;}
+.sp-note{margin-top:8px;padding:9px 11px;background:#ffd16612;border:1px solid #ffd16628;border-radius:6px;font-size:10px;color:#ffd166;line-height:1.55;}
 
-  /* Color-coded borders */
-  .block.cam-fwd   { border-color: var(--c-camera); box-shadow: 0 0 10px #00e5ff25; }
-  .block.cam-dms   { border-color: var(--c-dms);    box-shadow: 0 0 10px #30d15825; }
-  .block.soc-pri   { border-color: var(--c-soc);    box-shadow: 0 0 14px #39ff1430; }
-  .block.soc-pri.selected { box-shadow: var(--glow-green); }
-  .block.mem       { border-color: var(--c-mem);    box-shadow: 0 0 10px #bf5af225; }
-  .block.power     { border-color: var(--c-power);  box-shadow: 0 0 10px #ffd60a25; }
-  .block.safety    { border-color: var(--c-safety); box-shadow: 0 0 10px #ff453a25; }
-  .block.can-if    { border-color: var(--c-can);    box-shadow: 0 0 10px #ff9f0a25; }
-  .block.eth-if    { border-color: var(--c-eth);    box-shadow: 0 0 10px #0a84ff25; }
-  .block.fallback  { border-color: var(--c-fallback); box-shadow: 0 0 10px #ff6b6b25; }
-  .block.compare   { border-color: var(--c-compare); opacity: 0.7; }
-  .block.compare:hover { opacity: 1; }
+/* ─── TOOLTIP ────────────────────────────────────────────────────── */
+#tip{
+  position:fixed;pointer-events:none;z-index:1000;
+  background:linear-gradient(145deg,#0d1e38ee,#091524ee);
+  border:1px solid #2a4a70;border-radius:8px;
+  padding:9px 13px;max-width:260px;
+  font-size:11px;opacity:0;transition:opacity .12s;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 8px 32px #00000060;
+}
+#tip.on{opacity:1;}
+#tt-t{font-weight:700;color:var(--text-h);margin-bottom:3px;}
+#tt-b{color:var(--text-s);font-size:10px;line-height:1.5;}
 
-  .block-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-  .block-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
-    line-height: 1.3;
-  }
-  .block-sub {
-    font-size: 10px;
-    color: var(--text-secondary);
-    margin-top: 3px;
-    line-height: 1.4;
-  }
-  .block-badge {
-    display: inline-block;
-    margin-top: 5px;
-    padding: 2px 7px;
-    border-radius: 3px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
+/* ─── BOTTOM PANELS ──────────────────────────────────────────────── */
+#bottom-panels{
+  flex-shrink:0;
+  background:linear-gradient(0deg,#040c18,#070f1e);
+  border-top:1px solid #1a2f50;
+  display:flex;gap:0;
+  max-height:200px;overflow-y:auto;
+}
 
-  /* Badge colors */
-  .badge-green  { background: #39ff1420; color: var(--c-soc); border: 1px solid #39ff1440; }
-  .badge-cyan   { background: #00e5ff20; color: var(--c-camera); border: 1px solid #00e5ff40; }
-  .badge-orange { background: #ff9f0a20; color: var(--c-can); border: 1px solid #ff9f0a40; }
-  .badge-red    { background: #ff453a20; color: var(--c-safety); border: 1px solid #ff453a40; }
-  .badge-purple { background: #bf5af220; color: var(--c-mem); border: 1px solid #bf5af240; }
-  .badge-yellow { background: #ffd60a20; color: var(--c-power); border: 1px solid #ffd60a40; }
-  .badge-blue   { background: #0a84ff20; color: var(--c-eth); border: 1px solid #0a84ff40; }
-  .badge-gray   { background: #8e8ea020; color: var(--c-compare); border: 1px solid #8e8ea040; }
-  .badge-dms    { background: #30d15820; color: var(--c-dms); border: 1px solid #30d15840; }
+/* Key targets */
+#key-targets{
+  padding:12px 18px;border-right:1px solid #1a2f50;
+  min-width:280px;flex-shrink:0;
+}
+.kt-title{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--text-d);margin-bottom:8px;}
+.kt-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.kt-item{
+  padding:7px 10px;border-radius:6px;
+  background:#0d1e3080;border:1px solid #1a2f50;
+}
+.kt-item .label{font-size:8px;color:var(--text-s);text-transform:uppercase;letter-spacing:.08em;}
+.kt-item .val{font-size:11px;font-weight:700;color:var(--text-h);margin-top:2px;}
+.kt-item .note{font-size:8px;color:var(--text-d);margin-top:1px;}
 
-  /* ─── INNER SoC SECTIONS ───────────────────────────────────────── */
-  .soc-inner {
-    position: absolute;
-    border-radius: 6px;
-    border: 1px dashed #2a4060;
-    background: #0d1a2a60;
-    padding: 8px 10px;
-    font-size: 10px;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    z-index: 5;
-  }
+/* SoC Matrix */
+#soc-matrix{flex:1;padding:12px 18px;}
+.sm-title{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--text-d);margin-bottom:8px;}
+.sm-chips{display:flex;gap:7px;flex-wrap:wrap;}
+.sm-chip{
+  padding:7px 13px;border-radius:6px;cursor:pointer;
+  background:#0d1e3080;border:1px solid #1a2f50;
+  transition:all var(--trans);display:flex;align-items:center;gap:8px;
+}
+.sm-chip:hover{border-color:#2a4a70;background:#122040;}
+.sm-chip.selected{border-color:var(--c-soc);box-shadow:0 0 10px #39ff1425;}
+.sm-chip .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sm-chip .soc-n{font-size:12px;font-weight:700;color:var(--text-h);}
+.sm-chip .soc-d{font-size:9px;color:var(--text-s);margin-top:1px;}
+.sm-chip .soc-r{font-size:8px;margin-top:3px;}
 
-  /* ─── SECTION LABELS ────────────────────────────────────────────── */
-  .section-label {
-    position: absolute;
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-dim);
-    z-index: 2;
-    pointer-events: none;
-  }
+/* Legend */
+#legend{
+  flex-shrink:0;border-top:1px solid #1a2f50;
+  background:#040c18;padding:7px 20px;
+  display:flex;flex-wrap:wrap;gap:5px 16px;align-items:center;
+}
+.leg-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-d);flex-shrink:0;}
+.leg{display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--text-s);}
+.leg-ln{width:28px;height:2.5px;border-radius:2px;position:relative;}
+.leg-ln.dash{background:repeating-linear-gradient(90deg,currentColor 0 5px,transparent 5px 9px);}
 
-  /* ─── SIDE PANEL ────────────────────────────────────────────────── */
-  #side-panel {
-    position: fixed;
-    top: 57px;
-    right: -var(--panel-w);
-    width: var(--panel-w);
-    height: calc(100vh - 57px);
-    background: var(--bg-panel);
-    border-left: 1px solid var(--border);
-    overflow-y: auto;
-    transition: right 0.3s ease, opacity 0.3s;
-    z-index: 200;
-    right: calc(-1 * var(--panel-w));
-    opacity: 0;
-  }
-  #side-panel.open {
-    right: 0;
-    opacity: 1;
-  }
+/* Footer */
+#footer{
+  flex-shrink:0;border-top:1px solid #0e1c2c;background:#030a14;
+  padding:6px 20px;display:flex;flex-wrap:wrap;gap:6px 28px;align-items:center;
+}
+.ft-item{font-size:9px;color:var(--text-s);}
+.ft-item strong{color:var(--text-b);}
+.ft-disc{font-size:8px;color:var(--text-d);margin-left:auto;max-width:440px;text-align:right;line-height:1.5;}
 
-  .sp-header {
-    padding: 16px 18px 12px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  .sp-title { font-size: 14px; font-weight: 700; }
-  .sp-subtitle { font-size: 10px; color: var(--text-secondary); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
-  .sp-close {
-    background: none; border: none; color: var(--text-secondary);
-    font-size: 18px; cursor: pointer; line-height: 1;
-    padding: 2px 6px; border-radius: 4px;
-    transition: color var(--transition);
-  }
-  .sp-close:hover { color: var(--text-primary); }
+/* ─── STARTUP OVERLAY ────────────────────────────────────────────── */
+#startup{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--navy-0);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  transition:opacity .7s;
+}
+#startup.out{opacity:0;pointer-events:none;}
+.su-logo{font-size:26px;font-weight:900;letter-spacing:.08em;color:var(--c-soc);text-shadow:0 0 24px #39ff1460;}
+.su-sub{font-size:10px;color:var(--text-s);letter-spacing:.14em;text-transform:uppercase;}
+.su-bar-wrap{width:240px;height:3px;background:#1a2f50;border-radius:2px;overflow:hidden;}
+.su-bar{height:100%;width:0;background:linear-gradient(90deg,var(--c-soc),var(--c-cam-fwd));border-radius:2px;transition:width 1.8s ease;}
+.su-msg{font-size:9.5px;color:var(--text-d);letter-spacing:.1em;}
 
-  .sp-section { padding: 14px 18px; border-bottom: 1px solid var(--border); }
-  .sp-section:last-child { border-bottom: none; }
-  .sp-sec-title {
-    font-size: 9px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 8px;
-  }
-  .sp-row {
-    display: flex; justify-content: space-between;
-    padding: 4px 0; border-bottom: 1px solid #1a2535;
-    font-size: 11px;
-  }
-  .sp-row:last-child { border-bottom: none; }
-  .sp-row .key { color: var(--text-secondary); }
-  .sp-row .val { color: var(--text-primary); font-weight: 600; text-align: right; max-width: 60%; }
-  .sp-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.6; }
-  .sp-warn {
-    margin-top: 8px; padding: 8px 10px;
-    background: #ff453a15; border: 1px solid #ff453a30;
-    border-radius: 5px; font-size: 10px; color: #ff8a85;
-    line-height: 1.5;
-  }
-  .sp-note {
-    margin-top: 8px; padding: 8px 10px;
-    background: #ffd60a10; border: 1px solid #ffd60a30;
-    border-radius: 5px; font-size: 10px; color: #ffd60a;
-    line-height: 1.5;
-  }
+/* ─── VALIDATION MODE ────────────────────────────────────────────── */
+.val-only{display:none!important;}
+body.mode-validation .val-only{display:block!important;}
 
-  /* ─── LEGEND ────────────────────────────────────────────────────── */
-  #legend {
-    background: var(--bg-panel);
-    border-top: 1px solid var(--border);
-    padding: 10px 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 18px;
-    align-items: center;
-  }
-  .legend-title { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-right: 6px; }
-  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-secondary); }
-  .leg-line { width: 24px; height: 2px; border-radius: 1px; position: relative; }
-  .leg-line.dashed { background: repeating-linear-gradient(90deg, currentColor 0 4px, transparent 4px 8px); }
-  .leg-dot { width: 8px; height: 8px; border-radius: 50%; }
-
-  /* ─── KEY TARGETS PANEL ─────────────────────────────────────────── */
-  #key-targets {
-    background: var(--bg-panel);
-    border-top: 1px solid var(--border);
-    padding: 10px 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 24px;
-    align-items: flex-start;
-  }
-  .kt-title { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); flex-basis: 100%; }
-  .kt-chip {
-    display: flex; align-items: center; gap: 6px;
-    padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 600;
-    border: 1px solid var(--border); background: var(--bg-card);
-    cursor: pointer; transition: all var(--transition);
-  }
-  .kt-chip:hover { border-color: var(--border-h); background: var(--bg-card-h); }
-  .kt-chip .dot { width: 7px; height: 7px; border-radius: 50%; }
-  .kt-chip .tops { font-size: 9px; color: var(--text-secondary); margin-left: 4px; font-weight: 400; }
-  .kt-chip.selected { border-color: var(--c-soc); box-shadow: var(--glow-green); }
-
-  /* ─── FOOTER ────────────────────────────────────────────────────── */
-  #footer {
-    background: var(--bg-panel);
-    border-top: 1px solid var(--border);
-    padding: 10px 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 32px;
-    align-items: center;
-  }
-  .footer-item { font-size: 10px; color: var(--text-secondary); line-height: 1.5; }
-  .footer-item strong { color: var(--text-primary); }
-  .footer-disc { font-size: 9px; color: var(--text-dim); margin-left: auto; max-width: 420px; text-align: right; line-height: 1.5; }
-
-  /* ─── TOOLTIP ───────────────────────────────────────────────────── */
-  #tooltip {
-    position: fixed;
-    background: #0d1422ee;
-    border: 1px solid var(--border-h);
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 11px;
-    color: var(--text-primary);
-    pointer-events: none;
-    z-index: 1000;
-    max-width: 240px;
-    line-height: 1.5;
-    opacity: 0;
-    transition: opacity 0.15s;
-    backdrop-filter: blur(4px);
-  }
-  #tooltip.visible { opacity: 1; }
-  #tooltip .tt-title { font-weight: 700; margin-bottom: 4px; }
-  #tooltip .tt-body { color: var(--text-secondary); font-size: 10px; }
-
-  /* ─── STARTUP OVERLAY ───────────────────────────────────────────── */
-  #startup-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--bg-base);
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    transition: opacity 0.6s;
-  }
-  #startup-overlay.fade-out { opacity: 0; pointer-events: none; }
-  .su-logo { font-size: 22px; font-weight: 800; color: var(--c-soc); text-shadow: var(--glow-green); letter-spacing: 0.1em; }
-  .su-sub  { font-size: 11px; color: var(--text-secondary); letter-spacing: 0.12em; text-transform: uppercase; }
-  .su-bar-wrap { width: 220px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .su-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--c-soc), var(--c-camera)); border-radius: 2px; transition: width 1.8s ease; }
-  .su-status { font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; }
-
-  /* ─── MODE-SPECIFIC VISIBILITY ──────────────────────────────────── */
-  .show-validation { display: none !important; }
-  body.mode-validation .show-validation { display: block !important; }
-  body.mode-validation .hide-validation { opacity: 0.3 !important; pointer-events: none !important; }
-
-  /* ─── SCROLLBAR ─────────────────────────────────────────────────── */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg-base); }
-  ::-webkit-scrollbar-thumb { background: #2a3f5f; border-radius: 3px; }
-
-  /* ─── ANIMATION: block entrance ────────────────────────────────── */
-  @keyframes blockIn {
-    from { opacity:0; transform: scale(0.88) translateY(8px); }
-    to   { opacity:1; transform: scale(1) translateY(0); }
-  }
-  .block.anim { animation: blockIn 0.4s ease forwards; }
-
-  /* validation mode overlay tag */
-  .val-tag {
-    position: absolute; top: 4px; right: 6px;
-    font-size: 8px; color: var(--c-compare); letter-spacing: 0.06em;
-    display: none;
-  }
-  body.mode-validation .val-tag { display: block; }
+/* ─── SCROLLBAR ──────────────────────────────────────────────────── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--navy-1);}
+::-webkit-scrollbar-thumb{background:#1e3a5a;border-radius:3px;}
 </style>
 </head>
 <body>
 
-<!-- ── STARTUP OVERLAY ──────────────────────────────────────────────── -->
-<div id="startup-overlay">
+<!-- ── STARTUP ────────────────────────────────────────────────────── -->
+<div id="startup">
   <div class="su-logo">IND-VIAS / ADVIS</div>
-  <div class="su-sub">Hardware Architecture — v0.5</div>
+  <div class="su-sub">Dual-Vision Smart Safety ECU · v0.5</div>
   <div class="su-bar-wrap"><div class="su-bar" id="su-bar"></div></div>
-  <div class="su-status" id="su-status">Initializing diagram…</div>
+  <div class="su-msg" id="su-msg">Initializing hardware diagram…</div>
 </div>
 
-<!-- ── TOOLTIP ──────────────────────────────────────────────────────── -->
-<div id="tooltip">
-  <div class="tt-title" id="tt-title"></div>
-  <div class="tt-body"  id="tt-body"></div>
-</div>
+<!-- ── TOOLTIP ────────────────────────────────────────────────────── -->
+<div id="tip"><div id="tt-t"></div><div id="tt-b"></div></div>
 
-<!-- ── SIDE PANEL ───────────────────────────────────────────────────── -->
+<!-- ── SIDE PANEL ─────────────────────────────────────────────────── -->
 <div id="side-panel">
-  <div class="sp-header">
-    <div>
-      <div class="sp-title"  id="sp-title">Select a Block</div>
-      <div class="sp-subtitle" id="sp-cat">—</div>
-    </div>
+  <div class="sp-head">
+    <div><div class="sp-title" id="sp-title">–</div><div class="sp-cat" id="sp-cat">–</div></div>
     <button class="sp-close" onclick="closePanel()">✕</button>
   </div>
   <div id="sp-body"></div>
 </div>
 
-<!-- ── APP ──────────────────────────────────────────────────────────── -->
+<!-- ── APP ────────────────────────────────────────────────────────── -->
 <div id="app">
 
   <!-- TOP BAR -->
   <div id="topbar">
-    <div class="topbar-title">
-      <div class="t1">ADVIS v0.5 — Hardware Architecture</div>
-      <div class="t2">IND-VIAS · Single ECU · Direct MIPI CSI-2 · Windshield Mount</div>
+    <div class="tb-brand">
+      <div class="t1">IND-VIAS | DUAL-VISION SMART SAFETY ECU</div>
+      <div class="t2">E/E Hardware Architecture — Forward Perception + Driver Monitoring</div>
+      <div class="t3">ADVIS v0.5 · Single-ECU · Shared Compute · Risk-Coupled Intelligence</div>
     </div>
-    <div class="topbar-divider"></div>
-    <div id="mode-selector">
+    <div class="tb-center">
+      <div class="tb-banner">
+        <span>Single Windshield-Mounted ECU</span><span class="tb-sep">•</span>
+        Shared Compute<span class="tb-sep">•</span>Risk-Coupled Intelligence
+      </div>
+    </div>
+    <div class="tb-modes">
       <button class="mode-btn active" data-mode="assist"     onclick="setMode('assist')"    >Assist Mode</button>
       <button class="mode-btn"        data-mode="control"    onclick="setMode('control')"   >Control Mode</button>
       <button class="mode-btn"        data-mode="fleet"      onclick="setMode('fleet')"     >Fleet Mode</button>
       <button class="mode-btn"        data-mode="validation" onclick="setMode('validation')">Validation Board</button>
     </div>
-    <div class="status-pill">
-      <div class="status-dot"></div>
-      <span id="mode-label">Assist Mode · TDA4VL-Q1 candidate</span>
+    <div class="tb-status">
+      <div class="dot"></div>
+      <span id="mode-lbl">Assist Mode · TDA4VL-Q1 candidate</span>
     </div>
   </div>
 
@@ -571,689 +409,555 @@
     <div id="diagram-wrap">
       <div id="diagram">
 
-        <!-- SVG Signal Lines -->
-        <svg id="signal-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        <!-- ── SVG SIGNAL PATHS ───────────────────────────────────── -->
+        <svg id="sig-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Arrowheads for each color -->
+            <marker id="arr-fwd"  markerWidth="7" markerHeight="7" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L6,2.5 Z" fill="#00d4ff"/>
+            </marker>
+            <marker id="arr-dms"  markerWidth="7" markerHeight="7" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L6,2.5 Z" fill="#00ff9d"/>
+            </marker>
+            <marker id="arr-can"  markerWidth="7" markerHeight="7" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L6,2.5 Z" fill="#ff6b35"/>
+            </marker>
+            <marker id="arr-eth"  markerWidth="7" markerHeight="7" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L6,2.5 Z" fill="#4cc9f0"/>
+            </marker>
+            <marker id="arr-saf"  markerWidth="7" markerHeight="7" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L6,2.5 Z" fill="#ff4d6d"/>
+            </marker>
+            <marker id="arr-pwr"  markerWidth="7" markerHeight="7" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L6,2.5 Z" fill="#ffd166"/>
+            </marker>
+            <marker id="arr-mem"  markerWidth="7" markerHeight="7" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L6,2.5 Z" fill="#c77dff"/>
+            </marker>
+            <marker id="arr-fall" markerWidth="7" markerHeight="7" refX="4" refY="2.5" orient="auto">
+              <path d="M0,0 L0,5 L6,2.5 Z" fill="#ff9e00"/>
+            </marker>
+          </defs>
+        </svg>
 
-        <!-- ── SECTION LABELS ─────────────────────────────────── -->
-        <div class="section-label" style="left:20px;top:14px">Sensor Inputs</div>
-        <div class="section-label" style="left:340px;top:14px">Compute Platform</div>
-        <div class="section-label" style="left:340px;top:400px">Memory &amp; Storage</div>
-        <div class="section-label" style="left:750px;top:14px">Vehicle Interface</div>
-        <div class="section-label" style="left:750px;top:340px">Safety Domain</div>
-        <div class="section-label" style="left:20px;top:560px">SoC Comparison / Mode Variants</div>
+        <!-- ── SECTION LABELS ─────────────────────────────────────── -->
+        <div class="sec-lbl" style="left:22px;top:0">Sensor Inputs</div>
+        <div class="sec-lbl" style="left:600px;top:0">Shared Compute Platform</div>
+        <div class="sec-lbl" style="left:1175px;top:0">Vehicle Interface</div>
+        <div class="sec-lbl" style="left:630px;top:440px">Memory &amp; Storage</div>
+        <div class="sec-lbl" style="left:820px;top:440px">Safety Domain</div>
 
-        <!-- ─── FORWARD ROAD CAMERA ───────────────────────────── -->
-        <div class="block cam-fwd visible" id="b-fwd-cam"
-          style="left:20px;top:50px;width:180px"
+        <!-- ── ECU BOUNDARY ───────────────────────────────────────── -->
+        <div id="ecu-boundary">
+          <div id="ecu-label">Single Windshield-Mounted ECU — ADVIS v0.5</div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- SENSORS (outside ECU, left)                            -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- Forward Road Camera -->
+        <div class="blk cam-fwd" id="b-fwd-cam" style="left:16px;top:54px;width:196px"
           data-id="fwd-cam"
-          onmouseenter="showTip(event,'Forward Road Camera','OX03C10-class ISP · MIPI CSI-2 4-lane · ~3 MP planning class')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('fwd-cam')">
-          <div class="block-label" style="color:var(--c-camera)">Camera · Forward</div>
-          <div class="block-name">Road Camera</div>
-          <div class="block-sub">OX03C10-class<br>MIPI CSI-2 · 4-lane</div>
-          <span class="block-badge badge-cyan">~3 MP · planning class</span>
+          onmouseenter="tip(event,'Forward Road Camera','OX03C10-class · MIPI CSI-2 4-lane · ~3 MP planning class')"
+          onmouseleave="hideTip()" onclick="pick('fwd-cam')">
+          <div class="blk-cat" style="color:var(--c-cam-fwd)">Camera · Forward Road</div>
+          <div class="blk-name">Road Camera</div>
+          <div class="blk-sub">OX03C10-class ISP<br>MIPI CSI-2 · 4-lane direct</div>
+          <span class="blk-badge badge-cyan">~3 MP · Planning class</span>
         </div>
 
-        <!-- ─── IN-CABIN DMS CAMERA ───────────────────────────── -->
-        <div class="block cam-dms visible" id="b-dms-cam"
-          style="left:20px;top:210px;width:180px"
+        <!-- DMS Camera -->
+        <div class="blk cam-dms" id="b-dms-cam" style="left:16px;top:270px;width:196px"
           data-id="dms-cam"
-          onmouseenter="showTip(event,'DMS Camera · In-Cabin','OX01N1B/OX01H1B-class · MIPI CSI-2 2-lane · Driver Monitor')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('dms-cam')">
-          <div class="block-label" style="color:var(--c-dms)">Camera · DMS</div>
-          <div class="block-name">In-Cabin DMS</div>
-          <div class="block-sub">OX01N1B / OX01H1B-class<br>MIPI CSI-2 · 2-lane</div>
-          <span class="block-badge badge-dms">1.3 MP · planning class</span>
+          onmouseenter="tip(event,'In-Cabin DMS Camera','OX01N1B/OX01H1B-class · MIPI CSI-2 2-lane · Driver Monitoring')"
+          onmouseleave="hideTip()" onclick="pick('dms-cam')">
+          <div class="blk-cat" style="color:var(--c-cam-dms)">Camera · DMS In-Cabin</div>
+          <div class="blk-name">DMS Camera</div>
+          <div class="blk-sub">OX01N1B / OX01H1B-class<br>MIPI CSI-2 · 2-lane direct</div>
+          <span class="blk-badge badge-dms">~1.3 MP · Planning class</span>
         </div>
 
-        <!-- ─── PRIMARY SOC ────────────────────────────────────── -->
-        <div class="block soc-pri visible" id="b-soc"
-          style="left:280px;top:50px;width:340px;min-height:300px"
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- INSIDE ECU                                              -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- PRIMARY SoC — LARGE CENTER BLOCK -->
+        <div class="blk soc-pri" id="b-soc" style="left:242px;top:40px;width:810px;height:380px"
           data-id="soc"
-          onmouseenter="showTip(event,'Primary SoC — ADVIS Compute','Shared ADAS+DMS intelligent processing. Mode-dependent selection. Click for details.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('soc')">
-          <div class="block-label" style="color:var(--c-soc)">Primary SoC · Shared Compute</div>
-          <div class="block-name" id="soc-name">TDA4VL-Q1</div>
-          <div class="block-sub" id="soc-sub">4 TOPS · J721e-class · ASIL-B capable (target)<br>Primary ADVIS Assist candidate</div>
-          <span class="block-badge badge-green" id="soc-badge">4 TOPS · Assist candidate</span>
-          <div class="val-tag">v0.4.4 baseline: SOM + FPD-Link</div>
+          onmouseenter="tip(event,'Primary SoC — Shared Compute','Mode-dependent: TDA4VL-Q1 (Assist) or TDA4VM-Q1 (Control). Hosts ADAS + DMS intelligence with risk-coupled fusion.')"
+          onmouseleave="hideTip()" onclick="pick('soc')">
+          <div class="blk-cat" style="color:var(--c-soc)">Primary SoC · Shared Compute</div>
+          <div class="blk-name" id="soc-name" style="font-size:20px">TDA4VL-Q1</div>
+          <div class="blk-sub" id="soc-sub">4 TOPS · J721e-class · ASIL-B capable warning/request path (target) · Primary ADVIS Assist Candidate</div>
+          <span class="blk-badge badge-green" id="soc-badge" style="margin-bottom:10px">4 TOPS · Assist Candidate</span>
 
-          <!-- Inner SoC blocks -->
-          <div class="soc-inner" style="left:10px;top:75px;width:145px;height:60px">
-            <div style="color:var(--c-adas);font-weight:700;margin-bottom:3px">ADAS Intelligence</div>
-            <div style="font-size:9px">Object detect · Lane · FWD path</div>
+          <!-- Inner: ADAS Intelligence -->
+          <div class="soc-inner" style="left:12px;top:88px;width:250px;height:96px">
+            <div class="soc-inner-title" style="color:#64d2ff">ADAS Intelligence</div>
+            <div class="soc-inner-sub" id="adas-feats">FCW · LDW · TSR · PCW<br>Object Detection · Lane Path<br>Forward Perception Pipeline</div>
           </div>
-          <div class="soc-inner" style="left:175px;top:75px;width:145px;height:60px">
-            <div style="color:var(--c-dms);font-weight:700;margin-bottom:3px">DMS Intelligence</div>
-            <div style="font-size:9px">Drowsiness · Distraction · Gaze</div>
+
+          <!-- Inner: DMS Intelligence -->
+          <div class="soc-inner" style="left:278px;top:88px;width:250px;height:96px">
+            <div class="soc-inner-title" style="color:var(--c-cam-dms)">DMS Intelligence</div>
+            <div class="soc-inner-sub">Drowsiness Detection<br>Distraction · Gaze Estimation<br>Driver State Pipeline</div>
           </div>
-          <div class="soc-inner" style="left:10px;top:152px;width:310px;height:50px">
-            <div style="color:var(--c-soc);font-weight:700;margin-bottom:3px">Risk-Coupled ADAS+DMS Fusion</div>
-            <div style="font-size:9px">Shared risk context · Arbitration · ASIL-B capable warning/request path (target · subject to safety analysis)</div>
+
+          <!-- Inner: Risk-Coupled Fusion -->
+          <div class="soc-inner" style="left:12px;top:196px;width:516px;height:62px">
+            <div class="soc-inner-title" style="color:var(--c-soc)">Risk-Coupled ADAS + DMS Fusion</div>
+            <div class="soc-inner-sub">Shared Risk Context · Arbitration · ASIL-B capable warning/request path target (subject to safety analysis)</div>
           </div>
-          <div class="soc-inner" style="left:10px;top:218px;width:145px;height:38px">
-            <div style="color:var(--c-mem);font-weight:700;margin-bottom:2px">MIPI CSI Rx</div>
-            <div style="font-size:9px">4-lane + 2-lane inputs</div>
+
+          <!-- Inner: MIPI CSI Rx -->
+          <div class="soc-inner" style="left:12px;top:272px;width:250px;height:52px">
+            <div class="soc-inner-title" style="color:var(--c-mem)">MIPI CSI-2 Rx</div>
+            <div class="soc-inner-sub">4-lane (Road Cam) + 2-lane (DMS) · Direct inputs</div>
           </div>
-          <div class="soc-inner" style="left:175px;top:218px;width:145px;height:38px">
-            <div style="color:var(--c-can);font-weight:700;margin-bottom:2px">CAN-FD + Eth</div>
-            <div style="font-size:9px">Vehicle I/O interface</div>
+
+          <!-- Inner: CAN + ETH I/O -->
+          <div class="soc-inner" style="left:278px;top:272px;width:250px;height:52px">
+            <div class="soc-inner-title" style="color:var(--c-can)">CAN-FD + Ethernet I/O</div>
+            <div class="soc-inner-sub">Vehicle interface · ADAS request msgs · Optional diagnostics</div>
+          </div>
+
+          <!-- Inner: Sensor Sync (rightmost column) -->
+          <div class="soc-inner" style="left:544px;top:88px;width:248px;height:236px">
+            <div class="soc-inner-title" style="color:var(--c-fallback)">Sensor Sync &amp; Timing</div>
+            <div class="soc-inner-sub" style="margin-bottom:8px">HW sync · Frame timestamping<br>Camera trigger alignment</div>
+            <div class="soc-inner-title" style="color:var(--c-pwr);margin-top:8px">Power Domain</div>
+            <div class="soc-inner-sub" style="margin-bottom:8px">SoC thermal monitor<br>Dynamic clock gating</div>
+            <div class="soc-inner-title" style="color:var(--c-safety);margin-top:8px">Safety Interface</div>
+            <div class="soc-inner-sub">Watchdog I/F · Error signaling<br>MCU safety monitor link</div>
+          </div>
+
+          <!-- Val tag -->
+          <div style="position:absolute;top:6px;right:12px;font-size:8px;color:var(--c-cmp);display:none" id="val-soc-tag">
+            v0.4.4 validation: SOM + FPD-Link
           </div>
         </div>
 
-        <!-- ─── LPDDR4X MEMORY ─────────────────────────────────── -->
-        <div class="block mem visible" id="b-mem"
-          style="left:280px;top:390px;width:155px"
+        <!-- MEMORY -->
+        <div class="blk mem" id="b-mem" style="left:242px;top:444px;width:200px;height:118px"
           data-id="mem"
-          onmouseenter="showTip(event,'LPDDR4X Memory','High-bandwidth RAM for SoC compute. Capacity TBD pending SoC selection and BOM finalization.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('mem')">
-          <div class="block-label" style="color:var(--c-mem)">Memory</div>
-          <div class="block-name">LPDDR4X</div>
-          <div class="block-sub">Shared compute RAM<br>Capacity TBD</div>
-          <span class="block-badge badge-purple">BOM target / direction</span>
+          onmouseenter="tip(event,'LPDDR4X Memory','High-bandwidth shared compute RAM. Capacity TBD pending final SoC selection.')"
+          onmouseleave="hideTip()" onclick="pick('mem')">
+          <div class="blk-cat" style="color:var(--c-mem)">Memory</div>
+          <div class="blk-name" style="font-size:14px">LPDDR4X</div>
+          <div class="blk-sub">Shared compute RAM<br>Capacity TBD</div>
+          <span class="blk-badge badge-purple">BOM Target</span>
         </div>
 
-        <!-- ─── eMMC STORAGE ──────────────────────────────────── -->
-        <div class="block mem visible" id="b-stor"
-          style="left:460px;top:390px;width:155px"
+        <!-- STORAGE -->
+        <div class="blk stor" id="b-stor" style="left:460px;top:444px;width:200px;height:118px"
           data-id="stor"
-          onmouseenter="showTip(event,'eMMC / Flash Storage','Non-volatile storage for firmware, maps, logs, model weights.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('stor')">
-          <div class="block-label" style="color:var(--c-mem)">Storage</div>
-          <div class="block-name">eMMC / Flash</div>
-          <div class="block-sub">Firmware · Maps · Logs<br>Model weights</div>
-          <span class="block-badge badge-purple">BOM target / direction</span>
+          onmouseenter="tip(event,'eMMC / Flash Storage','Firmware · Maps · Logs · Model weights. Non-volatile storage.')"
+          onmouseleave="hideTip()" onclick="pick('stor')">
+          <div class="blk-cat" style="color:var(--c-stor)">Storage</div>
+          <div class="blk-name" style="font-size:14px">eMMC / Flash</div>
+          <div class="blk-sub">Firmware · Maps · Logs<br>Model weights</div>
+          <span class="blk-badge badge-purple">BOM Target</span>
         </div>
 
-        <!-- ─── POWER MANAGEMENT ──────────────────────────────── -->
-        <div class="block power visible" id="b-pwr"
-          style="left:280px;top:490px;width:335px"
-          data-id="pwr"
-          onmouseenter="showTip(event,'Power Management','PMIC with sequenced rail management. Automotive 12V input. BOM target subject to vendor quotes.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('pwr')">
-          <div class="block-label" style="color:var(--c-power)">Power Management</div>
-          <div class="block-name">PMIC — Rail Sequencing &amp; Supervision</div>
-          <div class="block-sub">Automotive 12 V input · SoC/mem/camera rails · Watchdog</div>
-          <span class="block-badge badge-yellow">BOM target / subject to vendor quotes</span>
-        </div>
-
-        <!-- ─── CAN-FD INTERFACE ──────────────────────────────── -->
-        <div class="block can-if visible" id="b-can"
-          style="left:700px;top:50px;width:180px"
-          data-id="can"
-          onmouseenter="showTip(event,'CAN-FD Vehicle Interface','ISO 11898-2 CAN-FD transceiver. ADAS request messages only — final actuator authority with OEM ECUs.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('can')">
-          <div class="block-label" style="color:var(--c-can)">Vehicle Interface</div>
-          <div class="block-name">CAN-FD</div>
-          <div class="block-sub">ISO 11898-2 · ADAS request msgs<br>Final authority → OEM ECUs</div>
-          <span class="block-badge badge-orange">Request only · No direct actuation</span>
-        </div>
-
-        <!-- ─── VEHICLE BUS ────────────────────────────────────── -->
-        <div class="block can-if visible" id="b-vbus"
-          style="left:700px;top:170px;width:180px"
-          data-id="vbus"
-          onmouseenter="showTip(event,'Vehicle CAN Bus','OEM vehicle network. ADVIS sends advisory/request messages. Actuator ECUs (brake, steering, throttle) retain final authority.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('vbus')">
-          <div class="block-label" style="color:var(--c-can)">Vehicle Network</div>
-          <div class="block-name">CAN Bus / OEM ECUs</div>
-          <div class="block-sub">Brake · Steering · Throttle ECUs<br>ADVIS = advisory input only</div>
-          <span class="block-badge badge-orange">OEM final authority</span>
-        </div>
-
-        <!-- ─── OPTIONAL ETHERNET ─────────────────────────────── -->
-        <div class="block eth-if visible" id="b-eth"
-          style="left:700px;top:290px;width:180px"
-          data-id="eth"
-          onmouseenter="showTip(event,'Ethernet — Diagnostics / OTA (Optional)','100BASE-T1 or GbE PHY. Optional interface for OTA firmware updates and diagnostic access. Not required for core ADAS operation.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('eth')">
-          <div class="block-label" style="color:var(--c-eth)">Optional Interface</div>
-          <div class="block-name">Ethernet PHY</div>
-          <div class="block-sub">Diagnostics · OTA updates<br>100BASE-T1 / GbE option</div>
-          <span class="block-badge badge-blue">Optional · Not required for ADAS</span>
-        </div>
-
-        <!-- ─── SAFETY MONITOR ────────────────────────────────── -->
-        <div class="block safety visible" id="b-safety"
-          style="left:700px;top:400px;width:180px"
+        <!-- SAFETY MONITOR -->
+        <div class="blk safety" id="b-safety" style="left:678px;top:444px;width:200px;height:118px"
           data-id="safety"
-          onmouseenter="showTip(event,'Safety Monitor','Watchdog and safety supervision. ASIL-B capable warning/request path target — subject to full safety analysis. No final ASIL certification claimed.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('safety')">
-          <div class="block-label" style="color:var(--c-safety)">Safety Domain</div>
-          <div class="block-name">Safety Monitor</div>
-          <div class="block-sub">Watchdog · Health monitor<br>ASIL-B capable (target)</div>
-          <span class="block-badge badge-red">Target · Subject to safety analysis</span>
+          onmouseenter="tip(event,'Safety Monitor','Watchdog · Health monitoring. ASIL-B capable warning/request path target.')"
+          onmouseleave="hideTip()" onclick="pick('safety')">
+          <div class="blk-cat" style="color:var(--c-safety)">Safety Domain</div>
+          <div class="blk-name" style="font-size:14px">Safety Monitor</div>
+          <div class="blk-sub">Watchdog · Health monitor<br>ASIL-B capable (target)</div>
+          <span class="blk-badge badge-red">Subject to Safety Analysis</span>
         </div>
 
-        <!-- ─── SAFETY FALLBACK PATH ──────────────────────────── -->
-        <div class="block fallback visible" id="b-fallback"
-          style="left:700px;top:510px;width:180px"
+        <!-- SAFETY FALLBACK -->
+        <div class="blk fallback" id="b-fallback" style="left:896px;top:444px;width:200px;height:118px"
           data-id="fallback"
-          onmouseenter="showTip(event,'Safety Fallback Path','Safe-state output on SoC/system fault. Sends minimal CAN request for safe-stop advisory. Does not directly actuate vehicle systems.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('fallback')">
-          <div class="block-label" style="color:var(--c-fallback)">Safety Fallback</div>
-          <div class="block-name">Fallback Path</div>
-          <div class="block-sub">Safe-state on fault<br>Minimal CAN advisory → OEM</div>
-          <span class="block-badge badge-red">Advisory only · OEM decides</span>
+          onmouseenter="tip(event,'Safety Fallback Path','Safe-state on fault. Minimal CAN advisory to OEM — final authority with OEM ECUs.')"
+          onmouseleave="hideTip()" onclick="pick('fallback')">
+          <div class="blk-cat" style="color:var(--c-fallback)">Safety Fallback</div>
+          <div class="blk-name" style="font-size:14px">Fallback Path</div>
+          <div class="blk-sub">Safe-state on fault<br>Minimal CAN advisory → OEM</div>
+          <span class="blk-badge badge-amber">Advisory Only</span>
         </div>
 
-        <!-- ─── COMPARISON SoCs ────────────────────────────────── -->
-        <!-- TDA4VM-Q1 -->
-        <div class="block compare visible" id="b-tda4vm"
-          style="left:20px;top:590px;width:200px"
-          data-id="tda4vm"
-          onmouseenter="showTip(event,'TDA4VM-Q1','8 TOPS · J721e-class · Safest ADVIS Control candidate. GPU + MMA. ASIL-B capable target.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('tda4vm')">
-          <div class="block-label" style="color:var(--c-compare)">Comparison · Control</div>
-          <div class="block-name">TDA4VM-Q1</div>
-          <div class="block-sub">8 TOPS · J721e-class<br>GPU + MMA · ASIL-B target</div>
-          <span class="block-badge badge-gray">Safest Control candidate</span>
+        <!-- POWER MANAGEMENT — full width bottom of ECU -->
+        <div class="blk pwr" id="b-pwr" style="left:242px;top:578px;width:854px;height:46px;display:flex;align-items:center;gap:14px;padding:0 16px"
+          data-id="pwr"
+          onmouseenter="tip(event,'Power Management — PMIC','Automotive 12V input. Rail sequencing for SoC, memory, cameras, interfaces. Watchdog supervision.')"
+          onmouseleave="hideTip()" onclick="pick('pwr')">
+          <div style="flex-shrink:0">
+            <div class="blk-cat" style="color:var(--c-pwr);margin-bottom:0">Power Management</div>
+            <div class="blk-name" style="font-size:13px">PMIC — Rail Sequencing &amp; Supervision</div>
+          </div>
+          <div class="blk-sub" style="margin-bottom:0;flex:1">Automotive 12 V input · SoC / Memory / Camera / Interface rails · Watchdog</div>
+          <span class="blk-badge badge-yellow" style="flex-shrink:0;white-space:nowrap">BOM Target · Subject to Vendor Quotes</span>
         </div>
 
-        <!-- TDA4AL-Q1 -->
-        <div class="block compare visible" id="b-tda4al"
-          style="left:240px;top:590px;width:200px"
-          data-id="tda4al"
-          onmouseenter="showTip(event,'TDA4AL-Q1','8 TOPS · Analytics-focused · No GPU. Comparison candidate. Not GPU-accelerated inference.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('tda4al')">
-          <div class="block-label" style="color:var(--c-compare)">Comparison · Analytics</div>
-          <div class="block-name">TDA4AL-Q1</div>
-          <div class="block-sub">8 TOPS · Analytics-focused<br>No GPU · Comparison only</div>
-          <span class="block-badge badge-gray">Analytics comparison</span>
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- VEHICLE INTERFACE (outside ECU, right)                 -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- CAN-FD -->
+        <div class="blk can-if" id="b-can" style="left:1178px;top:60px;width:226px"
+          data-id="can"
+          onmouseenter="tip(event,'CAN-FD Vehicle Interface','ISO 11898-2. ADAS request messages only. Final actuator authority with OEM ECUs.')"
+          onmouseleave="hideTip()" onclick="pick('can')">
+          <div class="blk-cat" style="color:var(--c-can)">Vehicle Interface</div>
+          <div class="blk-name">CAN-FD</div>
+          <div class="blk-sub">ISO 11898-2 · Up to 5 Mbit/s<br>ADAS request messages only</div>
+          <span class="blk-badge badge-orange">Request Only · No Direct Actuation</span>
         </div>
 
-        <!-- TDA4VE-Q1 -->
-        <div class="block compare visible" id="b-tda4ve"
-          style="left:460px;top:590px;width:200px"
-          data-id="tda4ve"
-          onmouseenter="showTip(event,'TDA4VE-Q1','8 TOPS · J721S2-class · Higher resource comparison candidate. Not default ADVIS v0.5 primary.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('tda4ve')">
-          <div class="block-label" style="color:var(--c-compare)">Comparison · Higher-Resource</div>
-          <div class="block-name">TDA4VE-Q1</div>
-          <div class="block-sub">8 TOPS · J721S2-class<br>Higher resource option</div>
-          <span class="block-badge badge-gray">Higher-resource comparison</span>
+        <!-- Vehicle Network / OEM ECUs -->
+        <div class="blk can-if" id="b-vbus" style="left:1178px;top:224px;width:226px"
+          data-id="vbus"
+          onmouseenter="tip(event,'Vehicle Network / OEM ECUs','Brake · Steering · Throttle ECUs retain final authority. ADVIS = advisory input only.')"
+          onmouseleave="hideTip()" onclick="pick('vbus')">
+          <div class="blk-cat" style="color:var(--c-can)">Vehicle Network</div>
+          <div class="blk-name">CAN Bus / OEM ECUs</div>
+          <div class="blk-sub">Brake · Steering · Throttle<br>ADVIS = advisory input only</div>
+          <span class="blk-badge badge-orange">OEM Final Authority</span>
         </div>
 
-        <!-- AM62A7-Q1 -->
-        <div class="block compare visible" id="b-am62a"
-          style="left:680px;top:590px;width:200px"
-          data-id="am62a"
-          onmouseenter="showTip(event,'AM62A7-Q1','2 TOPS · Single-camera / DMS-only / Fleet-lite / Aggregated-input candidate. Not default dual-independent-MIPI ADVIS v0.5.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('am62a')">
-          <div class="block-label" style="color:var(--c-compare)">Fleet-lite / DMS-only</div>
-          <div class="block-name">AM62A7-Q1</div>
-          <div class="block-sub">2 TOPS · Single-camera or DMS-only<br>Fleet-lite / aggregated input</div>
-          <span class="block-badge badge-gray">Not default dual-MIPI v0.5</span>
+        <!-- Ethernet PHY -->
+        <div class="blk eth-if" id="b-eth" style="left:1178px;top:392px;width:226px"
+          data-id="eth"
+          onmouseenter="tip(event,'Ethernet — Optional Interface','100BASE-T1 or GbE. OTA firmware updates · Diagnostics. Not required for core ADAS operation.')"
+          onmouseleave="hideTip()" onclick="pick('eth')">
+          <div class="blk-cat" style="color:var(--c-eth)">Optional Interface</div>
+          <div class="blk-name">Ethernet PHY</div>
+          <div class="blk-sub">Diagnostics · OTA updates<br>100BASE-T1 / GbE option</div>
+          <span class="blk-badge badge-blue">Optional · Not Required for ADAS</span>
         </div>
 
-        <!-- ─── VALIDATION BASELINE TAG (shown in Validation mode) ── -->
-        <div class="block compare show-validation" id="b-val-som"
-          style="left:280px;top:700px;width:335px"
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- VALIDATION BASELINE (visible only in Validation mode)  -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="blk compare val-only" id="b-val-som" style="left:242px;top:648px;width:854px"
           data-id="val-som"
-          onmouseenter="showTip(event,'v0.4.4 Validation Baseline','SOM + FPD-Link serialization. Validation baseline only — not v0.5 production architecture.')"
-          onmouseleave="hideTip()"
-          onclick="selectBlock('val-som')">
-          <div class="block-label" style="color:var(--c-compare)">v0.4.4 — Validation Baseline Only</div>
-          <div class="block-name">SOM + FPD-Link Serialization</div>
-          <div class="block-sub">Camera data over serializer/deserializer<br>Not v0.5 production architecture</div>
-          <span class="block-badge badge-gray">Validation baseline · Not production v0.5</span>
+          onmouseenter="tip(event,'v0.4.4 Validation Baseline','SOM + FPD-Link serialization. Validation baseline only — NOT v0.5 production architecture.')"
+          onmouseleave="hideTip()" onclick="pick('val-som')">
+          <div class="blk-cat" style="color:var(--c-cmp)">v0.4.4 — Validation Baseline Only</div>
+          <div class="blk-name">SOM + FPD-Link Serialization Path</div>
+          <div class="blk-sub">Camera data over serializer/deserializer chain · Validation and bring-up reference only · Not v0.5 direct-MIPI production architecture</div>
+          <span class="blk-badge badge-gray">Validation Baseline · Not Production v0.5</span>
         </div>
 
       </div><!-- #diagram -->
     </div><!-- #diagram-wrap -->
   </div><!-- #main -->
 
-  <!-- KEY TARGETS -->
-  <div id="key-targets">
-    <div class="kt-title">SoC Candidates — click to highlight</div>
-    <div class="kt-chip" data-soc="tda4vl" onclick="highlightSoc('tda4vl')">
-      <div class="dot" style="background:var(--c-soc)"></div>
-      TDA4VL-Q1 <span class="tops">4 TOPS · Assist</span>
+  <!-- ── BOTTOM PANELS ───────────────────────────────────────────── -->
+  <div id="bottom-panels">
+
+    <!-- Key Targets -->
+    <div id="key-targets">
+      <div class="kt-title">Key Targets &amp; Specifications</div>
+      <div class="kt-grid">
+        <div class="kt-item">
+          <div class="label">BOM Direction</div>
+          <div class="val" style="color:var(--c-pwr)">$52–58 realistic</div>
+          <div class="note">$50–52 stretch · Subject to vendor quotes &amp; volume</div>
+        </div>
+        <div class="kt-item">
+          <div class="label">Avg Power</div>
+          <div class="val" style="color:var(--c-soc)">&lt;5 W Assist target</div>
+          <div class="note">Subject to thermal validation</div>
+        </div>
+        <div class="kt-item">
+          <div class="label">Latency</div>
+          <div class="val" style="color:var(--c-cam-fwd)">&lt;80 ms sensor→CAN</div>
+          <div class="note">Target · subject to workload profiling</div>
+        </div>
+        <div class="kt-item">
+          <div class="label">Safety</div>
+          <div class="val" style="color:var(--c-safety)">ASIL-B capable path</div>
+          <div class="note">Warning/request target · Subject to safety analysis</div>
+        </div>
+        <div class="kt-item">
+          <div class="label">Operating Temp</div>
+          <div class="val" style="color:var(--c-fallback)">−40°C to +85°C</div>
+          <div class="note">Module target · subject to thermal design</div>
+        </div>
+        <div class="kt-item">
+          <div class="label">Architecture</div>
+          <div class="val" style="color:var(--c-ecu)">v0.5 Direct-MIPI</div>
+          <div class="note">v0.4.4 SOM/FPD-Link = validation baseline</div>
+        </div>
+      </div>
     </div>
-    <div class="kt-chip" data-soc="tda4vm" onclick="highlightSoc('tda4vm')">
-      <div class="dot" style="background:#60ff40"></div>
-      TDA4VM-Q1 <span class="tops">8 TOPS · Control</span>
-    </div>
-    <div class="kt-chip" data-soc="tda4al" onclick="highlightSoc('tda4al')">
-      <div class="dot" style="background:var(--c-compare)"></div>
-      TDA4AL-Q1 <span class="tops">8 TOPS · Analytics</span>
-    </div>
-    <div class="kt-chip" data-soc="tda4ve" onclick="highlightSoc('tda4ve')">
-      <div class="dot" style="background:#aaa"></div>
-      TDA4VE-Q1 <span class="tops">8 TOPS · J721S2</span>
-    </div>
-    <div class="kt-chip" data-soc="am62a" onclick="highlightSoc('am62a')">
-      <div class="dot" style="background:var(--c-can)"></div>
-      AM62A7-Q1 <span class="tops">2 TOPS · Fleet-lite</span>
+
+    <!-- SoC Matrix -->
+    <div id="soc-matrix">
+      <div class="sm-title">Scalability / SoC Candidate Matrix — click to highlight</div>
+      <div class="sm-chips">
+        <div class="sm-chip selected" data-soc="tda4vl" onclick="pickSoc('tda4vl')">
+          <div class="dot" style="background:var(--c-soc)"></div>
+          <div>
+            <div class="soc-n">TDA4VL-Q1</div>
+            <div class="soc-d">4 TOPS · J721e-class · GPU + MMA</div>
+            <div class="soc-r badge-green" style="padding:1px 6px;border-radius:3px;display:inline-block;font-size:7.5px;font-weight:700">Primary Assist Candidate</div>
+          </div>
+        </div>
+        <div class="sm-chip" data-soc="tda4vm" onclick="pickSoc('tda4vm')">
+          <div class="dot" style="background:#60e820"></div>
+          <div>
+            <div class="soc-n">TDA4VM-Q1</div>
+            <div class="soc-d">8 TOPS · J721e-class · GPU + MMA</div>
+            <div class="soc-r badge-green" style="padding:1px 6px;border-radius:3px;display:inline-block;font-size:7.5px;font-weight:700">Safest Control Candidate</div>
+          </div>
+        </div>
+        <div class="sm-chip" data-soc="tda4al" onclick="pickSoc('tda4al')">
+          <div class="dot" style="background:var(--c-cmp)"></div>
+          <div>
+            <div class="soc-n">TDA4AL-Q1</div>
+            <div class="soc-d">8 TOPS · Analytics · No GPU</div>
+            <div class="soc-r badge-gray" style="padding:1px 6px;border-radius:3px;display:inline-block;font-size:7.5px;font-weight:700">Analytics Comparison</div>
+          </div>
+        </div>
+        <div class="sm-chip" data-soc="tda4ve" onclick="pickSoc('tda4ve')">
+          <div class="dot" style="background:#aaa"></div>
+          <div>
+            <div class="soc-n">TDA4VE-Q1</div>
+            <div class="soc-d">8 TOPS · J721S2-class</div>
+            <div class="soc-r badge-gray" style="padding:1px 6px;border-radius:3px;display:inline-block;font-size:7.5px;font-weight:700">Higher-Resource Comparison</div>
+          </div>
+        </div>
+        <div class="sm-chip" data-soc="am62a" onclick="pickSoc('am62a')">
+          <div class="dot" style="background:var(--c-can2)"></div>
+          <div>
+            <div class="soc-n">AM62A7-Q1</div>
+            <div class="soc-d">2 TOPS · Single-cam / DMS-only</div>
+            <div class="soc-r badge-orange" style="padding:1px 6px;border-radius:3px;display:inline-block;font-size:7.5px;font-weight:700;white-space:nowrap">Fleet-lite · Not Default Dual-MIPI v0.5</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- LEGEND -->
+  <!-- ── LEGEND ──────────────────────────────────────────────────── -->
   <div id="legend">
-    <span class="legend-title">Signal Paths:</span>
-    <div class="leg-item"><div class="leg-line" style="background:var(--c-camera)"></div>MIPI CSI-2 (Road Cam)</div>
-    <div class="leg-item"><div class="leg-line" style="background:var(--c-dms)"></div>MIPI CSI-2 (DMS)</div>
-    <div class="leg-item"><div class="leg-line" style="background:var(--c-mem)"></div>Memory Bus</div>
-    <div class="leg-item"><div class="leg-line" style="background:var(--c-can)"></div>CAN-FD</div>
-    <div class="leg-item"><div class="leg-line dashed" style="color:var(--c-eth)"></div>Ethernet (Optional)</div>
-    <div class="leg-item"><div class="leg-line dashed" style="color:var(--c-safety)"></div>Safety Monitor</div>
-    <div class="leg-item"><div class="leg-line dashed" style="color:var(--c-fallback)"></div>Fallback Path</div>
-    <div class="leg-item"><div class="leg-line dashed" style="color:var(--c-power)"></div>Power Rail</div>
+    <span class="leg-lbl">Signal Paths:</span>
+    <div class="leg"><div class="leg-ln" style="background:var(--c-cam-fwd)"></div>MIPI CSI-2 Road Cam</div>
+    <div class="leg"><div class="leg-ln" style="background:var(--c-cam-dms)"></div>MIPI CSI-2 DMS</div>
+    <div class="leg"><div class="leg-ln" style="background:var(--c-mem)"></div>Memory Bus</div>
+    <div class="leg"><div class="leg-ln" style="background:var(--c-can)"></div>CAN-FD</div>
+    <div class="leg"><div class="leg-ln dash" style="color:var(--c-eth)"></div>Ethernet (Optional)</div>
+    <div class="leg"><div class="leg-ln dash" style="color:var(--c-safety)"></div>Safety Monitor</div>
+    <div class="leg"><div class="leg-ln dash" style="color:var(--c-fallback)"></div>Fallback Path</div>
+    <div class="leg"><div class="leg-ln dash" style="color:var(--c-pwr)"></div>Power Rail</div>
+    <span style="font-size:8px;color:var(--text-d);margin-left:8px">All paths carry animated flow indicators ↗</span>
   </div>
 
-  <!-- FOOTER -->
+  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
   <div id="footer">
-    <div class="footer-item"><strong>Architecture:</strong> v0.5 — Direct MIPI CSI-2 production target</div>
-    <div class="footer-item"><strong>Safety:</strong> ASIL-B capable warning/request path target · Subject to full safety analysis · No certification claimed</div>
-    <div class="footer-item"><strong>Actuation:</strong> ADVIS sends ADAS request msgs over CAN-FD · Final authority with OEM ECUs</div>
-    <div class="footer-item"><strong>Sensors:</strong> Planning class · Subject to datasheet confirmation</div>
-    <div class="footer-disc">Disclaimer: BOM values are target/direction subject to vendor quotes and production volume. Sensor specs are planning class unless datasheet-confirmed. ASIL-B claims are design targets only, subject to full safety analysis. ADVIS does not directly control brake, steering, or throttle.</div>
+    <div class="ft-item"><strong>Architecture:</strong> v0.5 — Direct MIPI CSI-2 production target · v0.4.4 SOM/FPD-Link = validation baseline only</div>
+    <div class="ft-item"><strong>Safety:</strong> ASIL-B capable warning/request path target · Subject to full safety analysis · No certification claimed</div>
+    <div class="ft-item"><strong>Actuation:</strong> ADAS request messages over CAN-FD · Final actuator authority remains with OEM ECUs</div>
+    <div class="ft-item"><strong>Sensors:</strong> Planning class · Subject to datasheet confirmation</div>
+    <div class="ft-disc">BOM values are target/direction subject to vendor quotes &amp; production volume. ASIL-B is a design target — no certification claimed. ADVIS does not directly control brake, steering, throttle, or powertrain.</div>
   </div>
 
 </div><!-- #app -->
 
 <script>
+'use strict';
 // ═══════════════════════════════════════════════════════════════════
-// BLOCK DATA — descriptions for side panel
+// BLOCK DATA
 // ═══════════════════════════════════════════════════════════════════
-const BLOCK_DATA = {
-  'fwd-cam': {
-    title: 'Forward Road Camera',
-    cat: 'Sensor · MIPI CSI-2',
-    color: 'var(--c-camera)',
-    specs: [
-      ['Type',       'OX03C10-class'],
-      ['Interface',  'MIPI CSI-2 · 4-lane'],
-      ['Resolution', '~3 MP (planning class)'],
-      ['FOV',        'Forward road · windshield mount'],
-      ['Signal',     'Direct to SoC CSI Rx'],
-    ],
-    desc: 'Forward-facing road camera providing the primary ADAS perception input. Directly connected to the primary SoC via MIPI CSI-2 4-lane — no serializer/deserializer chain in v0.5 production architecture.',
-    warn: 'Sensor values are planning class unless datasheet-confirmed. OX03C10-class refers to image sensor family designation.',
-    note: 'v0.4.4 validation baseline used FPD-Link SOM path. v0.5 targets direct MIPI for reduced latency and BOM simplification.',
-  },
-  'dms-cam': {
-    title: 'In-Cabin DMS Camera',
-    cat: 'Sensor · MIPI CSI-2',
-    color: 'var(--c-dms)',
-    specs: [
-      ['Type',       'OX01N1B / OX01H1B-class'],
-      ['Interface',  'MIPI CSI-2 · 2-lane'],
-      ['Resolution', '~1.3 MP (planning class)'],
-      ['FOV',        'Driver face / upper body'],
-      ['Signal',     'Direct to SoC CSI Rx'],
-    ],
-    desc: 'In-cabin driver monitoring camera. Feeds the DMS intelligence block within the shared SoC. Independent MIPI lane from the forward road camera.',
-    warn: 'OX01N1B and OX01H1B are planning-class designations. Subject to datasheet confirmation and vendor availability.',
-  },
-  'soc': {
-    title: 'Primary SoC — Shared Compute',
-    cat: 'Compute Platform · Mode-Dependent',
-    color: 'var(--c-soc)',
-    specs: [
-      ['Assist candidate',  'TDA4VL-Q1 · 4 TOPS'],
-      ['Control candidate', 'TDA4VM-Q1 · 8 TOPS'],
-      ['Architecture',      'J721e-class (TDA4VL/VM)'],
-      ['ASIL target',       'ASIL-B capable warning/request path'],
-      ['Camera inputs',     '2× MIPI CSI-2 direct'],
-      ['Vehicle I/O',       'CAN-FD + optional Ethernet'],
-    ],
-    desc: 'Single windshield-mounted ECU SoC. Hosts both ADAS and DMS intelligence with risk-coupled fusion. Mode selector determines preferred SoC candidate. Both cameras share this single compute platform.',
-    warn: 'ASIL-B capable is a design target for the warning/request path, subject to full safety analysis. No final ASIL certification is claimed for ADVIS v0.5.',
-    note: 'ADVIS does not directly control brake, steering, or throttle. All actuation signals are ADAS request messages over CAN-FD. Final actuator authority remains with OEM ECUs.',
-  },
-  'mem': {
-    title: 'LPDDR4X Memory',
-    cat: 'Memory · Shared Compute RAM',
-    color: 'var(--c-mem)',
-    specs: [
-      ['Type',       'LPDDR4X'],
-      ['Capacity',   'TBD · pending SoC selection'],
-      ['Interface',  'Internal SoC bus'],
-      ['Use',        'ADAS compute · DMS compute · OS'],
-    ],
-    desc: 'High-bandwidth DRAM shared between ADAS and DMS compute workloads. Capacity and exact part TBD pending final SoC selection and BOM finalization.',
-    warn: 'BOM target only — subject to vendor quotes and production volume.',
-  },
-  'stor': {
-    title: 'eMMC / Flash Storage',
-    cat: 'Storage · Non-Volatile',
-    color: 'var(--c-mem)',
-    specs: [
-      ['Type',       'eMMC / NOR Flash'],
-      ['Capacity',   'TBD · BOM target'],
-      ['Contents',   'Firmware · Maps · Logs · Model weights'],
-    ],
-    desc: 'Non-volatile storage for boot firmware, ADAS/DMS model weights, map data, and event logs. Capacity TBD.',
-    warn: 'BOM target only — subject to vendor quotes and production volume.',
-  },
-  'pwr': {
-    title: 'Power Management — PMIC',
-    cat: 'Power · Rail Supervision',
-    color: 'var(--c-power)',
-    specs: [
-      ['Input',         '12 V automotive'],
-      ['Rails',         'SoC core · Mem · Camera · I/O'],
-      ['Supervision',   'Watchdog · Sequencing'],
-      ['Part',          'TBD · BOM target'],
-    ],
-    desc: 'Automotive PMIC managing voltage rail sequencing, power supervision, and watchdog for the ECU. Supplies SoC, memory, camera modules, and interface transceivers.',
-    warn: 'BOM target only — subject to vendor quotes and production volume.',
-  },
-  'can': {
-    title: 'CAN-FD Transceiver',
-    cat: 'Vehicle Interface · ISO 11898-2',
-    color: 'var(--c-can)',
-    specs: [
-      ['Standard',    'ISO 11898-2 CAN-FD'],
-      ['Data rate',   'Up to 5 Mbit/s (FD phase)'],
-      ['Signal',      'ADAS request messages only'],
-      ['Authority',   'OEM ECUs retain final control'],
-    ],
-    desc: 'CAN-FD transceiver connecting the ADVIS ECU to the vehicle network. ADVIS transmits advisory and request messages only — it does not directly command brake, steering, or throttle actuators.',
-    warn: 'ADVIS does not directly control any vehicle actuator. All signals are ADAS request messages. Final actuator authority remains with OEM ECUs (brake, steering, throttle).',
-  },
-  'vbus': {
-    title: 'Vehicle CAN Bus / OEM ECUs',
-    cat: 'Vehicle Network · OEM Domain',
-    color: 'var(--c-can)',
-    specs: [
-      ['Network',   'Vehicle CAN / CAN-FD bus'],
-      ['ECUs',      'Brake · Steering · Throttle'],
-      ['ADVIS role','Advisory request sender only'],
-    ],
-    desc: 'The OEM vehicle network and downstream actuator ECUs. ADVIS sends ADAS request messages; OEM ECUs retain final authority over all physical actuators.',
-    warn: 'ADVIS does not replace or override OEM ECU logic. It is an advisory input node on the vehicle network. Actual intervention depends on OEM integration and vehicle platform support.',
-  },
-  'eth': {
-    title: 'Ethernet PHY — Diagnostics / OTA',
-    cat: 'Optional Interface · Ethernet',
-    color: 'var(--c-eth)',
-    specs: [
-      ['Standard',   '100BASE-T1 or GbE'],
-      ['Use cases',  'OTA firmware · Diagnostics · Logging'],
-      ['Required',   'No — optional for core ADAS'],
-    ],
-    desc: 'Optional Ethernet interface for OTA firmware updates, remote diagnostics, and high-bandwidth data logging. Not required for core ADAS/DMS operation.',
-    note: 'This interface is optional and may not be present in all ADVIS v0.5 configurations.',
-  },
-  'safety': {
-    title: 'Safety Monitor',
-    cat: 'Safety Domain · Supervision',
-    color: 'var(--c-safety)',
-    specs: [
-      ['Function',   'Watchdog · Health monitoring'],
-      ['ASIL target','ASIL-B capable warning/request path'],
-      ['Scope',      'SoC health · Rail monitoring'],
-      ['Certification', 'Not claimed — design target only'],
-    ],
-    desc: 'Dedicated safety supervision for the ADVIS ECU. Monitors SoC health, power rail integrity, and communication integrity. Triggers the fallback path on detected fault conditions.',
-    warn: 'ASIL-B capable is a design target for the warning/request path only. No final ASIL certification is claimed for ADVIS v0.5. Subject to full safety analysis per ISO 26262.',
-  },
-  'fallback': {
-    title: 'Safety Fallback Path',
-    cat: 'Safety Fallback · Advisory',
-    color: 'var(--c-fallback)',
-    specs: [
-      ['Trigger',    'SoC or system fault detected'],
-      ['Action',     'Minimal CAN advisory → OEM ECU'],
-      ['Authority',  'OEM ECU decides intervention'],
-      ['ADVIS role', 'Advisory request only'],
-    ],
-    desc: 'On detection of a SoC or critical system fault, the fallback path issues a minimal safe-state advisory over CAN-FD. OEM ECUs determine actual vehicle response. ADVIS does not directly actuate any system.',
-    warn: 'Fallback advisory is a request to the OEM vehicle network. Actual safe-state behavior depends on OEM ECU integration and vehicle platform capability.',
-  },
-  'tda4vm': {
-    title: 'TDA4VM-Q1',
-    cat: 'Comparison Candidate · Control Mode',
-    color: 'var(--c-compare)',
-    specs: [
-      ['TOPS',        '8 TOPS'],
-      ['Family',      'J721e-class'],
-      ['GPU',         'Yes · + MMA'],
-      ['ASIL target', 'ASIL-B capable (target)'],
-      ['Role',        'Safest ADVIS Control candidate'],
-    ],
-    desc: 'Higher-performance sibling of TDA4VL-Q1 in the same J721e family. 8 TOPS with GPU and MMA accelerators. Primary candidate for ADVIS Control Mode where higher compute margin is needed.',
-    note: 'Preferred for Control Mode operation. Shares same family as TDA4VL-Q1 — easier migration path.',
-  },
-  'tda4al': {
-    title: 'TDA4AL-Q1',
-    cat: 'Comparison Candidate · Analytics',
-    color: 'var(--c-compare)',
-    specs: [
-      ['TOPS',   '8 TOPS'],
-      ['GPU',    'No GPU — analytics-focused'],
-      ['Role',   'Comparison candidate only'],
-      ['Note',   'Not GPU-accelerated inference'],
-    ],
-    desc: 'Analytics-focused comparison candidate with 8 TOPS but no GPU. Not a default ADVIS v0.5 candidate due to absence of GPU-accelerated inference for DNN workloads.',
-    warn: 'Not recommended as primary ADVIS compute SoC due to missing GPU for DNN inference. Retained as analytics comparison candidate.',
-  },
-  'tda4ve': {
-    title: 'TDA4VE-Q1',
-    cat: 'Comparison Candidate · Higher-Resource',
-    color: 'var(--c-compare)',
-    specs: [
-      ['TOPS',   '8 TOPS'],
-      ['Family', 'J721S2-class'],
-      ['Role',   'Higher-resource comparison candidate'],
-      ['Status', 'Not default primary for v0.5'],
-    ],
-    desc: 'Higher-resource comparison candidate from the J721S2 family. Evaluated as an option where additional compute headroom is required. Not the default primary SoC for ADVIS v0.5.',
-  },
-  'am62a': {
-    title: 'AM62A7-Q1',
-    cat: 'Fleet-lite / DMS-only / Single-camera',
-    color: 'var(--c-compare)',
-    specs: [
-      ['TOPS',        '2 TOPS'],
-      ['Use cases',   'Single-camera · DMS-only · Fleet-lite'],
-      ['Input',       'Aggregated input (not dual independent MIPI)'],
-      ['Status',      'Not default dual-MIPI ADVIS v0.5'],
-    ],
-    desc: 'Lower-power candidate for fleet-lite deployments, DMS-only configurations, or single-camera use cases. 2 TOPS limits dual-independent MIPI ADAS+DMS simultaneous workloads.',
-    warn: 'AM62A7-Q1 is NOT the default ADVIS v0.5 candidate for dual-independent-MIPI ADAS+DMS operation. Suitable for single-camera, DMS-only, fleet aggregation, or lite deployments only.',
-  },
-  'val-som': {
-    title: 'v0.4.4 Validation Baseline',
-    cat: 'SOM + FPD-Link · Validation Only',
-    color: 'var(--c-compare)',
-    specs: [
-      ['Camera path', 'FPD-Link serializer/deserializer'],
-      ['Platform',    'SOM (System-on-Module)'],
-      ['Status',      'Validation baseline — not v0.5'],
-      ['Purpose',     'Hardware validation & bring-up'],
-    ],
-    desc: 'The v0.4.4 hardware configuration used for initial bring-up and validation. Uses a SOM with FPD-Link camera serialization chain. This is the validation baseline only — not the v0.5 production architecture.',
-    warn: 'v0.4.4 SOM/FPD-Link path is a validation baseline only. v0.5 production architecture targets direct MIPI CSI-2 to reduce BOM complexity and camera latency.',
-  },
+const BLOCKS = {
+  'fwd-cam':{title:'Forward Road Camera',cat:'Sensor · MIPI CSI-2 4-lane',color:'var(--c-cam-fwd)',
+    specs:[['Type','OX03C10-class'],['Interface','MIPI CSI-2 · 4-lane'],['Resolution','~3 MP (planning class)'],['Mounting','Windshield forward-facing'],['Signal path','Direct to SoC CSI-2 Rx']],
+    desc:'Primary ADAS perception input. Direct MIPI CSI-2 4-lane connection to the SoC — no FPD-Link or serializer chain in v0.5 production architecture. Feeds ADAS Intelligence: FCW, LDW, TSR, PCW, object detection, lane perception.',
+    warn:'OX03C10-class is a planning-class sensor designation. Sensor values subject to datasheet confirmation.',
+    note:'v0.4.4 validation baseline used FPD-Link SOM path. v0.5 targets direct MIPI for reduced latency and BOM simplification.'},
+  'dms-cam':{title:'In-Cabin DMS Camera',cat:'Sensor · MIPI CSI-2 2-lane',color:'var(--c-cam-dms)',
+    specs:[['Type','OX01N1B / OX01H1B-class'],['Interface','MIPI CSI-2 · 2-lane'],['Resolution','~1.3 MP (planning class)'],['Mounting','Cabin-facing driver view'],['Signal path','Direct to SoC CSI-2 Rx']],
+    desc:'Driver monitoring camera. Independent MIPI CSI-2 2-lane connection to the shared SoC. Feeds DMS Intelligence: drowsiness detection, distraction monitoring, gaze estimation, driver state classification.',
+    warn:'OX01N1B and OX01H1B-class are planning-class designations. Subject to datasheet confirmation.'},
+  'soc':{title:'Primary SoC — Shared Compute',cat:'Compute Platform · Mode-Dependent',color:'var(--c-soc)',
+    specs:[['Assist candidate','TDA4VL-Q1 · 4 TOPS'],['Control candidate','TDA4VM-Q1 · 8 TOPS'],['Family','J721e-class (both)'],['ASIL target','ASIL-B capable warning/request path'],['Camera I/F','2× direct MIPI CSI-2']],
+    desc:'Single windshield-mounted ECU SoC hosting both ADAS and DMS intelligence with risk-coupled fusion. Both cameras share this compute platform. Mode selector determines preferred SoC candidate.',
+    warn:'ASIL-B capable is a design target for the warning/request path only. Subject to full safety analysis per ISO 26262. No final ASIL certification is claimed.',
+    note:'ADVIS sends ADAS request messages over CAN-FD only. Final actuator authority remains with OEM ECUs (brake, steering, throttle).'},
+  'mem':{title:'LPDDR4X Memory',cat:'Memory · Shared Compute RAM',color:'var(--c-mem)',
+    specs:[['Type','LPDDR4X'],['Capacity','TBD · pending SoC selection'],['Use','ADAS · DMS · OS workloads']],
+    desc:'High-bandwidth DRAM shared between ADAS and DMS compute. Capacity TBD pending final SoC selection and BOM finalization.',
+    warn:'BOM target only — subject to vendor quotes and production volume.'},
+  'stor':{title:'eMMC / Flash Storage',cat:'Storage · Non-Volatile',color:'var(--c-stor)',
+    specs:[['Type','eMMC / NOR Flash'],['Contents','Firmware · Maps · Logs · Model weights'],['Capacity','TBD']],
+    desc:'Non-volatile storage for boot firmware, ADAS/DMS model weights, HD map data, and event logs.',
+    warn:'BOM target only — subject to vendor quotes and production volume.'},
+  'safety':{title:'Safety Monitor',cat:'Safety Domain · Watchdog',color:'var(--c-safety)',
+    specs:[['Function','Watchdog · Health monitoring'],['ASIL target','ASIL-B capable (target)'],['Scope','SoC health · Rail monitoring · Comm integrity'],['Certification','NOT claimed — design target only']],
+    desc:'Dedicated safety supervision. Monitors SoC health, power rail integrity, communication integrity. Triggers safety fallback path on fault.',
+    warn:'ASIL-B capable is a design target for the warning/request path. Subject to full safety analysis per ISO 26262. No certification claimed.'},
+  'fallback':{title:'Safety Fallback Path',cat:'Safety Fallback · Advisory Only',color:'var(--c-fallback)',
+    specs:[['Trigger','SoC or system fault'],['Action','Minimal CAN advisory to vehicle'],['Authority','OEM ECUs decide vehicle response']],
+    desc:'On SoC or critical system fault, fallback path issues a minimal safe-state advisory over CAN-FD. OEM ECUs determine actual vehicle response. ADVIS does not directly actuate any system.',
+    warn:'ADVIS does not replace or override OEM ECU logic. All fallback signals are advisory requests over CAN-FD. Actual intervention depends on OEM integration.'},
+  'pwr':{title:'Power Management — PMIC',cat:'Power · Rail Supervision',color:'var(--c-pwr)',
+    specs:[['Input','12 V automotive'],['Rails','SoC · Memory · Camera · I/O'],['Function','Watchdog · Rail sequencing · Supervision'],['Part','TBD — BOM target']],
+    desc:'Automotive PMIC managing voltage rail sequencing, power supervision, and watchdog for the ECU.',
+    warn:'BOM target — subject to vendor quotes and production volume.'},
+  'can':{title:'CAN-FD Transceiver',cat:'Vehicle Interface · ISO 11898-2',color:'var(--c-can)',
+    specs:[['Standard','ISO 11898-2 CAN-FD'],['Data rate','Up to 5 Mbit/s (FD phase)'],['Signal','ADAS request messages only'],['Authority','OEM ECUs retain final control']],
+    desc:'CAN-FD transceiver connecting ADVIS to the vehicle network. ADVIS transmits advisory and request messages only — it does not directly command brake, steering, or throttle actuators.',
+    warn:'ADVIS does not directly control any vehicle actuator. All signals are ADAS request messages. Final actuator authority remains with OEM ECUs.'},
+  'vbus':{title:'Vehicle Network / OEM ECUs',cat:'Vehicle Domain · OEM Authority',color:'var(--c-can)',
+    specs:[['Network','Vehicle CAN / CAN-FD bus'],['ECUs','Brake · Steering · Throttle · Powertrain'],['ADVIS role','Advisory request sender only']],
+    desc:'OEM vehicle network and downstream actuator ECUs. ADVIS sends ADAS request messages; OEM ECUs retain final authority over all physical actuators.',
+    warn:'ADVIS is an advisory input node on the vehicle network. Actual intervention depends on OEM ECU integration and vehicle platform support.'},
+  'eth':{title:'Ethernet PHY — Optional Interface',cat:'Optional · Diagnostics / OTA',color:'var(--c-eth)',
+    specs:[['Standard','100BASE-T1 or GbE'],['Use cases','OTA firmware · Diagnostics · Logging'],['Required','No — optional for core ADAS']],
+    desc:'Optional Ethernet interface for OTA firmware updates, remote diagnostics, and high-bandwidth data logging. Not required for core ADAS/DMS operation.',
+    note:'May not be present in all ADVIS v0.5 configurations depending on platform requirements.'},
+  'val-som':{title:'v0.4.4 Validation Baseline',cat:'SOM + FPD-Link · Validation Only',color:'var(--c-cmp)',
+    specs:[['Camera path','FPD-Link serializer/deserializer'],['Platform','SOM (System-on-Module)'],['Status','Validation baseline — NOT v0.5'],['Purpose','Hardware validation & bring-up']],
+    desc:'v0.4.4 hardware configuration for initial bring-up and validation. Uses SOM with FPD-Link camera serialization. This is the validation baseline only — not the v0.5 production architecture.',
+    warn:'v0.4.4 SOM/FPD-Link path is a validation baseline. v0.5 production targets direct MIPI CSI-2 for reduced latency and BOM simplification.'},
 };
 
 // ═══════════════════════════════════════════════════════════════════
 // MODE CONFIG
 // ═══════════════════════════════════════════════════════════════════
-const MODE_CONFIG = {
-  assist: {
-    label: 'Assist Mode · TDA4VL-Q1 candidate',
-    socName: 'TDA4VL-Q1',
-    socSub: '4 TOPS · J721e-class · ASIL-B capable (target)\nPrimary ADVIS Assist candidate',
-    socBadge: '4 TOPS · Assist candidate',
-    dimBlocks: ['b-am62a'],
-    activeSignals: ['mipi', 'dms', 'mem', 'can', 'safety', 'power', 'fallback'],
-    dimSignals: ['eth'],
+const MODES = {
+  assist:{
+    lbl:'Assist Mode · TDA4VL-Q1 candidate',
+    socName:'TDA4VL-Q1', socBadge:'4 TOPS · Assist Candidate',
+    socSub:'4 TOPS · J721e-class · ASIL-B capable warning/request path (target) · Primary ADVIS Assist Candidate',
+    adasFeats:'FCW · LDW · TSR · PCW\nObject Detection · Lane Path\nForward Perception Pipeline',
+    dimBlocks:['b-am62a'],
+    activeSignals:['fwd','dms','mem','can','safety','power','fallback'],
+    dimSignals:['eth'],
   },
-  control: {
-    label: 'Control Mode · TDA4VM-Q1 candidate',
-    socName: 'TDA4VM-Q1',
-    socSub: '8 TOPS · J721e-class · ASIL-B capable (target)\nSafest ADVIS Control candidate',
-    socBadge: '8 TOPS · Control candidate',
-    dimBlocks: ['b-am62a', 'b-tda4al'],
-    activeSignals: ['mipi', 'dms', 'mem', 'can', 'eth', 'safety', 'power', 'fallback'],
-    dimSignals: [],
+  control:{
+    lbl:'Control Mode · TDA4VM-Q1 candidate',
+    socName:'TDA4VM-Q1', socBadge:'8 TOPS · Safest Control Candidate',
+    socSub:'8 TOPS · J721e-class · ASIL-B capable warning/request path (target) · Safest ADVIS Control Candidate',
+    adasFeats:'AEB · ACC · LKA request layer\nFCW · LDW · TSR · PCW\nHigh-confidence ADAS request pipeline',
+    dimBlocks:[],
+    activeSignals:['fwd','dms','mem','can','eth','safety','power','fallback'],
+    dimSignals:[],
   },
-  fleet: {
-    label: 'Fleet Mode · AM62A7-Q1 candidate',
-    socName: 'AM62A7-Q1',
-    socSub: '2 TOPS · Fleet-lite / DMS-only / Single-cam\nAggregated input — not dual-MIPI default',
-    socBadge: '2 TOPS · Fleet-lite',
-    dimBlocks: ['b-tda4vm', 'b-tda4al', 'b-tda4ve'],
-    activeSignals: ['dms', 'can', 'eth', 'power'],
-    dimSignals: ['mipi', 'mem', 'safety', 'fallback'],
+  fleet:{
+    lbl:'Fleet Mode · AM62A7-Q1 candidate',
+    socName:'AM62A7-Q1', socBadge:'2 TOPS · Fleet-lite',
+    socSub:'2 TOPS · Fleet-lite / DMS-only / Single-camera / Aggregated-input · NOT default dual-MIPI ADVIS v0.5',
+    adasFeats:'DMS monitoring · Storage · Logging\nCAN reporting · Optional Ethernet\nAggregated or single-camera input',
+    dimBlocks:['b-tda4vm','b-tda4al','b-tda4ve'],
+    activeSignals:['dms','can','eth','power','mem'],
+    dimSignals:['fwd','safety','fallback'],
   },
-  validation: {
-    label: 'Validation Board · v0.4.4 SOM/FPD-Link baseline',
-    socName: 'SOM + FPD-Link (v0.4.4)',
-    socSub: 'Validation baseline — not v0.5 production\nCamera: FPD-Link serialization path',
-    socBadge: 'Validation baseline only',
-    dimBlocks: [],
-    activeSignals: ['can', 'power', 'safety'],
-    dimSignals: ['mipi', 'dms', 'mem', 'eth', 'fallback'],
+  validation:{
+    lbl:'Validation Board · v0.4.4 SOM/FPD-Link baseline',
+    socName:'SOM + FPD-Link (v0.4.4)', socBadge:'Validation Baseline Only',
+    socSub:'v0.4.4 validation baseline — SOM + FPD-Link camera serialization · NOT v0.5 direct-MIPI production architecture',
+    adasFeats:'Validation bring-up mode\nFPD-Link camera serialization path\nSOM-based platform',
+    dimBlocks:[],
+    activeSignals:['can','power','safety'],
+    dimSignals:['fwd','dms','mem','eth','fallback'],
   },
 };
 
 // ═══════════════════════════════════════════════════════════════════
-// SIGNAL PATH DEFINITIONS (SVG)
+// SIGNAL PATH DEFINITIONS
 // ═══════════════════════════════════════════════════════════════════
-// Paths are defined as arrays of [x,y] points (polyline)
-const SIGNAL_PATHS = [
-  // MIPI CSI-2 Road Camera → SoC
-  { id: 'sig-mipi', cls: 'sig-mipi', type: 'mipi', label: 'MIPI CSI-2 4L',
-    points: [[200,100],[260,100],[280,100]] },
-  // MIPI CSI-2 DMS Camera → SoC
-  { id: 'sig-dms',  cls: 'sig-dms',  type: 'dms',  label: 'MIPI CSI-2 2L',
-    points: [[200,260],[260,260],[280,260]] },
+// Each path: {id, type, cls (marker/color class), pts (polyline), arr (arrow marker id)}
+const SIGNAL_DEFS = [
+  // Forward Camera → SoC (MIPI 4-lane)
+  {id:'s-fwd',  type:'fwd',     stroke:'#00d4ff', sw:3.5, dash:'none',    arr:'arr-fwd',
+   pts:[[212,112],[228,112]]},
+  // DMS Camera → SoC (MIPI 2-lane)
+  {id:'s-dms',  type:'dms',     stroke:'#00ff9d', sw:3.5, dash:'none',    arr:'arr-dms',
+   pts:[[212,320],[228,320]]},
   // SoC → Memory
-  { id: 'sig-mem1', cls: 'sig-mem',  type: 'mem',  label: 'LPDDR4X Bus',
-    points: [[360,362],[360,390]] },
+  {id:'s-mem1', type:'mem',     stroke:'#c77dff', sw:2.5, dash:'none',    arr:'arr-mem',
+   pts:[[340,420],[340,444]]},
   // SoC → Storage
-  { id: 'sig-mem2', cls: 'sig-mem',  type: 'mem',  label: 'Storage Bus',
-    points: [[540,362],[540,390]] },
-  // SoC → CAN-FD
-  { id: 'sig-can1', cls: 'sig-can',  type: 'can',  label: 'CAN-FD',
-    points: [[622,100],[700,100]] },
-  // CAN-FD → Vehicle Bus
-  { id: 'sig-can2', cls: 'sig-can',  type: 'can',  label: 'Vehicle CAN',
-    points: [[790,118],[790,170]] },
-  // SoC → Ethernet (optional)
-  { id: 'sig-eth',  cls: 'sig-eth',  type: 'eth',  label: 'Ethernet (opt)',
-    points: [[622,200],[660,200],[700,320]] },
+  {id:'s-mem2', type:'mem',     stroke:'#c77dff', sw:2.5, dash:'none',    arr:'arr-mem',
+   pts:[[558,420],[558,444]]},
   // SoC → Safety Monitor
-  { id: 'sig-saf1', cls: 'sig-safety', type: 'safety', label: 'Safety Link',
-    points: [[622,280],[660,280],[700,430]] },
-  // Safety Monitor → Fallback
-  { id: 'sig-fall', cls: 'sig-fallback', type: 'fallback', label: 'Fallback',
-    points: [[790,458],[790,510]] },
-  // PMIC → SoC (power)
-  { id: 'sig-pwr1', cls: 'sig-power', type: 'power', label: 'SoC Power Rail',
-    points: [[450,490],[450,362]] },
-  // PMIC → Safety
-  { id: 'sig-pwr2', cls: 'sig-power', type: 'power', label: 'Safety Power',
-    points: [[615,510],[700,440]] },
+  {id:'s-saf',  type:'safety',  stroke:'#ff4d6d', sw:2.5, dash:'6 4',     arr:'arr-saf',
+   pts:[[776,420],[776,444]]},
+  // SoC → Fallback
+  {id:'s-fall', type:'fallback',stroke:'#ff9e00', sw:2.5, dash:'5 4',     arr:'arr-fall',
+   pts:[[994,420],[994,444]]},
+  // PMIC → SoC (power rail up)
+  {id:'s-pwr',  type:'power',   stroke:'#ffd166', sw:2,   dash:'4 4',     arr:'arr-pwr',
+   pts:[[668,578],[668,420]]},
+  // SoC → CAN-FD
+  {id:'s-can1', type:'can',     stroke:'#ff6b35', sw:3,   dash:'none',    arr:'arr-can',
+   pts:[[1052,100],[1178,100]]},
+  // CAN-FD → Vehicle Bus
+  {id:'s-can2', type:'can',     stroke:'#ff6b35', sw:3,   dash:'none',    arr:'arr-can',
+   pts:[[1291,152],[1291,224]]},
+  // SoC → Ethernet (optional)
+  {id:'s-eth',  type:'eth',     stroke:'#4cc9f0', sw:2,   dash:'7 5',     arr:'arr-eth',
+   pts:[[1052,200],[1110,200],[1178,440]]},
+  // Safety Monitor → CAN advisory path
+  {id:'s-saf2', type:'safety',  stroke:'#ff4d6d', sw:2,   dash:'4 3',     arr:'arr-saf',
+   pts:[[1052,490],[1110,490],[1178,490],[1178,152],[1291,152]]},
 ];
 
-let currentMode = 'assist';
-let selectedBlock = null;
+// ═══════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════
+let curMode = 'assist';
+let selBlock = null;
 let panelOpen = false;
-let animFrame = null;
+let animReq = null;
 let flowDots = [];
 
 // ═══════════════════════════════════════════════════════════════════
 // TOOLTIP
 // ═══════════════════════════════════════════════════════════════════
-function showTip(e, title, body) {
-  const tt = document.getElementById('tooltip');
-  document.getElementById('tt-title').textContent = title;
-  document.getElementById('tt-body').textContent  = body;
-  tt.classList.add('visible');
-  moveTip(e);
+function tip(e, title, body) {
+  const t = document.getElementById('tip');
+  document.getElementById('tt-t').textContent = title;
+  document.getElementById('tt-b').textContent = body;
+  t.classList.add('on'); moveTip(e);
 }
-function hideTip() {
-  document.getElementById('tooltip').classList.remove('visible');
-}
-document.addEventListener('mousemove', function(e) {
-  const tt = document.getElementById('tooltip');
-  if (!tt.classList.contains('visible')) return;
-  moveTip(e);
+function hideTip() { document.getElementById('tip').classList.remove('on'); }
+document.addEventListener('mousemove', e => {
+  const t = document.getElementById('tip');
+  if (t.classList.contains('on')) moveTip(e);
 });
 function moveTip(e) {
-  const tt = document.getElementById('tooltip');
-  let x = e.clientX + 14, y = e.clientY + 14;
-  if (x + 250 > window.innerWidth)  x = e.clientX - 250;
-  if (y + 100 > window.innerHeight) y = e.clientY - 80;
-  tt.style.left = x + 'px';
-  tt.style.top  = y + 'px';
+  const t = document.getElementById('tip');
+  let x = e.clientX + 16, y = e.clientY + 14;
+  if (x + 270 > window.innerWidth) x = e.clientX - 270;
+  if (y + 100 > window.innerHeight) y = e.clientY - 90;
+  t.style.left = x + 'px'; t.style.top = y + 'px';
 }
 
 // ═══════════════════════════════════════════════════════════════════
 // SIDE PANEL
 // ═══════════════════════════════════════════════════════════════════
-function selectBlock(id) {
-  const data = BLOCK_DATA[id];
-  if (!data) return;
-
-  // Deselect all, dim non-selected
-  document.querySelectorAll('.block').forEach(b => {
-    b.classList.remove('selected','dimmed');
-    b.classList.add('dimmed');
-  });
-  const el = document.querySelector('[data-id="' + id + '"]');
+function pick(id) {
+  const d = BLOCKS[id]; if (!d) return;
+  document.querySelectorAll('.blk').forEach(b => { b.classList.remove('selected','dimmed'); b.classList.add('dimmed'); });
+  const el = document.querySelector('[data-id="'+id+'"]');
   if (el) { el.classList.remove('dimmed'); el.classList.add('selected'); }
-  selectedBlock = id;
+  selBlock = id;
 
-  // Build panel content
-  document.getElementById('sp-title').textContent = data.title;
-  document.getElementById('sp-title').style.color = data.color;
-  document.getElementById('sp-cat').textContent   = data.cat;
+  document.getElementById('sp-title').textContent = d.title;
+  document.getElementById('sp-title').style.color = d.color;
+  document.getElementById('sp-cat').textContent = d.cat;
 
-  let html = '';
-
-  // Specs table
-  if (data.specs && data.specs.length) {
-    html += '<div class="sp-section"><div class="sp-sec-title">Specifications</div>';
-    data.specs.forEach(([k,v]) => {
-      html += '<div class="sp-row"><span class="key">' + k + '</span><span class="val">' + v + '</span></div>';
-    });
-    html += '</div>';
+  let h = '';
+  if (d.specs?.length) {
+    h += '<div class="sp-sec"><div class="sp-sec-ttl">Specifications</div>';
+    d.specs.forEach(([k,v]) => h += '<div class="sp-row"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>');
+    h += '</div>';
   }
+  if (d.desc) h += '<div class="sp-sec"><div class="sp-sec-ttl">Description</div><div class="sp-desc">'+d.desc+'</div></div>';
+  if (d.warn) h += '<div class="sp-sec"><div class="sp-warn">⚠ '+d.warn+'</div></div>';
+  if (d.note) h += '<div class="sp-sec"><div class="sp-note">ℹ '+d.note+'</div></div>';
+  document.getElementById('sp-body').innerHTML = h;
 
-  // Description
-  if (data.desc) {
-    html += '<div class="sp-section"><div class="sp-sec-title">Description</div>';
-    html += '<div class="sp-desc">' + data.desc + '</div></div>';
-  }
-
-  // Warning
-  if (data.warn) {
-    html += '<div class="sp-section"><div class="sp-warn">⚠ ' + data.warn + '</div></div>';
-  }
-
-  // Note
-  if (data.note) {
-    html += '<div class="sp-section"><div class="sp-note">ℹ ' + data.note + '</div></div>';
-  }
-
-  document.getElementById('sp-body').innerHTML = html;
-
-  openPanel();
-}
-
-function openPanel() {
   document.getElementById('side-panel').classList.add('open');
   document.getElementById('diagram-wrap').classList.add('panel-open');
   panelOpen = true;
@@ -1261,192 +965,154 @@ function openPanel() {
 function closePanel() {
   document.getElementById('side-panel').classList.remove('open');
   document.getElementById('diagram-wrap').classList.remove('panel-open');
-  document.querySelectorAll('.block').forEach(b => b.classList.remove('selected','dimmed'));
-  panelOpen = false;
-  selectedBlock = null;
+  document.querySelectorAll('.blk').forEach(b => b.classList.remove('selected','dimmed'));
+  panelOpen = false; selBlock = null;
 }
+document.getElementById('diagram-wrap').addEventListener('click', e => {
+  if (!e.target.closest('.blk') && panelOpen) closePanel();
+});
 
 // ═══════════════════════════════════════════════════════════════════
-// MODE SELECTOR
+// MODE
 // ═══════════════════════════════════════════════════════════════════
-function setMode(mode) {
-  currentMode = mode;
-  const cfg = MODE_CONFIG[mode];
-
-  // Update buttons
-  document.querySelectorAll('.mode-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.mode === mode);
-  });
-
-  // Status label
-  document.getElementById('mode-label').textContent = cfg.label;
-
-  // Update SoC block
+function setMode(m) {
+  curMode = m;
+  const cfg = MODES[m];
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+  document.getElementById('mode-lbl').textContent = cfg.lbl;
   document.getElementById('soc-name').textContent  = cfg.socName;
   document.getElementById('soc-sub').textContent   = cfg.socSub;
   document.getElementById('soc-badge').textContent = cfg.socBadge;
-
-  // Body class for validation mode
-  document.body.classList.toggle('mode-validation', mode === 'validation');
-
-  // Dim/undim comparison blocks
-  document.querySelectorAll('.block').forEach(b => b.classList.remove('dimmed'));
+  document.getElementById('adas-feats').innerHTML  = cfg.adasFeats.replace(/\n/g,'<br>');
+  document.body.classList.toggle('mode-validation', m === 'validation');
+  const valTag = document.getElementById('val-soc-tag');
+  if (valTag) valTag.style.display = m === 'validation' ? 'block' : 'none';
   if (!panelOpen) {
-    cfg.dimBlocks.forEach(bid => {
-      const el = document.getElementById(bid);
-      if (el) el.classList.add('dimmed');
-    });
+    document.querySelectorAll('.blk').forEach(b => b.classList.remove('dimmed'));
+    cfg.dimBlocks.forEach(bid => { const el = document.getElementById(bid); if (el) el.classList.add('dimmed'); });
   }
-
-  // Update signals
   renderSignals(cfg);
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// SoC HIGHLIGHT (key targets)
+// SoC CHIP
 // ═══════════════════════════════════════════════════════════════════
-function highlightSoc(soc) {
-  document.querySelectorAll('.kt-chip').forEach(c => c.classList.remove('selected'));
-  const chip = document.querySelector('[data-soc="' + soc + '"]');
+function pickSoc(soc) {
+  document.querySelectorAll('.sm-chip').forEach(c => c.classList.remove('selected'));
+  const chip = document.querySelector('[data-soc="'+soc+'"]');
   if (chip) chip.classList.add('selected');
-
-  const socMap = {
-    'tda4vl': 'assist',
-    'tda4vm': 'control',
-    'am62a':  'fleet',
-  };
-  if (socMap[soc]) setMode(socMap[soc]);
+  const map = {tda4vl:'assist',tda4vm:'control',am62a:'fleet'};
+  if (map[soc]) setMode(map[soc]);
 }
 
 // ═══════════════════════════════════════════════════════════════════
 // SVG SIGNAL RENDERING
 // ═══════════════════════════════════════════════════════════════════
-function pointsToD(pts) {
-  if (!pts || pts.length < 2) return '';
-  let d = 'M ' + pts[0][0] + ' ' + pts[0][1];
-  for (let i = 1; i < pts.length; i++) d += ' L ' + pts[i][0] + ' ' + pts[i][1];
-  return d;
+function ptsd(pts) {
+  return 'M ' + pts.map(p => p[0]+' '+p[1]).join(' L ');
 }
 
 function renderSignals(cfg) {
-  const svg = document.getElementById('signal-svg');
-  svg.innerHTML = '';
+  const svg = document.getElementById('sig-svg');
+  // Remove old paths and dots (keep defs)
+  Array.from(svg.children).forEach(c => { if (c.tagName !== 'defs') c.remove(); });
   flowDots = [];
 
-  SIGNAL_PATHS.forEach(sp => {
-    const active  = !cfg.dimSignals.includes(sp.type);
-    const opacity = active ? 1 : 0.12;
+  SIGNAL_DEFS.forEach(sp => {
+    const active = !cfg.dimSignals.includes(sp.type);
+    const opacity = active ? 1 : 0.08;
 
     const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d', pointsToD(sp.points));
-    path.setAttribute('class', 'sig-line ' + sp.cls + (active ? ' visible' : ''));
+    path.setAttribute('d', ptsd(sp.pts));
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke', sp.stroke);
+    path.setAttribute('stroke-width', sp.sw);
+    path.setAttribute('stroke-linecap','round');
+    path.setAttribute('stroke-linejoin','round');
+    if (sp.dash !== 'none') path.setAttribute('stroke-dasharray', sp.dash);
+    if (active && sp.arr) path.setAttribute('marker-end','url(#'+sp.arr+')');
     path.style.opacity = opacity;
+    // Glow filter via style
+    if (active) path.style.filter = 'drop-shadow(0 0 3px '+sp.stroke+')';
     svg.appendChild(path);
 
-    if (active) {
-      // Animated flow dot
+    if (active && sp.pts.length >= 2) {
       const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      dot.setAttribute('class', 'flow-dot visible ' + sp.type);
-      dot.setAttribute('r', '3.5');
+      dot.setAttribute('r','4');
+      dot.setAttribute('fill', sp.stroke);
+      dot.style.filter = 'drop-shadow(0 0 5px '+sp.stroke+')';
       svg.appendChild(dot);
-      flowDots.push({ dot, points: sp.points, t: Math.random(), speed: 0.003 + Math.random()*0.003 });
+      flowDots.push({dot, pts: sp.pts, t: Math.random(), spd: 0.004 + Math.random()*0.003});
     }
   });
 
-  // Start/restart animation
-  if (animFrame) cancelAnimationFrame(animFrame);
-  animateFlowDots();
+  if (animReq) cancelAnimationFrame(animReq);
+  animFlow();
 }
 
-function interpolatePoints(pts, t) {
-  // Total length
-  let segs = [];
-  let total = 0;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const dx = pts[i+1][0] - pts[i][0];
-    const dy = pts[i+1][1] - pts[i][1];
-    const len = Math.sqrt(dx*dx + dy*dy);
-    segs.push(len);
-    total += len;
+function lerp(pts, t) {
+  let segs=[], total=0;
+  for (let i=0;i<pts.length-1;i++){
+    const dx=pts[i+1][0]-pts[i][0], dy=pts[i+1][1]-pts[i][1];
+    const l=Math.sqrt(dx*dx+dy*dy); segs.push(l); total+=l;
   }
-  if (total === 0) return pts[0];
-  let target = t * total;
-  for (let i = 0; i < segs.length; i++) {
-    if (target <= segs[i]) {
-      const frac = target / segs[i];
-      return [
-        pts[i][0] + frac * (pts[i+1][0] - pts[i][0]),
-        pts[i][1] + frac * (pts[i+1][1] - pts[i][1])
-      ];
+  if (!total) return pts[0];
+  let tgt=t*total;
+  for (let i=0;i<segs.length;i++){
+    if (tgt<=segs[i]){
+      const f=tgt/segs[i];
+      return [pts[i][0]+f*(pts[i+1][0]-pts[i][0]), pts[i][1]+f*(pts[i+1][1]-pts[i][1])];
     }
-    target -= segs[i];
+    tgt-=segs[i];
   }
-  return pts[pts.length - 1];
+  return pts[pts.length-1];
 }
 
-function animateFlowDots() {
+function animFlow() {
   flowDots.forEach(fd => {
-    fd.t = (fd.t + fd.speed) % 1;
-    const pos = interpolatePoints(fd.points, fd.t);
+    fd.t = (fd.t + fd.spd) % 1;
+    const pos = lerp(fd.pts, fd.t);
     fd.dot.setAttribute('cx', pos[0]);
     fd.dot.setAttribute('cy', pos[1]);
   });
-  animFrame = requestAnimationFrame(animateFlowDots);
+  animReq = requestAnimationFrame(animFlow);
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// STARTUP SEQUENCE
+// STARTUP
 // ═══════════════════════════════════════════════════════════════════
 function runStartup() {
-  const overlay = document.getElementById('startup-overlay');
+  const overlay = document.getElementById('startup');
   const bar     = document.getElementById('su-bar');
-  const status  = document.getElementById('su-status');
+  const msg     = document.getElementById('su-msg');
 
   const steps = [
-    [200,  'Loading hardware definitions…'],
-    [600,  'Building signal graph…'],
-    [1000, 'Rendering architecture blocks…'],
-    [1500, 'Animating signal paths…'],
-    [2000, 'Ready.'],
+    [150,  'Loading hardware definitions…',     '15%'],
+    [600,  'Building signal graph…',             '40%'],
+    [1100, 'Rendering ECU block diagram…',       '65%'],
+    [1600, 'Animating signal paths…',            '85%'],
+    [2000, 'Applying automotive visual style…',  '100%'],
   ];
 
-  bar.style.width = '10%';
-
-  steps.forEach(([delay, msg], i) => {
-    setTimeout(() => {
-      status.textContent = msg;
-      bar.style.width = ((i + 1) / steps.length * 100) + '%';
-    }, delay);
+  steps.forEach(([delay, text, pct]) => {
+    setTimeout(() => { msg.textContent = text; bar.style.width = pct; }, delay);
   });
 
-  // Show blocks with staggered animation
+  // Stagger block entrance
   setTimeout(() => {
-    const blocks = Array.from(document.querySelectorAll('.block'));
-    blocks.forEach((b, i) => {
-      setTimeout(() => b.classList.add('anim'), i * 70);
-    });
-    // Initial signal render
-    renderSignals(MODE_CONFIG[currentMode]);
-  }, 1200);
+    const blks = Array.from(document.querySelectorAll('.blk'));
+    blks.forEach((b, i) => setTimeout(() => b.classList.add('visible'), i * 60));
+    renderSignals(MODES[curMode]);
+  }, 900);
 
   // Dismiss overlay
   setTimeout(() => {
-    overlay.classList.add('fade-out');
-    setTimeout(() => { overlay.style.display = 'none'; }, 700);
-  }, 2400);
+    overlay.classList.add('out');
+    setTimeout(() => overlay.style.display = 'none', 750);
+  }, 2500);
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => {
-  // Dismiss panel on background click
-  document.getElementById('diagram-wrap').addEventListener('click', (e) => {
-    if (!e.target.closest('.block') && panelOpen) closePanel();
-  });
-
-  runStartup();
-});
+document.addEventListener('DOMContentLoaded', runStartup);
 </script>
 </body>
 </html>
