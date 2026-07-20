@@ -61,7 +61,7 @@ Scan date: **20 July 2026**
 - https://www.sony-semicon.com/en/products/is/mobile/
 - https://www.sony-semicon.com/en/products/is/security/
 - https://www.st.com/en/imaging-and-photonics-solutions/automotive-cmos-image-sensors.html
-- https://www.st.com/en/imaging-and-photonics-sololutions/automotive-cmos-image-sensors/products.html
+- https://www.st.com/en/imaging-and-photonics-solutions/automotive-cmos-image-sensors/products.html
 - https://www.st.com/en/imaging-and-photonics-solutions/vb1740.html
 - https://www.st.com/en/imaging-and-photonics-solutions/vb1940.html
 - https://www.st.com/en/imaging-and-photonics-solutions/vb56g4a.html
