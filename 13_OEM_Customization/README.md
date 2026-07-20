@@ -2,16 +2,16 @@
 
 ## Purpose
 
-This folder defines how the ADVIS platform scales and customizes for different OEM requirements. The modular architecture enables multiple product variants from a single carrier design.
+This folder defines how the ADVIS platform scales and customizes for different OEM requirements. The modular architecture enables multiple product variants from a single carrier, sensor and software architecture.
 
-Sensor and radar selections in this folder are **SoC-agnostic**. TI platforms are current implementation candidates, not a permanent platform lock. Camera and radar products are adapted through normalized HALs and standard MIPI/SerDes/USB/CAN-FD/Automotive-Ethernet interfaces.
+Camera, radar and compute selections in this folder are **vendor-agnostic**. TI platforms are current implementation candidates, not a permanent platform lock. Products are adapted through normalized camera, radar, compute-runtime and vehicle-interface boundaries using standard MIPI CSI-2, FPD-Link, GMSL, USB, CAN-FD, Automotive Ethernet, PCIe and portable model formats where practical.
 
 ## Sub-folders
 
 | Folder | Contents |
 |--------|----------|
 | Variant_Matrix/ | Full matrix of platform variants vs. features/components |
-| SoC_Option_Packages/ | Supported SoC modules and their capability profiles |
+| Automotive_SoC_And_Compute_Platform_Options/ | Vendor-neutral automotive SoC, AI accelerator, prototype-board, pricing, safety and ADVIS workload reference |
 | Feature_Scaling_Tiers/ | Entry / Mid / High tier definitions |
 | Customer_Requirements/ | Per-OEM requirement capture and compliance tracking |
 | Forward_Vision_Sensor_Options/ | SoC-agnostic forward-camera sensor, module and sourcing reference |
@@ -21,51 +21,74 @@ Sensor and radar selections in this folder are **SoC-agnostic**. TI platforms ar
 ## Platform Scaling Tiers
 
 ### Entry Tier
-- Single camera (DMS only)
-- AM62A or equivalent low-cost SoC
-- CAN monitoring only
-- No GNSS/IMU (or GNSS only)
+- One or two cameras depending measured workload
+- AM62A/TDA4VEN/APACHE5/Hailo-class compute or equivalent
+- DMS, OMS, fleet monitoring or reduced warning ADAS
+- CAN/CAN-FD monitoring
 - Passive cooling
-- Target BOM: lowest cost
+- Lowest recurring BOM target
 
-### Mid Tier (Current v0.4.4 Baseline)
-- Dual camera (Forward + DMS)
-- TDA4VM / AM68A or equivalent SoC
-- CAN-FD monitoring
-- GNSS + IMU fusion
-- Passive or active cooling
-- Full feature set
+### Mid Tier — Dual-Vision Smart ECU
+- Forward camera + DMS camera
+- TDA4VL/TDA4AL, R-Car V3H, Ambarella CV22FS/CV2FS or equivalent
+- Shared Forward Vision + DMS runtime
+- CAN-FD, diagnostics, optional GNSS/IMU
+- Passive cooling preferred
+- Primary ADVIS Assist/Control cost-performance tier
 
-### High Tier
-- 4-8 cameras (surround view + DMS)
-- TDA4VH, Qualcomm, Renesas, NVIDIA, Ambarella, NXP or equivalent high-performance platform
-- Multi-CAN + Automotive Ethernet
-- Optional front/corner/imaging radar set
-- GNSS + IMU + V2X
-- Active cooling as required
-- L2+ perception capable
+### Fusion Tier
+- Two to six cameras plus front/corner radar inputs
+- TDA4VM, R-Car V4M, Ambarella CV3 or equivalent
+- CAN-FD + Automotive Ethernet
+- Camera-radar fusion, richer logging and future feature headroom
+- Passive or active cooling according to enclosure and ambient targets
 
-## SoC Compatibility Matrix
+### High Tier — Surround / L2+
+- Four to twelve or more cameras
+- TDA4AP/VH, R-Car V4H, Snapdragon Ride, Horizon Journey, NVIDIA DRIVE or equivalent
+- Multiple radars and optional lidar/V2X
+- Multi-gigabit Automotive Ethernet
+- Active cooling normally required
+- Surround perception, parking and premium L2+ domain-controller scope
 
-The table below is illustrative. Detailed and current options are maintained under `SoC_Option_Packages/`.
+## Compute Compatibility Matrix
 
-| SoC Family | Camera Inputs | AI Performance | Power Budget | Tier |
-|------------|---------------|----------------|--------------|------|
-| AM62A or equivalent | 1 | Low | <5W | Entry |
-| AM68A / TDA4VM or equivalent | 2-4 | Medium | 10-15W | Mid |
-| TDA4VH / R-Car / CV3 class | 4-8 | High | 20-30W | High |
-| Qualcomm SA8295 / NVIDIA DRIVE class | 8+ | Very High | 25-40W+ | High+ |
+The table below is illustrative. Detailed current options, prices, software ecosystems, qualification status and workload fit are maintained under `Automotive_SoC_And_Compute_Platform_Options/`.
+
+| Compute class | Typical camera scope | Vendor-stated AI range | ADVIS tier |
+|---|---:|---:|---|
+| AM62A / TDA4VEN / APACHE5 class | 1–2 | ~1.5–4 TOPS | Entry |
+| TDA4VL / TDA4AL / R-Car V3H / CV22FS class | 2 | ~4–8 effective TOPS or vendor CV engine | Dual Vision |
+| TDA4VM / R-Car V4M / CV3 class | 2–6 | ~8–24 TOPS | Fusion |
+| TDA4AP/VH / R-Car V4H / Journey / Ride / DRIVE class | 4–12+ | ~24–1000+ TOPS | Surround / L2+ |
+
+TOPS values are not directly comparable across precision, sparsity, accelerator utilization, memory bandwidth or supported operators. Selection must be based on the complete ADVIS workload running at target latency, temperature and power.
 
 ## Customization Without Redesign
 
-The platform architecture allows these customizations through BOM, harness, interface and configuration changes:
+The platform architecture allows these customizations through BOM, carrier, harness, adapter, runtime and configuration changes:
 
+- Compute module/SoC class behind a normalized ADVIS platform adapter
 - Camera count and sensor class
 - Native MIPI, FPD-Link, GMSL, Ethernet or USB prototype camera transport
 - Front radar, rear corner radar pair, four-corner radar set or no radar
 - CAN-FD object-list radar or Automotive-Ethernet point-cloud radar
-- CAN termination (end-node vs. mid-bus via DNI resistors)
-- GNSS antenna bias (active vs. passive antenna support)
-- IR illumination (populate or omit daughterboard connector)
-- Boot mode (strap resistor swap for different boot media)
-- Feature unlocks and OEM-specific calibration without changing the normalized camera/radar HAL contracts
+- Model compiler/runtime backend while preserving a common model source and validation set
+- Linux/QNX/AUTOSAR/RTOS partitioning according to SoC and safety concept
+- CAN termination and OEM-specific DBC/diagnostic mapping
+- GNSS/IMU population and synchronization method
+- IR illumination and DMS/OMS feature population
+- Memory/storage population, cooling and feature unlocks
+
+## Portability Rule
+
+ADVIS portability is not achieved by claiming that one binary runs on every SoC. It is achieved by freezing:
+
+1. sensor and vehicle interface contracts,
+2. timestamp and coordinate conventions,
+3. common perception tensor and metadata contracts,
+4. safety/capability outputs,
+5. model-source and validation datasets,
+6. a replaceable SoC-specific BSP, camera adapter and inference backend.
+
+Every production SoC candidate must still pass the same ADVIS benchmark, thermal, functional-safety, cybersecurity and lifecycle gates before selection.
