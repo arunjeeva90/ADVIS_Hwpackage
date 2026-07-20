@@ -24,9 +24,23 @@ ADVIS is **not locked to TI TDA, AM62A, TDA4VM, TDA4VL, or any other single comp
 | `05_Interface_And_Compute_Compatibility.md` | Universal MIPI/SerDes/Ethernet/USB integration policy |
 | `06_Supplier_RFQ_Checklist.md` | Mandatory questions before purchasing a sample or production camera |
 | `data/` | CSV copies of every comparison table |
-| `ADVIS_Forward_Vision_Sensor_Sourcing_Reference.xlsx.base64` | Exact workbook encoded as text for GitHub transport |
-| `tools/restore_workbook.py` | Reconstructs the `.xlsx` workbook from the Base64 file |
+| `workbook_parts/` | Chunked Base64 representation of the exact Excel reference workbook |
+| `tools/restore_workbook.py` | Reconstructs `ADVIS_Forward_Vision_Sensor_Sourcing_Reference.xlsx` from the chunk files |
 | `sources/Official_Source_Index.md` | Official manufacturer and supplier URLs |
+
+## Restoring the Excel workbook
+
+From this folder, run:
+
+```bash
+python tools/restore_workbook.py
+```
+
+The script concatenates the ordered `workbook_parts/part_*.b64` files, decodes them, and writes:
+
+```text
+ADVIS_Forward_Vision_Sensor_Sourcing_Reference.xlsx
+```
 
 ## Current recommendation
 
