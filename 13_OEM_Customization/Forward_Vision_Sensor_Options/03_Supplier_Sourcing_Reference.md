@@ -1,0 +1,44 @@
+# Supplier and Price Sourcing Reference
+
+## Interpretation rules
+
+- Prices were observed during the global scan and are not approved quotations.
+- Confirm whether a listing is for a bare sensor, board, lens module, serialized camera or complete enclosure.
+- Marketplace listings can use one page for multiple optional sensors; require the exact populated sensor in writing.
+- MOQ pricing is not comparable with a one-piece development module.
+- Compressed USB/IP-camera output is not equivalent to RAW Bayer access.
+
+
+| Sensor | Item type | Seller/platform | Region | Price seen | MOQ | Status | Risk/interpretation | Product link |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| IMX390 | USB3 complete module | FabToLab | India | ₹17,750.53 | 1 | Listed in stock | Quick PoC; not raw automotive SerDes | https://www.fabtolab.com/arducam-2-3mp-imx390-usb3-camera |
+| IMX390 | USB3 module | Arducam | Global | US$214.99 | 1 | Retail | Verify lens/FOV and SDK | https://www.arducam.com/product/arducam-day-night-vision-usb-camera-for-automotive-imx390/ |
+| IMX390 | Rugged FPD-Link III module | D3 Embedded | Global | US$299–399 | Sample | Professional | Best TI path; expensive | https://www.d3embedded.com/product/designcore-d3rcm-imx390-953-rugged-camera-module/ |
+| IMX390 | FPD-Link module | Mouser India | India | ~₹40,648 | 1 | Distributor | Check exact deserializer compatibility | https://www.mouser.in/c/embedded-solutions/engineering-tools/video-modules/?q=IMX390 |
+| IMX390 | Bare sensor IC | Alibaba | China | US$5.80–15.50 | Varies | Marketplace | High counterfeit/pull risk; not directly usable | https://www.alibaba.com/showroom/imx390-sensor.html |
+| IMX390/OX03C10/AR0231 | Automotive module listing | Alibaba | China | US$88 (2); US$75 (500–1999); US$60 (≥2000) | 2 | MOQ pricing | Ask exact populated sensor/serializer/lens | https://www.alibaba.com/product-detail/2MP-Automotive-Camera-Module-IMX390-OX03C10_1601002503523.html |
+| OX03C10 | 2.5 MP HDR module | Alibaba | China | US$86–309; sample ~US$350 | 5 | Marketplace | Verify serializer and authenticity | https://www.alibaba.com/product-detail/OX03C10-2-5MP-HDR-Automotive_1601213026925.html |
+| OX03C10 | Bare sensor IC | DigiKey search | Global | ~CAD$32.02 seen | 1 | Distributor | Needs complete camera design | https://www.digikey.ca/en/products/filter/image-sensors-camera/532 |
+| AR0823AT | Sensor/module listing | Alibaba | China | ~US$53–57 | 2/volume | Marketplace | Confirm item type | https://www.alibaba.com/product-detail/AR0823-8MP-CMOS-Image-Sensor_1600940836406.html |
+| AR0341AT | 3 MP HDR GMSL2 module | e-con Systems | Global | Sample ~US$349; volume from ~US$99 | Sample/volume | Vendor | Strong production candidate | https://www.e-consystems.com/automotive-cameras/3mp-hdr-gmsl2-camera.asp |
+| IMX490 | GMSL2 module | Leopard Imaging | Global | US$609–717 | 1 | Vendor | Premium benchmark; needs GMSL2 deserializer | https://leopardimaging.com/product/automotive-cameras/gmsl2-cameras/li-imx490-gmsl2/ |
+| IMX490 | GMSL2 module | DigiKey India | India | ~₹68,402 | 1 | Distributor | Traceable but expensive | https://www.digikey.in/en/products/filter/camera-modules/436 |
+| IMX678 | USB3 4K module | Waveshare | India/global | ~₹6,268 equivalent seen | 1 | Retail | Excellent-value high-res PoC | https://www.waveshare.com/imx678-4k-camera.htm |
+| IMX678 | USB3 camera | FabToLab | India | ~₹15,341.05 | 1 | Retail | Local sourcing; compare lens and SDK | https://www.fabtolab.com/catalogsearch/result/?q=IMX678 |
+| IMX678 | USB module | Alibaba | China | US$59.80–62.80 | Varies | Marketplace | Confirm UVC/RAW/lens/enclosure | https://www.alibaba.com/showroom/imx678-camera-module.html |
+| IMX585 | MIPI module | Alibaba | China | US$85–145 | Varies | Marketplace range | Great night image; non-auto | https://www.alibaba.com/showroom/imx585-camera-module.html |
+| IMX585 | USB3 module | Alibaba | China | US$115–200 | Varies | Marketplace range | Convenient but expensive | https://www.alibaba.com/showroom/imx585-usb-camera.html |
+| IMX462 | H.264 USB module | Alibaba | China | Sample ~US$39.90 | 1/varies | Marketplace | Compressed output limits tuning | https://www.alibaba.com/product-detail/IMX462-2MP-H264-USB-Camera_1600524839024.html |
+| IMX335 | 5 MP IP/module boards | Alibaba | China | US$8.90–28 | Varies | Marketplace | Very cheap; unknown ISP/RAW access | https://www.alibaba.com/showroom/imx335-camera-module.html |
+| IMX335 | OIS USB camera | FabToLab | India | ~₹20,286.32 | 1 | Retail | OIS unnecessary for fixed camera | https://www.fabtolab.com/catalogsearch/result/?q=IMX335 |
+| IMX291 | Camera module | Robu | India | ~₹5,438.88 | 1 | Category listing | Verify current stock/interface | https://robu.in/product-category/camera-and-displays/camera-modules/ |
+| IMX219 | Pi camera | Robu | India | ~₹949 | 1 | Retail | Best cheap MIPI learning camera | https://robu.in/product/raspberry-pi-camera-board-v2-8mp/ |
+| IMX219 | Pi camera | ThinkRobotics | India | ₹1,699.99 | 1 | Preorder/sold-out seen | Check connector generation | https://thinkrobotics.com/products/raspberry-pi-camera-module-3 |
+| IMX219 NoIR | Pi camera | Robocraze | India | ~₹1,565 | 1 | Retail | Useful NIR experiment; poor color fidelity | https://robocraze.com/products/raspberry-pi-noir-camera-module-v2 |
+| OV5647 | 5 MP Pi camera | Robocraze | India | ₹285 incl. GST | 1 | Listed in stock | Absolute cheapest daylight demo | https://robocraze.com/products/raspberry-pi-camera-module-5mp |
+| OV5640 | 5 MP module | Made-in-China | China | US$18–25 | Usually 100 | B2B | MOQ; driver/connector critical | https://www.made-in-china.com/products-search/hot-china-products/OV5640_Camera_Module.html |
+| OV9281 | 1 MP global-shutter module | Made-in-China | China | US$16–18 | Usually 100 | B2B | Mono; motion/optical flow only | https://www.made-in-china.com/showroom/ov9281-camera-module.html |
+| OV7251 | VGA global-shutter module | Made-in-China | China | US$18–20 | Usually 100 | B2B | Optical flow only | https://www.made-in-china.com/showroom/ov7251-camera-module.html |
+| IMX258 | 13 MP MIPI module | Made-in-China | China | US$22–27 | Usually 100 | B2B | Demand driver and pinout | https://www.made-in-china.com/showroom/imx258-camera-module.html |
+| OV2732 | 2 MP module | Made-in-China | China | US$18–20 | Usually 100 | B2B | Exact revision/interface required | https://www.made-in-china.com/showroom/ov2732-camera-module.html |
+| AR0330 | 3 MP USB module | Made-in-China | China | ~US$60 | Usually 100 | B2B | Legacy and relatively expensive | https://www.made-in-china.com/showroom/ar0330-camera-module.html |
